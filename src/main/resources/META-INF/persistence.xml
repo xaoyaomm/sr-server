@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+	<persistence-unit name="shenzhen-api" transaction-type="RESOURCE_LOCAL">
+	   <provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<mapping-file>META-INF/mappers.xml</mapping-file>
+		<!-- <class>com.sfc.api.entity.UsersCargoFavorite</class> <class>com.sfc.api.entity.VeVehicleInfo</class> 
+			<class>com.sfc.api.entity.BkBooking</class> <class>com.sfc.api.entity.BkVoiceOrder</class> 
+			<class>com.sfc.api.entity.BkVoicePhoto</class> <class>com.sfc.api.entity.PlUsers</class> 
+			<class>com.sfc.api.entity.VeBlockInfo</class> <class>com.sfc.api.entity.VeStatus</class> 
+			<class>com.sfc.api.entity.VeUploadGps</class> <class>com.sfc.api.entity.VeVehicleModifyLog</class> 
+			<class>com.sfc.api.entity.PlUsersCargo</class> <class>com.sfc.api.entity.BkInquiryLog</class> 
+			<class>com.sfc.api.entity.VeStatus</class> -->
+	</persistence-unit>
+
+</persistence>

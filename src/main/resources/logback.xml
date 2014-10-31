@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${x.logDir}log-api.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${x.logDir}log-api.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="org.hibernate" level="ERROR"/>
+	<logger name="org.springframework" level="ERROR"/>
+	<logger name="org.apache.axis2" level="ERROR"/>
+	<logger name="com.sfc.api.mongo.service" level="ERROR"/>
+	<logger name="rollingFile" level="${x.logLevel}" additivity="false" />
+
+	<!--log4jdbc -->
+	<logger name="jdbc.sqltiming" level="ERROR"/>
+
+	<root level="${x.logLevel}">
+		<appender-ref ref="console" /> 
+		<appender-ref ref="rollingFile" /> 
+	</root>
+</configuration>

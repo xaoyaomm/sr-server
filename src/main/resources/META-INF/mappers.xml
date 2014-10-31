@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_0.xsd">
+	<!-- 调用shenzhen.ve_vehicle_detail_get过程返回的Bean -->
+	<sql-result-set-mapping name="ReturnVeVehicleInfoDetailType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.procedure.VeVehicleInfoDetail">
+			<field-result name="carTypeId" column="cartype_id" />
+			<field-result name="tel" column="tel" />
+			<field-result name="veLevel" column="star_level" />
+			<field-result name="name" column="name" />
+			<field-result name="companyName" column="company_name" />
+			<field-result name="imageUrl" column="image_url" />
+			<field-result name="imageUrlTail" column="image_url_tail" />
+			<field-result name="imageUrlSide" column="image_url_side" />
+			<field-result name="imageUrlUser" column="image_url_user" />
+			<field-result name="carBrand" column="car_brand" />
+			<field-result name="carPlates" column="car_plates" />
+			<field-result name="operunit" column="operunit" />
+			<field-result name="longitude" column="longitude" />
+			<field-result name="latitude" column="latitude" />
+			<field-result name="cargoTypeList" column="cargo_type_list" />
+			<field-result name="hidePlates" column="hide_plates" />
+			<field-result name="comment" column="comment" />
+			<field-result name="veResidentDesc" column="ve_resident_desc" />
+			<field-result name="remark" column="remark" />
+		</entity-result>
+	</sql-result-set-mapping>
+	<sql-result-set-mapping name="ReturnVoiceListDetailType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.procedure.VoiceListDetail">
+			<field-result name="id" column="id" />
+			<field-result name="filePath" column="file_path" />
+			<field-result name="fileName" column="file_name" />
+			<field-result name="expireTime" column="expire_time" />
+			<field-result name="orderType" column="order_type" />
+			<field-result name="fromAddress" column="from_address" />
+			<field-result name="toAddress" column="to_address" />
+			<field-result name="goodsLength" column="goods_length" />
+			<field-result name="goodsWidth" column="goods_width" />
+			<field-result name="goodsHeight" column="goods_height" />
+			<field-result name="description" column="description" />
+			<field-result name="fromShortAddress" column="from_short_address" />
+			<field-result name="toShortAddress" column="to_short_address" />
+			<field-result name="fromToDistance" column="from_to_distance" />
+		</entity-result>
+	</sql-result-set-mapping>
+	<!-- 调用ve_master_get_vehicle_detail 返回的bean -->
+	<sql-result-set-mapping name="ReturnVehicleCommentType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.procedure.VehicleComment">
+			<field-result name="bookingNo" column="booking_no" />
+			<field-result name="id" column="id" />
+			<field-result name="commentLevel" column="comment_level" />
+			<field-result name="comments" column="comments" />
+			<field-result name="createTime" column="createtime" />
+			<field-result name="commentType" column="comment_type" />
+		</entity-result>
+	</sql-result-set-mapping>
+	<!-- 调用ve_vehicle_info_staff_for_detail 返回的bean -->
+	<sql-result-set-mapping name="ReturnVehicleInfoDetailForStaffType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.procedure.VehicleInfoStaffDetail">
+			<field-result name="vehicleInfoId" column="vehicle_info_id" />
+			<field-result name="vePlates" column="ve_plates" />
+			<field-result name="modelId" column="model_id" />
+			<field-result name="brandId" column="brand_id" />
+			<field-result name="veProductDt" column="ve_product_dt" />
+			<field-result name="residentAddressId" column="ve_resident_address_id" />
+			<field-result name="residentAddress" column="resident_address" />
+			<field-result name="blocks" column="blocks" />
+			<field-result name="blocksId" column="blocks_id" />
+			<field-result name="cargoTypeList" column="cargo_type_list" />
+			<field-result name="userType" column="user_type" />
+			<field-result name="userName" column="user_name" />
+			<field-result name="mobile" column="mobile" />
+			<field-result name="companyName" column="company_name" />
+			<field-result name="telephone" column="telephone" />
+			<field-result name="address" column="address" />
+			<field-result name="contractNo" column="contract_no" />
+			<field-result name="img1" column="img1" />
+			<field-result name="img2" column="img2" />
+			<field-result name="img3" column="img3" />
+			<field-result name="img4" column="img4" />
+			<field-result name="ve_vin" column="ve_vin" />
+			<field-result name="identification" column="identification" />
+		</entity-result>
+	</sql-result-set-mapping>
+	<!-- 券查询 -->
+	<sql-result-set-mapping name="ReturnTicketStatsDetailType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.TicketStats">
+			<field-result name="id" column="id" />
+			<field-result name="total" column="total" />
+			<field-result name="name" column="name" />
+			<field-result name="ticketAmount" column="ticket_amount" />
+			<field-result name="startDate" column="start_dt" />
+			<field-result name="endDate" column="end_dt" />
+		</entity-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping name="ReturnTicketInfoDetailType">
+		<entity-result entity-class="com.sfc.api.mysql.entity.TbTicketInfo">
+			<field-result name="ticketId" column="ticket_id" />
+			<field-result name="ticketNo" column="ticket_no" />
+			<field-result name="ticketType" column="ticket_type" />
+			<field-result name="ticketName" column="ticket_name" />
+			<field-result name="userId" column="user_id" />
+			<field-result name="userType" column="user_type" />
+			<field-result name="ticketStatus" column="ticket_status" />
+			<field-result name="ticketAmount" column="ticket_amount" />
+			<field-result name="startDt" column="start_dt" />
+			<field-result name="endDt" column="end_dt" />
+			<field-result name="createDt" column="create_dt" />
+			<field-result name="updateDt" column="update_dt" />
+		</entity-result>
+	</sql-result-set-mapping>
+</entity-mappings>
