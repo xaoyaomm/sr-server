@@ -13,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.store.api.common.Constant;
-import com.store.api.mysql.entity.PlUsers;
-import com.store.api.mysql.entity.PlUsersCargo;
-import com.store.api.mysql.entity.TbStaff;
 import com.store.api.utils.JsonUtils;
 
 
@@ -55,12 +52,8 @@ public class CustomSession implements HttpSession {
     @Override
     public Object getAttribute(String key) {
         if(valueMap.containsKey(key)){
-            if(key.equals(Constant.SESSION_PL_USER_CARGO))
-                return JsonUtils.json2Object(valueMap.get(key).toString(), PlUsersCargo.class);
-            if(key.equals(Constant.SESSION_PL_USER))
-                return JsonUtils.json2Object(valueMap.get(key).toString(), PlUsers.class);
-            if(key.equals(Constant.SESSION_TB_STAFF))
-                return JsonUtils.json2Object(valueMap.get(key).toString(), TbStaff.class);
+            if(key.equals(Constant.SESSION_PL_USER_CARGO) || key.equals(Constant.SESSION_PL_USER_CARGO))
+                return JsonUtils.json2Object(valueMap.get(key).toString(), Object.class);//TODO
         }
         return valueMap.get(key);
     }
@@ -76,12 +69,11 @@ public class CustomSession implements HttpSession {
             }
         } else {
             changed = true;
-            if(null!=value && (key.equals(Constant.SESSION_PL_USER_CARGO) || key.equals(Constant.SESSION_PL_USER)|| key.equals(Constant.SESSION_TB_STAFF)))
+            if(null!=value && (key.equals(Constant.SESSION_PL_USER_CARGO) || key.equals(Constant.SESSION_PL_USER)))
                 valueMap.put(key, JsonUtils.object2Json(value));
             else
                 valueMap.put(key, value);
         }
-
     }
     
 

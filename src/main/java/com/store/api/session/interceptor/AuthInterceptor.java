@@ -39,13 +39,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 }
                 sbUrl.append(arg + "=" + request.getParameterValues(arg)[0]);
             }
-            if (Constant.REPORT_LOG) {
-                LOG.error("{}|{}|{}|{}", sbUrl.toString(), request.getSession().getId(), clientVersion(request), parseImei(request));
-            }else{
-                if (!request.getRequestURI().toString().contains("/reportlocation")) {
-                    LOG.error("{}|{}|{}|{}", sbUrl.toString(), request.getSession().getId(), clientVersion(request), parseImei(request));
-                }
-            }
+            
+            LOG.error("{}|{}|{}|{}", sbUrl.toString(), request.getSession().getId(), clientVersion(request), parseImei(request));
+            
 
             if (auth == null || Utils.isEmpty(auth.type())) {
                 return true;
