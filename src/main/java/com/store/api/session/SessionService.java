@@ -14,19 +14,13 @@ import com.store.api.utils.Utils;
  * session服务类
  * 
  * Revision History
- * 
- * 2014年4月29日,vincent,created it
+ *
+ * @author vincent,2014年11月6日 created it
  */
 public class SessionService {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-    public static final SessionUserType USER_TYPE_CARGO = new SessionUserType("cargo");
-
-    public static final SessionUserType USER_TYPE_DRIVE = new SessionUserType("drive");
-
-    public static final SessionUserType USER_TYPE_STAFF = new SessionUserType("staff");
-
-    private int expire = 3600; // 单位为秒,过期踢出的用户缓存中保存1小时
+    private int expire = 3600*24; // 单位为秒,过期踢出的用户缓存中保存24小时
 
     private static SessionService instance = null;
 

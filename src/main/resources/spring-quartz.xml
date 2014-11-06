@@ -20,7 +20,7 @@
 	<bean name="scheduler" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="onlineTimeWeekTrigger" />
+				<!-- <ref bean="onlineTimeWeekTrigger" /> -->
 			</list>
 		</property>
 	</bean>
@@ -42,6 +42,6 @@
 		</property>
 	</bean>
 
-	<context:component-scan base-package="com.sfc.api.job" />
+	<context:component-scan base-package="com.store.api.job" />
 
 </beans>

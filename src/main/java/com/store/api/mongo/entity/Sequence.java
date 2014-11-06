@@ -8,9 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 给Mongo增加自增主键
- * @author @haipenge 
- * haipenge@gmail.com
-*  Create Date:2014年8月10日
  */
 @Document(collection="global_sequence")
 public class Sequence implements Serializable {

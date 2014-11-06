@@ -27,7 +27,7 @@ public class SequenceServiceImpl  implements SequenceService {
      */
     @Override
     synchronized public <T extends Serializable> Long getNextSequence(T entity) {
-        Sequence sequence=this.sequenceRepository.getSequenceByName(entity.getClass().getName());
+        Sequence sequence=this.sequenceRepository.getSequenceByName(entity.getClass().getSimpleName());
         return sequence.getSeq();
     }
 

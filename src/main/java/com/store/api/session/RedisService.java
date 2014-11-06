@@ -21,8 +21,8 @@ import com.store.api.utils.PropertiesUtil;
  * redis服务类
  * 
  * Revision History
- * 
- * 2014年7月8日,vincent,created it
+ *
+ * @author vincent,2014年11月6日 created it
  */
 public class RedisService {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());

@@ -1,18 +1,20 @@
 package com.store.api.session;
 
-import java.util.Enumeration;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.store.api.common.Constant;
 import com.store.api.utils.Utils;
 
+/**
+ * 扩展Request对象
+ * 
+ * Revision History
+ *
+ * @author vincent,2014年11月6日 created it
+ */
 public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	private String ssid = "";
@@ -40,46 +42,4 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
 		return session;
 	}
 
-	private void printHeaer(HttpServletRequest request) {
-		LOG.info(">>CustomRequest--Request Info start------------------------------------------------------");
-		// java 获取请求 URL  
-		String url = request.getScheme() + "://"; // 请求协议 http 或 https 
-		url += request.getHeader("host"); // 请求服务器 
-		url += request.getRequestURI(); // 工程名   
-		if (request.getQueryString() != null) // 判断请求参数是否为空
-		{
-			url += "?" + request.getQueryString(); // 参数
-		}
-		LOG.info("Request URL is:"+url);
-
-		Enumeration headers = request.getHeaderNames();
-		if (headers != null) {
-			while (headers.hasMoreElements()) {
-				Object name = headers.nextElement();
-				if (name != null) {
-					String value = request.getHeader(name.toString());
-					LOG.info(">>CustomRequest Header is:" + name + "=" + value);
-				}
-			}
-		}
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie != null) {
-					String name = cookie.getName();
-					String value = cookie.getValue();
-					LOG.info(">>>CustomRequest Cookie:" + name + " = " + value);
-				}
-			}
-		}
-		Enumeration<String> en = request.getAttributeNames();
-		if (null != en) {
-			while (en.hasMoreElements()) {
-				String key = en.nextElement();
-				LOG.info(">>>CustomRequest Attribute:" + key + " = "
-						+ request.getAttribute(key));
-			}
-		}
-		LOG.info(">>CustomRequest--Request Info end------------------------------------------------------");
-	}
 }

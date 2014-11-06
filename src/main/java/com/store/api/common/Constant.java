@@ -14,9 +14,9 @@ public class Constant {
     public static final String SUCCESS="SUCCESS";
     public static final String FAIL="FAIL";
     public static final String SESSION_NAME="STORERUNSSID";
-    public static final String HEADER_SFC_IMEI="STORERUN-IM";
-    public static final String HEADER_SFC_VERSION="STORERUN-VER";
-    public static final String HEADER_SFC_CLIENT="STORERUN-CLI";
+    public static final String HEADER_STORERUN_IMEI="SR-IM";
+    public static final String HEADER_STORERUN_VERSION="SR-VER";
+    public static final String HEADER_STORERUN_CLIENT="SR-CLI";
     
     /**
      * 图片URL地址前缀
@@ -24,14 +24,14 @@ public class Constant {
     public static final String IMG_URL_PRE;
     
     /**
-     * SESSION中车主对象对应KEY值
+     * SESSION中顾客对象对应KEY值
      */
-    public static final String SESSION_PL_USER="pl_user";
+    public static final String SESSION_USER_CUSTOMER="customer";
     
     /**
-     * SESSION中货主对象对应KEY值
+     * SESSION中商户对象对应KEY值
      */
-    public static final String SESSION_PL_USER_CARGO="pl_user_cargo";
+    public static final String SESSION_USER_MERCHANTS="merchants";
     
     /**
      * SESSION是否失效的标志key

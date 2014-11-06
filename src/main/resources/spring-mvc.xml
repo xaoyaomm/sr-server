@@ -25,9 +25,7 @@
 		p:alwaysUseFullPath="true" p:pathMatcher-ref="pathMatcher" p:order="3"
 		p:useSuffixPatternMatch="true">
 	</bean>
-	
-	<!-- 文件上传 -->
-	<!-- <bean id="multipartResolver" class="com.sfc.api.session.CommonsMultipartResolverCustom"/> -->
+
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
 	<!-- 配置RequestMappingHandlerAdapter -->
@@ -61,5 +59,5 @@
 	<bean id="formHttpMessageConverter" class="org.springframework.http.converter.FormHttpMessageConverter">
 	</bean>
 	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> -->
 </beans>

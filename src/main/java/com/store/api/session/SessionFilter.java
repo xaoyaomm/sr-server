@@ -1,7 +1,6 @@
 package com.store.api.session;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
@@ -20,9 +19,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.utils.Utils;
 import com.store.api.utils.security.SecurityUtil;
 
+/**
+ * session处理Filter
+ * 
+ * Revision History
+ *
+ * @author vincent,2014年11月6日 created it
+ */
 public class SessionFilter extends HttpServlet implements Filter {
 
     private static final long serialVersionUID = 1L;
@@ -42,16 +49,9 @@ public class SessionFilter extends HttpServlet implements Filter {
         }
         boolean flag = checkSessionId(ssid);
 
-//        printHeaer(request);
-
         if (flag) {
             request.setAttribute(Constant.SESSION_NAME, SecurityUtil.decrypt(ssid));
             CustomServletRequestWrapper cRequest = new CustomServletRequestWrapper(request);
-            if (!flag) {
-                if (null != cRequest.getSession().getAttribute(Constant.SESSION_PL_USER) || null != cRequest.getSession().getAttribute(Constant.SESSION_PL_USER_CARGO)) {
-                    setValueToCookie(response, Constant.SESSION_NAME, SecurityUtil.encrypt(cRequest.getCustomSession().getId()));
-                }
-            }
             chain.doFilter(cRequest, response);
             try {
                 cRequest.getCustomSession().saveSession();
@@ -64,15 +64,6 @@ public class SessionFilter extends HttpServlet implements Filter {
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        // TODO Auto-generated method stub
-    }
-
-    private void setValueToCookie(HttpServletResponse response, String key, String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(86400 * 365 * 10);
-        cookie.setPath("/");
-        cookie.setDomain(Constant.COOKIE_DOMAIN);
-        response.addCookie(cookie);
     }
 
     private String getValueByCookie(HttpServletRequest request, String para) {
@@ -92,44 +83,10 @@ public class SessionFilter extends HttpServlet implements Filter {
             return false;
         String id = SecurityUtil.decrypt(sessionId);
         StringBuffer pattern = new StringBuffer();
-        pattern.append("(?:").append(SessionService.USER_TYPE_CARGO.getType()).append("|");
-        pattern.append(SessionService.USER_TYPE_DRIVE.getType()).append("|");
-        pattern.append(SessionService.USER_TYPE_STAFF.getType()).append(")+_\\d+_\\d{7}");
+        pattern.append("(?:").append(UserType.customer).append("|");
+        pattern.append(UserType.merchants);
+        pattern.append(")+_\\d+(_\\d{7})*");
         return Pattern.matches(pattern.toString(), id);
-    }
-
-    private void printHeaer(HttpServletRequest request) {
-        LOG.info(">>Filter--Request Info start------------------------------------------------------");
-        // java 获取请求 URL  
-        String url = request.getScheme() + "://"; // 请求协议 http 或 https 
-        url += request.getHeader("host"); // 请求服务器 
-        url += request.getRequestURI(); // 工程名   
-        if (request.getQueryString() != null) // 判断请求参数是否为空
-        {
-            url += "?" + request.getQueryString(); // 参数
-        }
-        LOG.info("Request URL is:" + url);
-        Enumeration<String> headers = request.getHeaderNames();
-        if (headers != null) {
-            while (headers.hasMoreElements()) {
-                Object name = headers.nextElement();
-                if (name != null) {
-                    String value = request.getHeader(name.toString());
-                    LOG.info(">>Filter Header is:" + name + "=" + value);
-                }
-            }
-        }
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie != null) {
-                    String name = cookie.getName();
-                    String value = cookie.getValue();
-                    LOG.info(">>>Filter Header Cookie:" + name + " = " + value);
-                }
-            }
-        }
-        LOG.info(">>Filter--Request Info END------------------------------------------------------");
     }
 
 }

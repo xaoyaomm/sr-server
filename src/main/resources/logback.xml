@@ -19,12 +19,8 @@
 	<!-- project default level -->
 	<logger name="org.hibernate" level="ERROR"/>
 	<logger name="org.springframework" level="ERROR"/>
-	<logger name="org.apache.axis2" level="ERROR"/>
-	<logger name="com.sfc.api.mongo.service" level="ERROR"/>
 	<logger name="rollingFile" level="${x.logLevel}" additivity="false" />
 
-	<!--log4jdbc -->
-	<logger name="jdbc.sqltiming" level="ERROR"/>
 
 	<root level="${x.logLevel}">
 		<appender-ref ref="console" /> 

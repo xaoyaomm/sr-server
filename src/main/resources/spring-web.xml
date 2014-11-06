@@ -18,7 +18,7 @@
      http://www.springframework.org/schema/mvc
      http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 	<!-- 自动扫描的包名 -->
-	<context:component-scan base-package="com.sfc.api">
+	<context:component-scan base-package="com.store.api">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
   		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
  	</context:component-scan>
@@ -37,7 +37,7 @@
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors>
- 			<bean class="com.sfc.api.session.interceptor.AuthInterceptor" />
+ 			<bean class="com.store.api.session.interceptor.AuthInterceptor" />
  	</mvc:interceptors> 
 
 	<!-- 总错误处理 -->

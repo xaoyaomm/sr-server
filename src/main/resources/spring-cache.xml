@@ -27,22 +27,22 @@
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 	</bean>
 	
-	<bean id="redisCacheManager" class="com.sfc.api.cache.RedisCachedImpl">
+	<bean id="redisCacheManager" class="com.store.api.cache.RedisCachedImpl">
 		<property name="redisTemplate" ref="redisTemplate" />
 	</bean>
 	
-	<bean id="methodCacheInterceptor" class="com.sfc.api.cache.MethodCacheInterceptor">
+	<bean id="methodCacheInterceptor" class="com.store.api.cache.MethodCacheInterceptor">
 		<property name="cacheManager">
 			<ref local="redisCacheManager" />
 		</property>
 	</bean>
 	
-	<bean id="cacheAdvisor" class="com.sfc.api.cache.AnnotationMethodPointcutAdvisor">
+	<bean id="cacheAdvisor" class="com.store.api.cache.AnnotationMethodPointcutAdvisor">
 		<property name="advice">
 			<ref bean="methodCacheInterceptor" />
 		</property>
 		<property name="annotationCls">
-			<value>com.sfc.api.cache.UseCache</value>
+			<value>com.store.api.cache.UseCache</value>
 		</property>
 	</bean>
 	

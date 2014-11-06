@@ -1,5 +1,8 @@
 package com.store.api.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,15 +10,15 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.store.api.common.Constant;
 import com.store.api.utils.Utils;
 
 public class BaseAction {
     protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    
+    protected Map<String, Object> result = new HashMap<String, Object>();
 
     protected HttpServletRequest request;
 
@@ -25,19 +28,15 @@ public class BaseAction {
 
     private String imei; // 手机串号
 
-    private String versionName; // 客户端版本号 eg:2.1.2
+    private String versionName; // 客户端版本号
 
-    private Long versionCode; // 客户端版本号编码 eg:212
+    private Long versionCode; // 客户端版本号编码
 
-    private String clientType; // 客户端类型 android_cargo,ios_cargo,android_drive
+    private String clientType; // 客户端类型
 
     @ModelAttribute
     public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
-        String contentType = request.getHeader("Content-Type");
-        if (request.getMethod().equalsIgnoreCase("post") && !Utils.isEmpty(contentType) && contentType.contains("multipart/form-data"))
-            this.request = ((DefaultMultipartHttpServletRequest) request).getRequest();
-        else
-            this.request = request;
+        this.request = request;
         this.response = response;
         this.session = this.request.getSession();
         this.imei = parseImei();
@@ -100,83 +99,34 @@ public class BaseAction {
     }
 
     private String parseImei() {
-        String imei = request.getHeader(Constant.HEADER_SFC_IMEI);
+        String imei = request.getHeader(Constant.HEADER_STORERUN_IMEI);
         if (!Utils.isEmpty(imei))
             return imei.trim();
-        else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("imei=")) {
-                        return fs[i].replace("imei=", "");
-                    }
-                }
-
-            }
-        }
         return null;
     }
 
     private String parseVersionName() {
-        String version = request.getHeader(Constant.HEADER_SFC_VERSION);
+        String version = request.getHeader(Constant.HEADER_STORERUN_VERSION);
         if (!Utils.isEmpty(version))
             return version.trim();
-        else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("versionName")) {
-                        return fs[i].replace("versionName=", "");
-                    }
-                }
-            }
-        }
         return null;
     }
 
     private Long parseVersionCode() {
-        String version = request.getHeader(Constant.HEADER_SFC_VERSION);
+        String version = request.getHeader(Constant.HEADER_STORERUN_VERSION);
         if (!Utils.isEmpty(version)) {
             if (version.contains("."))
                 version = version.replace(".", "");
             if (Utils.isNumber(version))
                 return Long.valueOf(version);
-        } else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("versionCode")) {
-                        String code = fs[i].replace("versionCode", "");
-                        if (Utils.isNumber(code))
-                            return Long.valueOf(code);
-                    }
-                }
-            }
-
         }
-        return null;
+        return 0L;
     }
 
     private String parseClientType() {
-        String client = request.getHeader(Constant.HEADER_SFC_CLIENT);
+        String client = request.getHeader(Constant.HEADER_STORERUN_CLIENT);
         if (!Utils.isEmpty(client))
             return client.trim();
-        else{
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("sfc365_client_")) {
-                        return fs[i].replace("sfc365_client_", "");
-                    } else if (fs[i].contains("iOS")) {
-                        return "IOS";
-                    }
-                }
-            }
-        }
         return null;
     }
 }

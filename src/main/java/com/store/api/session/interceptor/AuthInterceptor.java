@@ -74,7 +74,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String parseClientType(HttpServletRequest request) {
-        String client = request.getHeader(Constant.HEADER_SFC_CLIENT);
+        String client = request.getHeader(Constant.HEADER_STORERUN_CLIENT);
         if (!Utils.isEmpty(client))
             return client.trim();
         else {
@@ -94,7 +94,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String parseVersionName(HttpServletRequest request) {
-        String version = request.getHeader(Constant.HEADER_SFC_VERSION);
+        String version = request.getHeader(Constant.HEADER_STORERUN_VERSION);
         if (!Utils.isEmpty(version))
             return version.trim();
         else {
@@ -112,7 +112,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String parseImei(HttpServletRequest request) {
-        String imei = request.getHeader(Constant.HEADER_SFC_IMEI);
+        String imei = request.getHeader(Constant.HEADER_STORERUN_IMEI);
         if (!Utils.isEmpty(imei))
             return imei.trim();
         else {
