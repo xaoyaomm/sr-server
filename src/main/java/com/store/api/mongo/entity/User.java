@@ -48,6 +48,15 @@ public class User implements Serializable{
 	
 	/** 纬度 **/
 	private Double lng=0D;
+	
+	/** 注册版本 **/
+	private String registerVer="";
+	
+	/** 当前版本 **/
+	private String currVer="";
+	
+	/** imei **/
+	private String imei="";
 
 	public Long getId() {
 		return id;
