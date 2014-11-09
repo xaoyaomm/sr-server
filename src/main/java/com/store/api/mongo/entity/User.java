@@ -4,10 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.store.api.mongo.entity.enumeration.UserType;
 
 @Document
@@ -43,11 +42,9 @@ public class User implements Serializable{
 	/** 地址 **/
 	private String address="";
 	
-	/** 纬度 **/
-	private Double lat=0D;
-	
-	/** 纬度 **/
-	private Double lng=0D;
+	/** 坐标点[0]经度  [1]纬度 **/
+	@Indexed
+	private Double[] location={0D,0D};
 	
 	/** 注册版本 **/
 	private String registerVer="";
@@ -57,8 +54,36 @@ public class User implements Serializable{
 	
 	/** imei **/
 	private String imei="";
+	
+	/** 地址ID **/
+	private Long addressId=0L;
+	
+	/** UUID **/
+	private String uuid="";
+	
+	/** 帐号创建时间 **/
+    private Long createTime=System.currentTimeMillis();
+	
+	/** 最后使用时间 **/
+	private Long lastUserTime=System.currentTimeMillis();
+	
+	public Long getLastUserTime() {
+        return lastUserTime;
+    }
 
-	public Long getId() {
+    public void setLastUserTime(Long lastUserTime) {
+        this.lastUserTime = lastUserTime;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getId() {
 		return id;
 	}
 
@@ -130,22 +155,52 @@ public class User implements Serializable{
 		this.address = address;
 	}
 
-	public Double getLat() {
-		return lat;
-	}
+    public Double[] getLocation() {
+        return location;
+    }
 
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
+    public void setLocation(Double[] location) {
+        this.location = location;
+    }
 
-	public Double getLng() {
-		return lng;
-	}
+    public String getRegisterVer() {
+        return registerVer;
+    }
 
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-	
-	
+    public String getCurrVer() {
+        return currVer;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setRegisterVer(String registerVer) {
+        this.registerVer = registerVer;
+    }
+
+    public void setCurrVer(String currVer) {
+        this.currVer = currVer;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
 }

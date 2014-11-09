@@ -2,17 +2,16 @@ package com.store.api.session.interceptor;
 
 import java.util.Enumeration;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.User;
 import com.store.api.session.annotation.Authorization;
 import com.store.api.utils.JsonUtils;
 import com.store.api.utils.Utils;
@@ -47,21 +46,21 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 return true;
             } else {
                 Object obj = null;
-                String contentType = request.getHeader("Content-Type");
-                if (request.getMethod().equalsIgnoreCase("post") && !Utils.isEmpty(contentType) && contentType.contains("multipart/form-data")) {
-                    obj = ((DefaultMultipartHttpServletRequest) request).getRequest().getSession().getAttribute(auth.type());
-                } else
                     obj = request.getSession().getAttribute(auth.type());
                 if (null != obj) {// 验证成功
-
                     Object status = request.getSession().getAttribute(Constant.SESSION_INVALID_KEY);
                     if (null != status && ((String) status).equals(Constant.SESSION_INVALID_VALUE)) {
                         response.getWriter().print(JsonUtils.resultJson(1, "帐号已在其它设备上登录，请重新登录", null));
                         return false;
-                    } else
+                    } else{
+                        User user=(User) obj;
+                        user.setCurrVer(parseVersionName(request));
+                        user.setLastUserTime(System.currentTimeMillis());
+                        request.getSession().setAttribute(auth.type(),user);
                         return true;
+                    }
                 } else {// 验证失败
-                    response.getWriter().print(JsonUtils.resultJson(1, "登录超时，请重新登录", null));
+                    response.getWriter().print(JsonUtils.resultJson(1, "尚未登录，请先登录", null));
                     return false;
                 }
             }
@@ -77,56 +76,23 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         String client = request.getHeader(Constant.HEADER_STORERUN_CLIENT);
         if (!Utils.isEmpty(client))
             return client.trim();
-        else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("sfc365_client_")) {
-                        return fs[i].replace("sfc365_client_", "");
-                    } else if (fs[i].contains("iOS")) {
-                        return "IOS";
-                    }
-                }
-            }
-        }
-        return "-";
+        else
+            return "-";
     }
 
     private String parseVersionName(HttpServletRequest request) {
         String version = request.getHeader(Constant.HEADER_STORERUN_VERSION);
         if (!Utils.isEmpty(version))
             return version.trim();
-        else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("versionName")) {
-                        return fs[i].replace("versionName=", "");
-                    }
-                }
-            }
-        }
-        return "-";
+        else
+            return "-";
     }
 
     private String parseImei(HttpServletRequest request) {
         String imei = request.getHeader(Constant.HEADER_STORERUN_IMEI);
         if (!Utils.isEmpty(imei))
             return imei.trim();
-        else {
-            String ua = request.getHeader("user-agent");
-            if (!Utils.isEmpty(ua)) {
-                String[] fs = ua.split(",");
-                for (int i = 0; i < fs.length; i++) {
-                    if (fs[i].contains("imei=")) {
-                        return fs[i].replace("imei=", "");
-                    }
-                }
-
-            }
-        }
-        return "-";
+        else
+            return "-";
     }
 }

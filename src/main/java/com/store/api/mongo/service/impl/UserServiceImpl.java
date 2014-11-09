@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
                 entity.setId(sequenceService.getNextSequence(entity));
             }
         }
+		repository.save(entitys);
 	}
 
 	@Override
@@ -44,8 +45,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByUserName(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByUserName(userName);
 	}
 
 }

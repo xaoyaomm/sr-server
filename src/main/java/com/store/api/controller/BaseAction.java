@@ -13,7 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.User;
+import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.session.SessionService;
+import com.store.api.utils.JsonUtils;
 import com.store.api.utils.Utils;
+import com.store.api.utils.security.SecurityUtil;
 
 public class BaseAction {
     protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
@@ -128,5 +133,27 @@ public class BaseAction {
         if (!Utils.isEmpty(client))
             return client.trim();
         return null;
+    }
+    
+    protected void initSession (UserType type,User user,boolean delOld)throws Exception{
+        String oldSessionId = null;
+        String sessid = null;
+        Map<String, String> map = new HashMap<String, String>();
+        if (type.equals(UserType.merchants)) {
+            if (null != request.getSession().getAttribute(Constant.SESSION_USER))
+                oldSessionId = request.getSession().getId();
+            map.put(Constant.SESSION_USER, JsonUtils.object2Json(user));
+            sessid = SessionService.getInstance().createSession(user.getId() + "", UserType.merchants, map, null);
+        } else if(type.equals(UserType.customer)) {
+            if (null != request.getSession().getAttribute(Constant.SESSION_USER))
+                oldSessionId = request.getSession().getId();
+            map.put(Constant.SESSION_USER, JsonUtils.object2Json(user));
+            sessid = SessionService.getInstance().createSession(user.getId() + "", UserType.customer, map, delOld?oldSessionId:null);
+        }else{
+            map.put(Constant.SESSION_USER, JsonUtils.object2Json(user));
+            sessid = SessionService.getInstance().createSession(user.getId() + "", UserType.visitor, map, null);
+        }
+        if (!Utils.isEmpty(sessid))
+            setValueToCookie(Constant.SESSION_NAME, SecurityUtil.encrypt(sessid));
     }
 }

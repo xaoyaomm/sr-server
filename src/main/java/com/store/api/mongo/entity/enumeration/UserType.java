@@ -2,7 +2,7 @@ package com.store.api.mongo.entity.enumeration;
 
 public enum UserType {
 
-	merchants, customer, temp;
+	merchants, customer, visitor;
 
     public String getZh() {
         switch (this) {
@@ -10,8 +10,8 @@ public enum UserType {
             return "商家";
         case customer:
             return "顾客";
-        case temp:
-            return "临时用户";
+        case visitor:
+            return "游客";
         default:
             return "未知";
         }

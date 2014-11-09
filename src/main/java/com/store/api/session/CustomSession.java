@@ -4,12 +4,16 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.User;
 import com.store.api.utils.JsonUtils;
 
 /**
@@ -48,10 +52,9 @@ public class CustomSession implements HttpSession {
 	@Override
 	public Object getAttribute(String key) {
 		if (valueMap.containsKey(key)) {
-			if (key.equals(Constant.SESSION_USER_CUSTOMER)
-					|| key.equals(Constant.SESSION_USER_MERCHANTS))
+			if (key.equals(Constant.SESSION_USER))
 				return JsonUtils.json2Object(valueMap.get(key).toString(),
-						Object.class);
+						User.class);
 		}
 		return valueMap.get(key);
 	}
@@ -68,8 +71,7 @@ public class CustomSession implements HttpSession {
 		} else {
 			changed = true;
 			if (null != value
-					&& (key.equals(Constant.SESSION_USER_CUSTOMER) || key
-							.equals(Constant.SESSION_USER_MERCHANTS)))
+					&& (key.equals(Constant.SESSION_USER)))
 				valueMap.put(key, JsonUtils.object2Json(value));
 			else
 				valueMap.put(key, value);

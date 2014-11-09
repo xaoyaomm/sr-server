@@ -2,12 +2,11 @@ package com.store.api.session;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.store.api.common.Constant;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.utils.Utils;
 
 /**
@@ -94,18 +93,18 @@ public class SessionService {
      *            sessionMap(对象必须转成JSON格式)
      * @return sessionId
      */
-    public String createSession(String id, SessionUserType type, Map<String, String> map,String oldSessionId) throws Exception {
-        String sessionId = createSessionId(id, type.getType(), true);
-        String pattern = createSessionId(id, type.getType(), false) + "*";
+    public String createSession(String id, UserType type, Map<String, String> map,String oldSessionId) throws Exception {
+        String sessionId = createSessionId(id, type.toString(), false);
+//        String pattern = createSessionId(id, type, false) + "*";
         try {
-            Set<String> keys = RedisService.getInstance().findByPattern(pattern.toString());
-            if (null != keys && keys.size() > 0) {
-                for (String key : keys) {
-                    Map redisMap = RedisService.getInstance().hGetAll(key);
-                    redisMap.put(Constant.SESSION_INVALID_KEY, Constant.SESSION_INVALID_VALUE);
-                    RedisService.getInstance().save(key, redisMap, expire);
-                }
-            }
+//            Set<String> keys = RedisService.getInstance().findByPattern(pattern.toString());
+//            if (null != keys && keys.size() > 0) {
+//                for (String key : keys) {
+//                    Map redisMap = RedisService.getInstance().hGetAll(key);
+//                    redisMap.put(Constant.SESSION_INVALID_KEY, Constant.SESSION_INVALID_VALUE);
+//                    RedisService.getInstance().save(key, redisMap, expire);
+//                }
+//            }
             RedisService.getInstance().save(sessionId, map);
             if(!Utils.isEmpty(oldSessionId))
                 RedisService.getInstance().remove(oldSessionId);

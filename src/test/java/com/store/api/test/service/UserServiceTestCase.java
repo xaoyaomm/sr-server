@@ -21,18 +21,19 @@ public class UserServiceTestCase extends BaseServiceTestCase {
 		user.setType(UserType.customer);
 		user.setUserName("testa");
 		service.save(user);
+		System.out.println(user.getId());
 	}
 	
 	@Test
 	public void testFindOne(){
-		User user=service.findOne(2L);
+		User user=service.findOne(6L);
 		Assert.assertNotNull(user);
 		log.info(user.getNickName());
 	}
 	
 	@Test
 	public void testFindByName(){
-		User user=service.findByUserName("testa");
+		User user=service.findByUserName("vincent");
 		Assert.assertNotNull(user);
 		log.info(user.getNickName());
 	}

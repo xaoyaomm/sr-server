@@ -13,15 +13,14 @@ public class Address implements Serializable{
 	@Id
 	private Long id;
 	
-	private Long userId;
+	/** 用户ID **/
+	private Long userId=0L;
 	
-	private String address;
+	/** 地址信息 **/
+	private String address="";
 	
-	private Double lat;
-	
-	private Double lng;
-	
-	private Boolean def;
+	/** 坐标点[0]经度  [1]纬度 **/
+	private Double[] location={0D,0D};
 
 	public Long getId() {
 		return id;
@@ -47,28 +46,12 @@ public class Address implements Serializable{
 		this.address = address;
 	}
 
-	public Double getLat() {
-		return lat;
-	}
+	public Double[] getLocation() {
+        return location;
+    }
 
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
-
-	public Double getLng() {
-		return lng;
-	}
-
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-
-	public Boolean getDef() {
-		return def;
-	}
-
-	public void setDef(Boolean def) {
-		this.def = def;
-	}
+    public void setLocation(Double[] location) {
+        this.location = location;
+    }
 
 }

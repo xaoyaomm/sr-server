@@ -24,15 +24,10 @@ public class Constant {
     public static final String IMG_URL_PRE;
     
     /**
-     * SESSION中顾客对象对应KEY值
+     * SESSION中用户对象对应KEY值
      */
-    public static final String SESSION_USER_CUSTOMER="customer";
-    
-    /**
-     * SESSION中商户对象对应KEY值
-     */
-    public static final String SESSION_USER_MERCHANTS="merchants";
-    
+    public static final String SESSION_USER="user";
+   
     /**
      * SESSION是否失效的标志key
      */

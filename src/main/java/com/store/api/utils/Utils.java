@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.mysql.jdbc.StringUtils;
+import org.springframework.util.StringUtils;
 
 public class Utils {
 	
@@ -207,7 +207,7 @@ public class Utils {
 
     
     public static String format(String str){
-    	if(StringUtils.isNullOrEmpty(str)){
+    	if(StringUtils.isEmpty(str)){
     		return "未知";
     	}
     	
