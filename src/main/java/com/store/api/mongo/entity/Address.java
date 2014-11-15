@@ -19,7 +19,7 @@ public class Address implements Serializable{
 	/** 地址信息 **/
 	private String address="";
 	
-	/** 坐标点[0]经度  [1]纬度 **/
+	/** 坐标点[0]纬度  [1]经度 **/
 	private Double[] location={0D,0D};
 
 	public Long getId() {

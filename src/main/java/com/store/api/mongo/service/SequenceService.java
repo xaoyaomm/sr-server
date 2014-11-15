@@ -10,5 +10,7 @@ import java.io.Serializable;
 public interface SequenceService  {
   public <T extends Serializable> Long getNextSequence(T entity);
   
+  public Long getNextSequence(String name);
+  
   public void SetNextSequence(String sequenceName,Long next);
 }

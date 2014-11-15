@@ -1,23 +1,17 @@
 package com.store.api.utils;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.security.MessageDigest;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import com.mysql.jdbc.StringUtils;
 
 public class Method {
 
@@ -27,7 +21,7 @@ public class Method {
 	 * 
 	 */
     public static Integer intVal(String s) {
-        if (StringUtils.isNullOrEmpty(s)) {
+        if (StringUtils.isEmpty(s)) {
             return null;
         }
         return Integer.valueOf(s);
@@ -35,14 +29,14 @@ public class Method {
     }
 
     public static Long longVal(String s) {
-        if (StringUtils.isNullOrEmpty(s)) {
+        if (StringUtils.isEmpty(s)) {
             return null;
         }
         return Long.valueOf(s);
     }
 
     public static Double doubleVal(String s) {
-        if (StringUtils.isNullOrEmpty(s)) {
+        if (StringUtils.isEmpty(s)) {
             return null;
         }
         return Double.valueOf(s);

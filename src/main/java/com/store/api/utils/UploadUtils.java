@@ -15,9 +15,9 @@ import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
@@ -162,7 +162,7 @@ public class UploadUtils {
 	    
 	 
         public static String getAudioPath(String basePath,String year,String month,String day,String hour){
-        	if(StringUtils.isNullOrEmpty(year)||StringUtils.isNullOrEmpty(month)||StringUtils.isNullOrEmpty(day)||StringUtils.isNullOrEmpty(hour)){
+        	if(StringUtils.isEmpty(year)||StringUtils.isEmpty(month)||StringUtils.isEmpty(day)||StringUtils.isEmpty(hour)){
         		return null;
         	}
         	

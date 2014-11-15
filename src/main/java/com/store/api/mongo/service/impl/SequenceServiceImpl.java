@@ -17,6 +17,7 @@ public class SequenceServiceImpl  implements SequenceService {
 	/**
 	 * 针对Mongo的序列服务实现
 	 */
+	@Override
 	synchronized public Long getNextSequence(String name) {
 		 Sequence sequence=this.sequenceRepository.getSequenceByName(name);
 		return sequence.getSeq();
