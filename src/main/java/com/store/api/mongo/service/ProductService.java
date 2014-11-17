@@ -1,6 +1,7 @@
 package com.store.api.mongo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.store.api.mongo.entity.Product;
 
@@ -41,5 +42,12 @@ public interface ProductService {
 	 * @return
 	 */
 	public Long findMaxVer(Long areaId);
+	
+	/**
+	 * 按ID列表查询
+	 * @param ids
+	 * @return
+	 */
+	public Map<Long,Product> findByIds(List<Long> ids);
 
 }

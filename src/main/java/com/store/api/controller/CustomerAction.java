@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.store.api.mongo.entity.Catalog;
 import com.store.api.mongo.entity.Order;
+import com.store.api.mongo.entity.OrderProduct;
 import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.service.CatalogService;
 import com.store.api.mongo.service.ProductService;
@@ -107,12 +108,22 @@ public class CustomerAction extends BaseAction {
             return result;
         }
         
-        List<Map<Long, Long>> orderList=(List<Map<Long, Long>>) JsonUtils.json2Object(json, new ArrayList<Map<Long, Long>>().getClass());
+        List<Map<String, Long>> orderList=(List<Map<String, Long>>) JsonUtils.json2Object(json, new ArrayList<Map<String, Long>>().getClass());
         if(null==orderList){
             result.put("errorcode", "3");
             result.put("info", "下单失败");
             return result;
         }
+        
+        List<OrderProduct> pros=new ArrayList<OrderProduct>();
+        List<Long> proIds=new ArrayList<Long>();
+        double totalPrice=0;
+        
+        for (Map<String, Long> map : orderList) {
+			Long id=map.get("p_id");
+			Long num=map.get("p_num");
+			proIds.add(id);
+		}
         
         Order order=new Order();
         

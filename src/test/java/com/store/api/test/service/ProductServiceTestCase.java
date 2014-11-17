@@ -2,7 +2,9 @@ package com.store.api.test.service;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
@@ -35,6 +37,17 @@ public class ProductServiceTestCase extends BaseServiceTestCase {
         }
         service.save(list);
         
+    }
+    
+    @Test
+    public void testFind(){
+    	List<Long> ids=new ArrayList<Long>();
+    	ids.add(16L);
+    	ids.add(23L);
+    	ids.add(45L);
+    	
+    	Map<Long, Product> map=service.findByIds(ids);
+    	System.out.println(map.get(16L).getName());
     }
 
 }

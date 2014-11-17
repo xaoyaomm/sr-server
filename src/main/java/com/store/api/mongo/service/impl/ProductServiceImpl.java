@@ -1,6 +1,9 @@
 package com.store.api.mongo.service.impl;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,5 +81,16 @@ public class ProductServiceImpl implements ProductService {
             return page.getContent().get(0).getVer();
         return 0L;
     }
+
+	@Override
+	public Map<Long,Product> findByIds(List<Long> ids) {
+		Iterator<Product> it =repository.findAll(ids).iterator();
+		Map<Long,Product> map=new HashMap<Long, Product>();
+		while(it.hasNext()){
+			Product pro=it.next();
+			map.put(pro.getId(), pro);
+		}
+		return map;
+	}
 
 }
