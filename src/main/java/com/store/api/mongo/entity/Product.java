@@ -3,6 +3,7 @@ package com.store.api.mongo.entity;
 import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -35,6 +36,7 @@ public class Product implements Serializable{
 	private int status=1;
 	
 	/** 产品版本 **/
+	@Indexed
 	private Long ver=0L;
 
 	public Long getId() {

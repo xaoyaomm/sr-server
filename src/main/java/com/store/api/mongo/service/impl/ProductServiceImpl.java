@@ -3,6 +3,9 @@ package com.store.api.mongo.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.ProductRepository;
@@ -10,6 +13,13 @@ import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.service.ProductService;
 import com.store.api.mongo.service.SequenceService;
 
+
+/**
+ * 
+ * Revision History
+ * 
+ * 2014年11月15日,vincent,created it
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -59,5 +69,14 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findByAreaIdAndVerGreaterThan(Long areaId, Long ver) {
 		return repository.findByAreaIdAndVerGreaterThan(areaId, ver);
 	}
+
+    @Override
+    public Long findMaxVer(Long areaId) {
+        PageRequest pr=new PageRequest(0, 1, Direction.DESC, "ver");
+        Page<Product> page=repository.findByAreaId(areaId, pr);
+        if(page.hasContent())
+            return page.getContent().get(0).getVer();
+        return 0L;
+    }
 
 }

@@ -2,10 +2,18 @@ package com.store.api.mongo.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.store.api.mongo.entity.Product;
 
+/**
+ * 
+ * Revision History
+ * 
+ * 2014年11月15日,vincent,created it
+ */
 public interface ProductRepository extends MongoRepository<Product, Long> {
 	
 	/**
@@ -22,5 +30,13 @@ public interface ProductRepository extends MongoRepository<Product, Long> {
 	 * @return
 	 */
 	public List<Product> findByAreaIdAndVerGreaterThan(Long areaId,Long ver);
+	
+	/**
+	 * 分页查询
+	 * @param areaId
+	 * @param pr
+	 * @return
+	 */
+	public Page<Product> findByAreaId(Long areaId,Pageable pr);
 
 }

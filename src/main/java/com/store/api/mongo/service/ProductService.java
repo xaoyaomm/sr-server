@@ -34,5 +34,12 @@ public interface ProductService {
 	 * @return
 	 */
 	public List<Product> findByAreaIdAndVerGreaterThan(Long areaId,Long ver);
+	
+	/**
+	 * 查询最大版本号
+	 * @param areaId
+	 * @return
+	 */
+	public Long findMaxVer(Long areaId);
 
 }
