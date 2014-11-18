@@ -7,7 +7,10 @@
  */
 package com.store.api.mongo.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.OrderRepository;
 import com.store.api.mongo.entity.Order;
+import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.SequenceService;
 
@@ -38,13 +42,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<Order> findByCustomerId(Long id, int page, int size) {
         
-        PageRequest pr=new PageRequest(page<0?0:page, size, Direction.DESC, "status","id");
+        PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "status","id");
         return repository.findByCustomerId(id, pr);
     }
 
     @Override
     public Page<Order> findByMerchantsId(Long id, int page, int size) {
-        PageRequest pr=new PageRequest(page<0?0:page, size, Direction.DESC, "status","id");
+        PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "status","id");
         return repository.findByMerchantsId(id, pr);
     }
 
@@ -75,5 +79,26 @@ public class OrderServiceImpl implements OrderService {
     public void remove(List<Order> entitys) {
         repository.delete(entitys);
     }
+
+	@Override
+	public Order findOne(Long id) {
+		return repository.findOne(id);
+	}
+
+	@Override
+	public void remove(Order entity) {
+		repository.delete(entity);
+	}
+
+	@Override
+	public List<Order> findAll(Set<Long> ids) {
+		Iterator<Order> it =repository.findAll(ids).iterator();
+		List<Order> list=new ArrayList<Order>();
+		while(it.hasNext()){
+			Order order=it.next();
+			list.add(order);
+		}
+		return list;
+	}
 
 }

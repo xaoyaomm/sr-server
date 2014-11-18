@@ -49,7 +49,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/register")
+    @RequestMapping(value="/register" ,produces="text/plain;charset=UTF-8")
     public String register(@RequestParam(value = "name", required = false, defaultValue = "")
     String userName, @RequestParam(value = "nickname", required = false, defaultValue = "")
     String nickName, @RequestParam(value = "pwd", required = false, defaultValue = "")
@@ -99,7 +99,7 @@ public class PublicAction extends BaseAction {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/visitorlogin")
+    @RequestMapping(value="/visitorlogin",produces="text/plain;charset=UTF-8")
     public String visitorLogin(@RequestParam(value = "uuid", required = false, defaultValue = "")
     String uuid) throws Exception {
         if (Utils.isEmpty(uuid))
@@ -109,6 +109,7 @@ public class PublicAction extends BaseAction {
         user.setImei(getImei());
         user.setRegisterVer(getVersionName());
         user.setCurrVer(getVersionName());
+        user.setUuid(uuid);
         userService.save(user);
 
         initSession(UserType.visitor, user, false);
@@ -128,7 +129,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/login")
+    @RequestMapping(value="/login",produces="text/plain;charset=UTF-8")
     public String login(@RequestParam(value = "name", required = false, defaultValue = "")
     String userName, @RequestParam(value = "pwd", required = false, defaultValue = "")
     String pwd) throws Exception {
@@ -173,7 +174,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/modify")
+    @RequestMapping(value="/modify",produces="text/plain;charset=UTF-8")
     @Authorization(type = Constant.SESSION_USER)
     public String modify(@RequestParam(value = "nickname", required = false, defaultValue = "")
     String nickName, @RequestParam(value = "phone", required = false, defaultValue = "")
@@ -200,7 +201,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/userinfo")
+    @RequestMapping(value="/userinfo",produces="text/plain;charset=UTF-8")
     @Authorization(type = Constant.SESSION_USER)
     public String userInfo() throws Exception {
         Object obj = session.getAttribute(Constant.SESSION_USER);
@@ -237,7 +238,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/queryaddress")
+    @RequestMapping(value="/queryaddress",produces="text/plain;charset=UTF-8")
     @Authorization(type = Constant.SESSION_USER)
     public String queryAddress() throws Exception {
         Object obj = session.getAttribute(Constant.SESSION_USER);
@@ -271,7 +272,7 @@ public class PublicAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/editaddress")
+    @RequestMapping(value="/editaddress",produces="text/plain;charset=UTF-8")
     @Authorization(type = Constant.SESSION_USER)
     public String editAddress(@RequestParam(value = "addressid", required = false, defaultValue = "0")
     Long addrId, @RequestParam(value = "address", required = false, defaultValue = "")

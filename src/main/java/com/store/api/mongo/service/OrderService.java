@@ -1,7 +1,10 @@
 package com.store.api.mongo.service;
 
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
+
 import com.store.api.mongo.entity.Order;
 
 /**
@@ -30,6 +33,8 @@ public interface OrderService {
      */
     public Page<Order> findByMerchantsId(Long id,int page,int size);
     
+    public List<Order> findAll(Set<Long> ids);
+    
     public void save(Order entity);
     
     public void save(List<Order> entitys);
@@ -37,4 +42,8 @@ public interface OrderService {
     public void remove(Long id);
     
     public void remove(List<Order> entitys);
+    
+    public void remove(Order entity);
+    
+    public Order findOne(Long id);
 }

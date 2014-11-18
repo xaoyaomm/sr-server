@@ -72,6 +72,6 @@ public class Constant {
         XMPP_REG_URL=props.getProperty("xmppRegUrl","http://192.168.1.53:9090/plugins/userService");
         XMPP_PUSH_URL=props.getProperty("xmppPushUrl","http://192.168.1.53:9090/plugins/pushmessage");
         SEARCH_DISTANCE=PropertiesUtil.getLongProperty(props, "searchDistance");
-        COOKIE_DOMAIN=props.getProperty("cookieDomain","api.sfc365.com");
+        COOKIE_DOMAIN=props.getProperty("cookieDomain","202.96.155.42");
     }
 }

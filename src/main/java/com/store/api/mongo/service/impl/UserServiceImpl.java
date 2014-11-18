@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.UserRepository;
 import com.store.api.mongo.entity.User;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.service.SequenceService;
 import com.store.api.mongo.service.UserService;
 
@@ -49,6 +50,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByUserName(String userName) {
 		return repository.findByUserName(userName);
+	}
+
+	@Override
+	public List<User> findByType(UserType type) {
+		return repository.findByType(type);
 	}
 
 }

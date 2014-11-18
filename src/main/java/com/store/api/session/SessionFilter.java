@@ -84,7 +84,8 @@ public class SessionFilter extends HttpServlet implements Filter {
         String id = SecurityUtil.decrypt(sessionId);
         StringBuffer pattern = new StringBuffer();
         pattern.append("(?:").append(UserType.customer).append("|");
-        pattern.append(UserType.merchants);
+        pattern.append(UserType.merchants).append("|");
+        pattern.append(UserType.visitor);
         pattern.append(")+_\\d+_(\\d{7})*");
         return Pattern.matches(pattern.toString(), id);
     }

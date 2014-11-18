@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
 public class OrderProduct implements Serializable{
 
@@ -17,6 +19,7 @@ public class OrderProduct implements Serializable{
     private Long orderId=0L;
     
     /** 产品ID **/
+    @JsonProperty("p_id")
     private Long productId=0L;
     
     /** 产品名称 **/
@@ -26,6 +29,7 @@ public class OrderProduct implements Serializable{
     private Double productPrice=0D;
     
     /** 购买数量 **/
+    @JsonProperty("p_num")
     private int amount=0;
     
     /** 产品图片 **/

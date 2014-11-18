@@ -1,5 +1,6 @@
 package com.store.api.controller;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public class BaseAction {
     private Long versionCode; // 客户端版本号编码
 
     private String clientType; // 客户端类型
+    
+    protected  DecimalFormat nfmt = new DecimalFormat();
 
     @ModelAttribute
     public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
@@ -48,6 +51,7 @@ public class BaseAction {
         this.versionName = parseVersionName();
         this.versionCode = parseVersionCode();
         this.clientType = parseClientType();
+        nfmt.setMaximumFractionDigits(1); 
     }
 
     protected String getImei() {

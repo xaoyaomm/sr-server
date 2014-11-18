@@ -58,6 +58,12 @@ public class Order implements Serializable{
     /** 订单总价 **/
     private Double totalPrice=0D;
     
+    /** 商品总数量 **/
+    private int totalAmount=0;
+    
+    /** 购买商品描述 **/
+    private String prosDesc="";
+    
     /** 卖家地址 **/
     private String fromAddress="";
     
@@ -213,5 +219,21 @@ public class Order implements Serializable{
     public void setMerchantsPhone(String merchantsPhone) {
         this.merchantsPhone = merchantsPhone;
     }
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public String getProsDesc() {
+		return prosDesc;
+	}
+
+	public void setProsDesc(String prosDesc) {
+		this.prosDesc = prosDesc;
+	}
 
 }

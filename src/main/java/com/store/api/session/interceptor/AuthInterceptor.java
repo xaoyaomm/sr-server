@@ -24,6 +24,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (handler.getClass().isAssignableFrom(HandlerMethod.class)) {
+        	response.setContentType("text/plain;charset=UTF-8");
             Authorization auth = ((HandlerMethod) handler).getMethodAnnotation(Authorization.class);
             // 没有声明需要权限
             StringBuffer sbUrl = new StringBuffer();

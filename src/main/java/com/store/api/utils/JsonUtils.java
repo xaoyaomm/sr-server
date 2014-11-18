@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.store.api.mongo.entity.OrderProduct;
+import com.store.api.mongo.entity.Product;
 
 public class JsonUtils {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtils.class);
@@ -85,6 +87,20 @@ public class JsonUtils {
         }
         return o;
     }
+    
+    public static List<OrderProduct> json2OrderProduct(String json) {
+    	List<OrderProduct> o = null;
+        try {
+            o = objectMapper.readValue(json, new TypeReference<List<OrderProduct>>(){});
+        } catch (JsonParseException e) {
+            LOG.error(">>E:" + e);
+        } catch (JsonMappingException e) {
+            LOG.error(">>E:" + e);
+        } catch (IOException e) {
+            LOG.error(">>E:" + e);
+        }
+        return o;
+    }
 	
 	/**
 	 * 处理返回的json模式
@@ -99,7 +115,7 @@ public class JsonUtils {
 		if(null != dataList){
 			map.put("data", dataList);
 		}
-		return EncodingUtil.stringToUnicode(JsonUtils.object2Json(map));
+		return JsonUtils.object2Json(map);
 	}
 	
 }  

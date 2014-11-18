@@ -9,6 +9,8 @@ package com.store.api.mongo.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.store.api.mongo.entity.OrderOffer;
 
 /**
@@ -40,5 +42,14 @@ public interface OrderOfferService {
      * @return
      */
     public List<OrderOffer> findByMerchantsId(Long id);
+    
+    
+    /**
+     * 分页查询推送给商户的订单数
+     * @param mercId
+     * @param date
+     * @return
+     */
+    public Page<OrderOffer> findByMerchantsIdAndCreateDateGreaterThan(Long mercId,Long date,int page,int size);
 
 }

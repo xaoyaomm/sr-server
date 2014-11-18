@@ -10,6 +10,10 @@ package com.store.api.mongo.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.OrderOfferRepository;
 import com.store.api.mongo.entity.OrderOffer;
@@ -22,6 +26,7 @@ import com.store.api.mongo.service.SequenceService;
  * 
  * 2014年11月15日,vincent,created it
  */
+@Service
 public class OrderOfferServiceImpl implements OrderOfferService {
     
     @Autowired
@@ -67,5 +72,11 @@ public class OrderOfferServiceImpl implements OrderOfferService {
     public List<OrderOffer> findByMerchantsId(Long id) {
         return repository.findByMerchantsId(id);
     }
+
+	@Override
+	public Page<OrderOffer> findByMerchantsIdAndCreateDateGreaterThan(Long mercId, Long date,int page,int size) {
+		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+		return repository.findByMerchantsIdAndCreateDateGreaterThan(mercId, date,pr);
+	}
 
 }
