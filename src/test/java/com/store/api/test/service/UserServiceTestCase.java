@@ -1,8 +1,11 @@
 package com.store.api.test.service;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.service.UserService;
@@ -37,5 +40,10 @@ public class UserServiceTestCase extends BaseServiceTestCase {
 		Assert.assertNotNull(user);
 		log.info(user.getNickName());
 	}
-
+	
+	@Test
+	public void testGeoSearch(){
+		List<User> users=service.geoSearch(UserType.merchants, new Double[]{114.036956,22.616613}, 2369D);
+		System.out.println(users.size());
+	}
 }

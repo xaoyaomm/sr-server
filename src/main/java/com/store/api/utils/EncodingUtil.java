@@ -1,6 +1,5 @@
 package com.store.api.utils;
 
-import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

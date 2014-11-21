@@ -19,6 +19,11 @@ public class Constant {
     public static final String HEADER_STORERUN_CLIENT="SR-CLI";
     
     /**
+     * 位置计算弧度系数
+     */
+    public static final double EARTH_RADIUS = 6378137;
+    
+    /**
      * 图片URL地址前缀
      */
     public static final String IMG_URL_PRE;

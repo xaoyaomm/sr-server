@@ -4,9 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.store.api.mongo.entity.enumeration.UserType;
 
 @Document
@@ -43,7 +47,7 @@ public class User implements Serializable{
 	private String address="";
 	
 	/** 坐标点[0]经度  [1]纬度 **/
-	@Indexed
+	@GeoSpatialIndexed(type=GeoSpatialIndexType.GEO_2DSPHERE ,name="location_2ds")
 	private Double[] location={0D,0D};
 	
 	/** 注册版本 **/
@@ -60,6 +64,9 @@ public class User implements Serializable{
 	
 	/** UUID **/
 	private String uuid="";
+	
+	/** 状态 1有效  0无效 **/
+	private int status=1;
 	
 	/** 帐号创建时间 **/
     private Long createTime=System.currentTimeMillis();
@@ -202,5 +209,13 @@ public class User implements Serializable{
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 }

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -336,6 +335,11 @@ public class MerchantsAction extends BaseAction {
 		}
 	}
 	
+	/**
+	 * 确认送达
+	 * @param orderId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/arrive")
 	@Authorization(type = Constant.SESSION_USER)

@@ -33,8 +33,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 封装HTTP请求
- * 
- * @author songhaipeng 2013年12月4日
  */
 public class HttpUtil {
     protected static Logger log = LoggerFactory.getLogger(HttpUtil.class);

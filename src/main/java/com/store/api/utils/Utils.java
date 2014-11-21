@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.util.StringUtils;
-
 public class Utils {
 	
 	/**
@@ -32,48 +30,7 @@ public class Utils {
             return false;
     	return Pattern.matches("^([0-9])+$", orderId);
     }
-    
-   
-    /**
-     * 验证价格的有效性
-     * @param price
-     * @return
-     */
-    public static boolean checkPrice(String price) {
-        if(isEmpty(price))
-            return false;
-    	return Pattern.matches("^([0-9])+(\\.[0-9]{1,2})*+$", price);
-    }
-    
-    public static boolean checkUserName(String userName){
-        if(isEmpty(userName))
-            return false;
-        return Pattern.matches("^([a-zA-Z0-9_\\x{4e00}-\\x{9fa5}]{2,30})+", userName);
-    }
-    
-    /**
-     * 评价等级
-     */
-    public static int getGrade(long score){
-    	if(score <= 0){
-    		return 0;
-    	}
-    	else if(score <= 20 && score > 0){
-    		return 1;
-    	}
-    	else if(score <= 60 && score > 20){
-    		return 2;
-    	}
-    	else if(score <= 150 && score > 60){
-    		return 3;
-    	}
-    	else if(score <= 300 && score > 150){
-    		return 4;
-    	}
-    	else{
-    		return 5;
-    	}
-    }
+
     /**
      * double 保留两位小数
      * @param d
@@ -204,20 +161,6 @@ public class Utils {
     	return bd+"";
     }
     
-
-    
-    public static String format(String str){
-    	if(StringUtils.isEmpty(str)){
-    		return "未知";
-    	}
-    	
-    	for (int i = 0; i < str.length(); i++){
-    		   if (!Character.isDigit(str.charAt(i))){
-    			   return "未知";
-    		   }
-    	}
-    	return str+"米";
-    }
     public static Integer[] stringToIntegerArray(String str){
     	 String[] modelStr = str.split(",");
          Integer[] models = new Integer[modelStr.length];
@@ -247,45 +190,7 @@ public class Utils {
  	}
  	
  	
- 	private static double EARTH_RADIUS = 6378137;
- 	private static double rad(double d)
- 	{
- 	   return d * Math.PI / 180.0;
- 	}
-
- 	public static double GetDistance(Double lat1, Double lng1, Double lat2, Double lng2)
- 	{
- 	   if(lat1 == null || lng1 == null || lat2 == null || lng2 == null){
- 		   return 0;
- 	   }
- 	   double radLat1 = rad(lat1);
- 	   double radLat2 = rad(lat2);
- 	   double a = radLat1 - radLat2;
- 	   double b = rad(lng1) - rad(lng2);
- 	   double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + 
- 	    Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
- 	   s = s * EARTH_RADIUS;
- 	   s = Math.round(s * 10000) / 10000;
- 	   return s;
- 	}
- 	
- 	private static final int MAX_MATCH_NUMBER = 1;
-	private static final String MATCH_REG = ".\\d路;";
-
-	public static boolean isBusLines(String str) {
-		Pattern pattern = Pattern.compile(MATCH_REG);
-		Matcher matcher = pattern.matcher(str);
-//		System.out.println(matcher.groupCount());
-		int count = 0;
-		while (matcher.find()) {
-			count++;
-		}
-		return count >= MAX_MATCH_NUMBER;
-	}
- 	
- 	
  	public static void main(String[] args) {
- 		System.out.println(GetDistance(113.676795,22.941322,114.091837,22.547244));
- 		//114.091837,22.547244
+ 		
 	}
 }

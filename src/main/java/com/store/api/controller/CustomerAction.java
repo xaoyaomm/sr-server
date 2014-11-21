@@ -123,6 +123,11 @@ public class CustomerAction extends BaseAction {
 		return result;
 	}
 
+	/**
+	 * 下单接口
+	 * @param json
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/order")
 	@Authorization(type = Constant.SESSION_USER)
