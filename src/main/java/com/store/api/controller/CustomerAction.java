@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.Address;
 import com.store.api.mongo.entity.Catalog;
 import com.store.api.mongo.entity.Order;
 import com.store.api.mongo.entity.OrderOffer;
@@ -22,6 +23,7 @@ import com.store.api.mongo.entity.OrderProduct;
 import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.mongo.service.AddressService;
 import com.store.api.mongo.service.CatalogService;
 import com.store.api.mongo.service.OrderOfferService;
 import com.store.api.mongo.service.OrderProductService;
@@ -61,6 +63,9 @@ public class CustomerAction extends BaseAction {
 
 	@Autowired
 	private OrderOfferService orderOfferService;
+	
+	@Autowired
+	private AddressService addressService;
 
 	/**
 	 * 查询所有商品列表
@@ -82,7 +87,7 @@ public class CustomerAction extends BaseAction {
 				reList.add(reMap);
 			}
 		}
-		return JsonUtils.resultJson(0, "", reList);
+		return JsonUtils.resultJson(1, "", reList);
 	}
 
 	/**
@@ -110,13 +115,13 @@ public class CustomerAction extends BaseAction {
 			reMap = new HashMap<String, String>();
 			reMap.put("p_id", product.getId() + "");
 			reMap.put("p_name", product.getName());
-			reMap.put("p_price", nfmt.format(product.getPrice()));
+			reMap.put("p_price", product.getPrice()+"");
 			reMap.put("p_img", product.getImgUrl());
 			reMap.put("p_catalog", product.getCatalogId() + "");
 			reMap.put("p_status", product.getStatus() + "");
 			reList.add(reMap);
 		}
-		result.put("errorcode", "0");
+		result.put("errorcode", "1");
 		result.put("info", "");
 		result.put("ver", maxVer + "");
 		result.put("data", reList);
@@ -131,26 +136,37 @@ public class CustomerAction extends BaseAction {
 	@ResponseBody
 	@RequestMapping("/order")
 	@Authorization(type = Constant.SESSION_USER)
-	public Map<String, Object> productList(@RequestParam(value = "jsoninfo", required = false, defaultValue = "") String json) {
+	public Map<String, Object> productList(@RequestParam(value = "goods", required = false, defaultValue = "") String json,
+	        @RequestParam(value = "addrid", required = false, defaultValue = "") Long addrId) {
 		if (Utils.isEmpty(json)) {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "下单失败");
 			return result;
 		}
 
 		List<OrderProduct> opList = JsonUtils.json2OrderProduct(json);
 		if (null == opList) {
-			result.put("errorcode", "3");
+			result.put("errorcode", "-3");
 			result.put("info", "下单失败");
 			return result;
 		}
 
 		Object obj = session.getAttribute(Constant.SESSION_USER);
 		User user = (User) obj;
+		
+		Address address=addressService.findOne(addrId);;
+		if(null==address){
+		    if(Utils.isEmpty(user.getAddress()) || null==user.getLocation()){
+		        result.put("errorcode", "-4");
+	            result.put("info", "无效的地址，请重新填写地址");
+	            return result;
+		    }else
+		        address=addressService.findOne(user.getAddressId());
+		}
 
 		List<Long> proIds = new ArrayList<Long>();
 		Map<String, String> reMap = new HashMap<String, String>();
-		double totalPrice = 0;
+		long totalPrice = 0;
 		Order order =null;
 		List<OrderOffer> offerList=null;
 		StringBuffer prosDesc = new StringBuffer();
@@ -178,8 +194,8 @@ public class CustomerAction extends BaseAction {
 			order.setCustomerId(user.getId());
 			order.setCustomerName(user.getNickName());
 			order.setCustomerPhone(user.getPhone());
-			order.setToAddress(user.getAddress());
-			order.setToLocation(user.getLocation());
+			order.setToAddress(address.getAddress());
+			order.setToLocation(address.getLocation());
 			order.setTotalPrice(totalPrice);
 			order.setTotalAmount(opList.size());
 			order.setProsDesc(prosDesc.toString());
@@ -193,6 +209,7 @@ public class CustomerAction extends BaseAction {
 
 			
 			reMap.put("order_id", order.getId() + "");
+			reMap.put("invalid_time", "300");
 
 			// TODO 推送给商户
 			List<User> users = userService.findByType(UserType.merchants);
@@ -206,17 +223,18 @@ public class CustomerAction extends BaseAction {
 				offerList.add(offer);
 			}
 			orderOfferService.save(offerList);
+			reMap.put("rec_num", users.size()+"");
 			
 		} catch (Exception e) {//异常后删除写入的数据
 			orderService.remove(order);
 			orderProductService.remove(opList);
 			orderOfferService.remove(offerList);
-			result.put("errorcode", "4");
+			result.put("errorcode", "-4");
 			result.put("info", "下单失败");
 			return result;
 		}
 
-		result.put("errorcode", "0");
+		result.put("errorcode", "1");
 		result.put("info", "");
 		result.put("data", reMap);
 		return result;
@@ -246,12 +264,12 @@ public class CustomerAction extends BaseAction {
 				reMap.put("rec_num", offerList.size() + "");
 				reMap.put("deal_merc", "");
 			}
-			result.put("errorcode", "0");
+			result.put("errorcode", "1");
 			result.put("info", "");
 			result.put("data", reMap);
 			return result;
 		} else {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "查询失败");
 			return result;
 		}
@@ -282,12 +300,12 @@ public class CustomerAction extends BaseAction {
 				reMap.put("deal_merc", order.getMerchantsName());
 				reMap.put("status", order.getStatus() + "");
 				reMap.put("product_num", order.getTotalAmount() + "");
-				reMap.put("total_price", nfmt.format(order.getTotalPrice()));
+				reMap.put("total_price", order.getTotalPrice()+"");
 				reMap.put("desc", order.getProsDesc());
 				reList.add(reMap);
 			}
 		}
-		result.put("errorcode", "0");
+		result.put("errorcode", "1");
 		result.put("total_page", orderPage.getTotalPages() + "");
 		result.put("info", "");
 		result.put("data", reList);
@@ -314,9 +332,9 @@ public class CustomerAction extends BaseAction {
 				for (OrderProduct op : ops) {
 					Map<String, String> opMap = new HashMap<String, String>();
 					opMap.put("p_id", op.getProductId() + "");
-					opMap.put("p_name", op.getProductName());
-					opMap.put("p_price", nfmt.format(op.getProductPrice()));
-					opMap.put("p_img", op.getProductImg());
+//					opMap.put("p_name", op.getProductName());
+//					opMap.put("p_price", op.getProductPrice()+"");
+//					opMap.put("p_img", op.getProductImg());
 					opMap.put("p_num", op.getAmount() + "");
 					reList.add(opMap);
 				}
@@ -326,15 +344,15 @@ public class CustomerAction extends BaseAction {
 			reMap.put("deal_merc", order.getMerchantsName());
 			reMap.put("status", order.getStatus() + "");
 			reMap.put("product_num", order.getTotalAmount() + "");
-			reMap.put("total_price", nfmt.format(order.getTotalPrice()));
+			reMap.put("total_price", order.getTotalPrice()+"");
 			reMap.put("products", reList);
 
-			result.put("errorcode", "0");
+			result.put("errorcode", "1");
 			result.put("info", "");
 			result.put("data", reMap);
 			return result;
 		} else {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "查询失败");
 			return result;
 		}
@@ -356,11 +374,11 @@ public class CustomerAction extends BaseAction {
 			order.setStatus(6);
 			orderService.save(order);
 
-			result.put("errorcode", "0");
+			result.put("errorcode", "1");
 			result.put("info", "");
 			return result;
 		} else {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "确认收货失败");
 			return result;
 		}

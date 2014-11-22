@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
@@ -74,9 +75,20 @@ public class OrderOfferServiceImpl implements OrderOfferService {
     }
 
 	@Override
-	public Page<OrderOffer> findByMerchantsIdAndCreateDateGreaterThan(Long mercId, Long date,int page,int size) {
+	public Page<OrderOffer> findByMerchantsIdAndOrderIdGreaterThan(Long mercId, Long orderId,int page,int size) {
 		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
-		return repository.findByMerchantsIdAndCreateDateGreaterThan(mercId, date,pr);
+		return repository.findByMerchantsIdAndStatusNotAndOrderIdGreaterThan(mercId,1,orderId,pr);
 	}
+
+    @Override
+    public int findTadayLostByUserId(Long id, Long date) {
+        return repository.findTadayLostByUserId(id, date);
+    }
+
+    @Override
+    public Page<OrderOffer> findByMerchantsIdAndOrderIdLessThan(Long mercId, Long orderId, int page,int size) {
+        PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+        return repository.findByMerchantsIdAndStatusNotAndOrderIdLessThan(mercId,1,orderId,pr);
+    }
 
 }

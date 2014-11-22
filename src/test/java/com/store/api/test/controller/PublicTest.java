@@ -52,9 +52,21 @@ public class PublicTest extends BaseActionTestCase{
     }
     
     @Test
-    public void testLogin() throws Exception{
+    public void testCustomerLogin() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/login").accept(MediaType.ALL)
                 .param("name", "vincent")
+                .param("pwd", "12345"));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        log.info(mr.getResponse().getCookie(Constant.SESSION_NAME).getValue());
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
+    @Test
+    public void testMerchantsLogin() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/login").accept(MediaType.ALL)
+                .param("name", "vc_merc")
                 .param("pwd", "12345"));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();

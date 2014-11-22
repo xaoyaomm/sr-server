@@ -31,14 +31,24 @@ public class ProductServiceTestCase extends BaseServiceTestCase {
             pro.setName("零食"+i);
             DecimalFormat dcmFmt = new DecimalFormat("0.0");
             Random rand = new Random();
-            Double f = rand.nextDouble() * 100;
-            pro.setPrice(Double.valueOf(dcmFmt.format(f)));
+            int price = rand.nextInt(100)*10;
+            pro.setPrice(Long.valueOf(price));
             pro.setStatus(1);
             pro.setOrder(Long.valueOf(i));
             list.add(pro);
         }
         service.save(list);
-        
+    }
+    
+    @Test
+    public void testUpdate() {
+        List<Product> list=service.findByAreaId(51L);
+        for (Product pro : list) {
+            Random rand = new Random();
+            int price = rand.nextInt(100)*10;
+            pro.setPrice(Long.valueOf(price));
+        }
+        service.save(list);
     }
     
     @Test

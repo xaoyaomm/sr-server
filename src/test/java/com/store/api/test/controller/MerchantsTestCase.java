@@ -19,10 +19,21 @@ public class MerchantsTestCase extends BaseActionTestCase {
     }
 	
 	@Test
-    public void testReceiveOrderList() throws Exception{
-        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlist").accept(MediaType.ALL)
-        		 .param("page", "1")
-        		 .param("size", "10").cookie(cookie));
+    public void testReceiveOrderListTop() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttop").accept(MediaType.ALL)
+        		 .param("orderid", "6")
+        		 .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+	
+	@Test
+    public void testReceiveOrderListTail() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttail").accept(MediaType.ALL)
+                 .param("orderid", "7")
+                 .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

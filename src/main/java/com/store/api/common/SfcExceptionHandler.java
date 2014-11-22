@@ -41,7 +41,7 @@ public class SfcExceptionHandler {
         }  
         LOG.error(sbUrl.toString()+" --->\n"+e.getMessage()+"\n"+sb_e.toString());
         Map<String, String> map=new HashMap<String, String>();
-        map.put("errorcode", "99");
+        map.put("errorcode", "-99");
         map.put("info", "服务器忙，请稍候再试");
         return map;  
     }  

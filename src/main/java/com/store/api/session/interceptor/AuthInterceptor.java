@@ -51,7 +51,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 if (null != obj) {// 验证成功
                     Object status = request.getSession().getAttribute(Constant.SESSION_INVALID_KEY);
                     if (null != status && ((String) status).equals(Constant.SESSION_INVALID_VALUE)) {
-                        response.getWriter().print(JsonUtils.resultJson(1, "帐号已在其它设备上登录，请重新登录", null));
+                        response.getWriter().print(JsonUtils.resultJson(-1, "帐号已在其它设备上登录，请重新登录", null));
                         return false;
                     } else{
                         User user=(User) obj;
@@ -61,7 +61,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                         return true;
                     }
                 } else {// 验证失败
-                    response.getWriter().print(JsonUtils.resultJson(1, "尚未登录，请先登录", null));
+                    response.getWriter().print(JsonUtils.resultJson(-1, "尚未登录，请先登录", null));
                     return false;
                 }
             }

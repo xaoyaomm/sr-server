@@ -56,7 +56,7 @@ public class Order implements Serializable{
     private Long cancelDate=0L;
     
     /** 订单总价 **/
-    private Double totalPrice=0D;
+    private Long totalPrice=0L;
     
     /** 商品总数量 **/
     private int totalAmount=0;
@@ -112,10 +112,6 @@ public class Order implements Serializable{
         return cancelDate;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
     public String getFromAddress() {
         return fromAddress;
     }
@@ -168,16 +164,20 @@ public class Order implements Serializable{
         this.cancelDate = cancelDate;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public void setFromAddress(String fromAddress) {
         this.fromAddress = fromAddress;
     }
 
     public void setToAddress(String toAddress) {
         this.toAddress = toAddress;
+    }
+
+    public Long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public void setFromLocation(Double[] fromLocation) {

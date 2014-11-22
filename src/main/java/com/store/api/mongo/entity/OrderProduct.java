@@ -26,7 +26,7 @@ public class OrderProduct implements Serializable{
     private String productName="";
     
     /** 产品单价 **/
-    private Double productPrice=0D;
+    private Long productPrice=0L;
     
     /** 购买数量 **/
     @JsonProperty("p_num")
@@ -51,7 +51,7 @@ public class OrderProduct implements Serializable{
         return productName;
     }
 
-    public Double getProductPrice() {
+    public Long getProductPrice() {
         return productPrice;
     }
 
@@ -79,7 +79,7 @@ public class OrderProduct implements Serializable{
         this.productName = productName;
     }
 
-    public void setProductPrice(Double productPrice) {
+    public void setProductPrice(Long productPrice) {
         this.productPrice = productPrice;
     }
 

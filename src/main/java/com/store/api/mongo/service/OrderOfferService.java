@@ -10,6 +10,7 @@ package com.store.api.mongo.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.store.api.mongo.entity.OrderOffer;
 
@@ -45,11 +46,27 @@ public interface OrderOfferService {
     
     
     /**
-     * 分页查询推送给商户的订单数
+     * 分页查询推送给商户的订单数(top)
      * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<OrderOffer> findByMerchantsIdAndOrderIdGreaterThan(Long mercId,Long orderId,int page,int size);
+    
+    /**
+     * 分页查询推送给商户的订单数(tail)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<OrderOffer> findByMerchantsIdAndOrderIdLessThan(Long mercId,Long orderId,int page,int size);
+    
+    /**
+     * 查询今天商户错过的订单数
+     * @param id
      * @param date
      * @return
      */
-    public Page<OrderOffer> findByMerchantsIdAndCreateDateGreaterThan(Long mercId,Long date,int page,int size);
+    public int findTadayLostByUserId(Long id,Long date);
 
 }

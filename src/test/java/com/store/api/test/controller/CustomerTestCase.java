@@ -41,7 +41,8 @@ public class CustomerTestCase extends BaseActionTestCase {
     public void testOrder() throws Exception{
     	String json="[{\"p_id\":\"16\",\"p_num\":\"2\"},{\"p_id\":\"22\",\"p_num\":\"1\"},{\"p_id\":\"45\",\"p_num\":\"1\"}]";
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/order").accept(MediaType.ALL)
-                .param("jsoninfo",json).cookie(cookie));
+                .param("goods",json)
+                .param("addrid", "4").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -51,7 +52,7 @@ public class CustomerTestCase extends BaseActionTestCase {
     @Test
     public void testQueryOffer() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/queryoffer").accept(MediaType.ALL)
-                .param("orderid", "4"));
+                .param("orderid", "6"));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -73,7 +74,7 @@ public class CustomerTestCase extends BaseActionTestCase {
     @Test
     public void testOrderDetail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/orderdetail").accept(MediaType.ALL)
-                .param("orderid", "4").cookie(cookie));
+                .param("orderid", "6").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

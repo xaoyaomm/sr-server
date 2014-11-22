@@ -40,8 +40,6 @@ public class BaseAction {
 
     private String clientType; // 客户端类型
     
-    protected  DecimalFormat nfmt = new DecimalFormat();
-
     @ModelAttribute
     public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -51,7 +49,6 @@ public class BaseAction {
         this.versionName = parseVersionName();
         this.versionCode = parseVersionCode();
         this.clientType = parseClientType();
-        nfmt.setMaximumFractionDigits(1); 
     }
 
     protected String getImei() {

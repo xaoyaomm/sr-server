@@ -55,10 +55,10 @@ public class PublicAction extends BaseAction {
 			@RequestParam(value = "phone", required = false, defaultValue = "") String phone, @RequestParam(value = "type", required = false, defaultValue = "2") Long type,
 			@RequestParam(value = "promocode", required = false, defaultValue = "") String code) throws Exception {
 		if (Utils.isEmpty(userName) || Utils.isEmpty(pwd)) {
-			return JsonUtils.resultJson(2, "用户名或密码不能为空", null);
+			return JsonUtils.resultJson(-2, "用户名或密码不能为空", null);
 		}
 		if (userService.findByUserName(userName.trim()) != null)
-			return JsonUtils.resultJson(3, "用户名已经被注册", null);
+			return JsonUtils.resultJson(-3, "用户名已经被注册", null);
 		if (Utils.isEmpty(nickName)) {
 			nickName = userName;
 		}
@@ -86,7 +86,7 @@ public class PublicAction extends BaseAction {
 		veResult.put("nick_name", nickName);
 		veResult.put("phone", phone);
 		veResult.put("user_type", "1");
-		return JsonUtils.resultJson(0, "", veResult);
+		return JsonUtils.resultJson(1, "", veResult);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class PublicAction extends BaseAction {
 	@RequestMapping(value = "/visitorlogin", produces = "text/plain;charset=UTF-8")
 	public String visitorLogin(@RequestParam(value = "uuid", required = false, defaultValue = "") String uuid) throws Exception {
 		if (Utils.isEmpty(uuid))
-			return JsonUtils.resultJson(2, "注册失败", null);
+			return JsonUtils.resultJson(-2, "注册失败", null);
 		User user = userService.findByUuid(uuid);
 		if (null == user) {
 			user = new User();
@@ -118,7 +118,7 @@ public class PublicAction extends BaseAction {
 		Map<String, Object> veResult = new HashMap<String, Object>();
 		veResult.put("user_id", user.getId() + "");
 		veResult.put("user_type", "0");
-		return JsonUtils.resultJson(0, "", veResult);
+		return JsonUtils.resultJson(1, "", veResult);
 	}
 
 	/**
@@ -134,12 +134,12 @@ public class PublicAction extends BaseAction {
 	public String login(@RequestParam(value = "name", required = false, defaultValue = "") String userName,
 			@RequestParam(value = "pwd", required = false, defaultValue = "") String pwd) throws Exception {
 		if (Utils.isEmpty(userName) || Utils.isEmpty(pwd))
-			return JsonUtils.resultJson(2, "用户名或密码不能为空", null);
+			return JsonUtils.resultJson(-2, "用户名或密码不能为空", null);
 		User user = userService.findByUserName(userName.trim());
 		if (null == user)
-			return JsonUtils.resultJson(3, "用户尚未注册", null);
+			return JsonUtils.resultJson(-3, "用户尚未注册", null);
 		if (Utils.isEmpty(user.getPwd()) || !user.getPwd().equalsIgnoreCase(pwd.trim()))
-			return JsonUtils.resultJson(4, "密码错误", null);
+			return JsonUtils.resultJson(-4, "密码错误", null);
 
 		initSession(user.getType(), user, false);
 
@@ -162,7 +162,7 @@ public class PublicAction extends BaseAction {
 		veResult.put("phone", user.getPhone());
 		veResult.put("user_type", "1");
 		veResult.put("addrs", resAddr);
-		return JsonUtils.resultJson(0, "", veResult);
+		return JsonUtils.resultJson(1, "", veResult);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class PublicAction extends BaseAction {
 	public String modify(@RequestParam(value = "nickname", required = false, defaultValue = "") String nickName,
 			@RequestParam(value = "phone", required = false, defaultValue = "") String phone) throws Exception {
 		if (Utils.isEmpty(nickName) && Utils.isEmpty(phone))
-			return JsonUtils.resultJson(2, "修改字段不能为空", null);
+			return JsonUtils.resultJson(-2, "修改字段不能为空", null);
 
 		Object obj = session.getAttribute(Constant.SESSION_USER);
 
@@ -190,7 +190,7 @@ public class PublicAction extends BaseAction {
 			user.setPhone(phone);
 		userService.save(user);
 		session.setAttribute(Constant.SESSION_USER, user);
-		return JsonUtils.resultJson(0, "", null);
+		return JsonUtils.resultJson(1, "", null);
 	}
 
 	/**
@@ -227,7 +227,7 @@ public class PublicAction extends BaseAction {
 		veResult.put("phone", user.getPhone());
 		veResult.put("user_type", "1");
 		veResult.put("addrs", resAddr);
-		return JsonUtils.resultJson(0, "", veResult);
+		return JsonUtils.resultJson(1, "", veResult);
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class PublicAction extends BaseAction {
 				resAddr.add(map);
 			}
 		}
-		return JsonUtils.resultJson(0, "", resAddr);
+		return JsonUtils.resultJson(1, "", resAddr);
 	}
 
 	/**
@@ -278,9 +278,9 @@ public class PublicAction extends BaseAction {
 			@RequestParam(value = "lng", required = false, defaultValue = "") Double lng, @RequestParam(value = "def", required = false, defaultValue = "") String def)
 			throws Exception {
 		if (lat <= 0 || lng <= 0)
-			return JsonUtils.resultJson(2, "位置信息错误", null);
+			return JsonUtils.resultJson(-2, "位置信息错误", null);
 		if (Utils.isEmpty(address))
-			return JsonUtils.resultJson(3, "请填写地址信息", null);
+			return JsonUtils.resultJson(-3, "请填写地址信息", null);
 		boolean isadd = true;
 		boolean isdef = false;
 		if (addrId > 0)
@@ -326,7 +326,7 @@ public class PublicAction extends BaseAction {
 		Map<String, String> reMap = new HashMap<String, String>();
 		reMap.put("addr_id", addObj.getId() + "");
 
-		return JsonUtils.resultJson(0, "", reMap);
+		return JsonUtils.resultJson(1, "", reMap);
 	}
 
 }

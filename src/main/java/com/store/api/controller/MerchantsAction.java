@@ -50,39 +50,38 @@ public class MerchantsAction extends BaseAction {
 	private OrderOfferService orderOfferService;
 
 	/**
-	 * 接单列表
+	 * 接单列表头部,取>订单ID的记录
 	 * 
 	 * @param page
 	 * @param size
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/receiveorderlist")
+	@RequestMapping("/receiveorderlisttop")
 	@Authorization(type = Constant.SESSION_USER)
-	public Map<String, Object> receiveOrderList(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-
+	public Map<String, Object> receiveOrderListTop(
+	        @RequestParam(value = "orderid", required = false, defaultValue = "0") Long orderId) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		Long startTime = cal.getTime().getTime();
+		int page=1;
+		int size=20;
 
 		Object obj = session.getAttribute(Constant.SESSION_USER);
 		User user = (User) obj;
 
-		int lost = 0;
+		int lost = orderOfferService.findTadayLostByUserId(user.getId(), startTime);
 		Set<Long> ids = new HashSet<Long>();
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
 		Map<String, String> orderMap = null;
 
-		Page<OrderOffer> ofPage = orderOfferService.findByMerchantsIdAndCreateDateGreaterThan(user.getId(), startTime, page, size);
+		Page<OrderOffer> ofPage = orderOfferService.findByMerchantsIdAndOrderIdGreaterThan(user.getId(), orderId, page, size);
 		if (ofPage.hasContent()) {
 			for (OrderOffer of : ofPage.getContent()) {
 				ids.add(of.getOrderId());
-				if (of.getStatus() > 0)
-					lost++;
 			}
 		}
 		List<Order> orders = orderService.findAll(ids);
@@ -94,7 +93,7 @@ public class MerchantsAction extends BaseAction {
 				orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
 				orderMap.put("to_address", order.getToAddress());
 				orderMap.put("product_num", order.getTotalAmount() + "");
-				orderMap.put("total_price", nfmt.format(order.getTotalPrice()));
+				orderMap.put("total_price", order.getTotalPrice()+"");
 				orderMap.put("desc", order.getProsDesc());
 				orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
 				reList.add(orderMap);
@@ -104,12 +103,71 @@ public class MerchantsAction extends BaseAction {
 		reMap.put("lost_num", lost + "");
 		reMap.put("orders", reList);
 
-		result.put("errorcode", "0");
+		result.put("errorcode", "1");
 		result.put("info", "");
-		result.put("total_page", ofPage.getTotalPages() + "");
 		result.put("data", reMap);
 		return result;
 	}
+	
+	/**
+     * 接单列表尾部,取<订单ID的记录
+     * 
+     * @param page
+     * @param size
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/receiveorderlisttail")
+    @Authorization(type = Constant.SESSION_USER)
+    public Map<String, Object> receiveOrderListTail(
+            @RequestParam(value = "orderid", required = false, defaultValue = "0") Long orderId) {
+
+        int page=1;
+        int size=10;
+        
+        if(orderId <=0){
+            result.put("errorcode", "-2");
+            result.put("info", "查询失败");
+            return result;
+        }
+        
+        Object obj = session.getAttribute(Constant.SESSION_USER);
+        User user = (User) obj;
+
+        Set<Long> ids = new HashSet<Long>();
+        Map<String, Object> reMap = new HashMap<String, Object>();
+        List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
+        Map<String, String> orderMap = null;
+
+        Page<OrderOffer> ofPage = orderOfferService.findByMerchantsIdAndOrderIdLessThan(user.getId(),orderId, page, size);
+        if (ofPage.hasContent()) {
+            for (OrderOffer of : ofPage.getContent()) {
+                ids.add(of.getOrderId());
+            }
+        }
+        List<Order> orders = orderService.findAll(ids);
+
+        if (orders.size() > 0) {
+            for (Order order : orders) {
+                orderMap = new HashMap<String, String>();
+                orderMap.put("order_id", order.getId() + "");
+                orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
+                orderMap.put("to_address", order.getToAddress());
+                orderMap.put("product_num", order.getTotalAmount() + "");
+                orderMap.put("total_price", order.getTotalPrice()+"");
+                orderMap.put("desc", order.getProsDesc());
+                orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
+                reList.add(orderMap);
+            }
+        }
+
+        reMap.put("orders", reList);
+
+        result.put("errorcode", "1");
+        result.put("info", "");
+        result.put("data", reMap);
+        return result;
+    }
 
 	/**
 	 * 接单详细
@@ -133,7 +191,7 @@ public class MerchantsAction extends BaseAction {
 						opMap = new HashMap<String, String>();
 						opMap.put("p_id", op.getProductId() + "");
 						opMap.put("p_name", op.getProductName());
-						opMap.put("p_price", nfmt.format(op.getProductPrice()));
+						opMap.put("p_price", op.getProductPrice()+"");
 						opMap.put("p_img", op.getProductImg());
 						opMap.put("p_num", op.getAmount() + "");
 						reList.add(opMap);
@@ -143,15 +201,15 @@ public class MerchantsAction extends BaseAction {
 				reMap.put("to_address", order.getToAddress());
 				reMap.put("phone", order.getCustomerPhone());
 				reMap.put("nick_name", order.getCustomerName());
-				reMap.put("total_price", nfmt.format(order.getTotalPrice()));
+				reMap.put("total_price", order.getTotalPrice()+"");
 				reMap.put("products", reList);
 			}
-			result.put("errorcode", "0");
+			result.put("errorcode", "1");
 			result.put("info", "");
 			result.put("data", reMap);
 			return result;
 		} else {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "查询失败");
 			return result;
 		}
@@ -203,14 +261,14 @@ public class MerchantsAction extends BaseAction {
 					orderService.save(order);
 					orderOfferService.save(ofs);
 
-					result.put("errorcode", "0");
+					result.put("errorcode", "1");
 					result.put("info", "");
 					return result;
 				}
 			}
 			return result;
 		} else {
-			result.put("errorcode", "3");
+			result.put("errorcode", "-3");
 			result.put("info", "抢单失败");
 			return result;
 		}
@@ -242,13 +300,13 @@ public class MerchantsAction extends BaseAction {
 				reMap.put("to_address", order.getToAddress());
 				reMap.put("status", order.getStatus() + "");
 				reMap.put("product_num", order.getTotalAmount() + "");
-				reMap.put("total_price", nfmt.format(order.getTotalPrice()));
+				reMap.put("total_price", order.getTotalPrice()+"");
 				reMap.put("desc", order.getProsDesc());
 				reList.add(reMap);
 			}
 		}
 
-		result.put("errorcode", "0");
+		result.put("errorcode", "1");
 		result.put("total_page", orderPage.getTotalPages() + "");
 		result.put("info", "");
 		result.put("data", reList);
@@ -276,7 +334,7 @@ public class MerchantsAction extends BaseAction {
 					Map<String, String> opMap = new HashMap<String, String>();
 					opMap.put("p_id", op.getProductId() + "");
 					opMap.put("p_name", op.getProductName());
-					opMap.put("p_price", nfmt.format(op.getProductPrice()));
+					opMap.put("p_price", op.getProductPrice()+"");
 					opMap.put("p_img", op.getProductImg());
 					opMap.put("p_num", op.getAmount() + "");
 					reList.add(opMap);
@@ -288,15 +346,15 @@ public class MerchantsAction extends BaseAction {
 			reMap.put("phone", order.getCustomerPhone());
 			reMap.put("status", order.getStatus() + "");
 			reMap.put("product_num", order.getTotalAmount() + "");
-			reMap.put("total_price", nfmt.format(order.getTotalPrice()));
+			reMap.put("total_price", order.getTotalPrice()+"");
 			reMap.put("products", reList);
 
-			result.put("errorcode", "0");
+			result.put("errorcode", "1");
 			result.put("info", "");
 			result.put("data", reMap);
 			return result;
 		} else {
-			result.put("errorcode", "2");
+			result.put("errorcode", "-2");
 			result.put("info", "查询失败");
 			return result;
 		}
@@ -320,16 +378,16 @@ public class MerchantsAction extends BaseAction {
 				
 				orderService.save(order);
 				
-				result.put("errorcode", "0");
+				result.put("errorcode", "1");
 				result.put("info", "");
 				return result;
 			}else{
-				result.put("errorcode", "2");
+				result.put("errorcode", "-2");
 				result.put("info", "取消订单失败");
 				return result;
 			}
 		} else {
-			result.put("errorcode", "3");
+			result.put("errorcode", "-3");
 			result.put("info", "取消订单失败");
 			return result;
 		}
@@ -352,16 +410,16 @@ public class MerchantsAction extends BaseAction {
 				
 				orderService.save(order);
 				
-				result.put("errorcode", "0");
+				result.put("errorcode", "1");
 				result.put("info", "");
 				return result;
 			}else{
-				result.put("errorcode", "2");
+				result.put("errorcode", "-2");
 				result.put("info", "确认失败");
 				return result;
 			}
 		} else {
-			result.put("errorcode", "3");
+			result.put("errorcode", "-3");
 			result.put("info", "确认失败");
 			return result;
 		}

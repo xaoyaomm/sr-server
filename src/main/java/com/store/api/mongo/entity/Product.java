@@ -17,8 +17,8 @@ public class Product implements Serializable{
 	/** 产品名称 **/
 	private String name="";
 	
-	/** 产品单价 **/
-	private Double price=0D;
+	/** 产品单价(分) **/
+	private Long price=0L;
 	
 	/** 产品图片地址 **/
 	private String imgUrl="";
@@ -55,11 +55,11 @@ public class Product implements Serializable{
 		this.name = name;
 	}
 
-	public Double getPrice() {
+	public Long getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(Long price) {
 		this.price = price;
 	}
 
