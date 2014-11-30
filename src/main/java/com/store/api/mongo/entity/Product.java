@@ -12,38 +12,38 @@ public class Product implements Serializable{
 	private static final long serialVersionUID = 6064717319673556320L;
 	
 	@Id
-	private Long id;
+	private long id;
 	
 	/** 产品名称 **/
 	private String name="";
 	
 	/** 产品单价(分) **/
-	private Long price=0L;
+	private long price=0L;
 	
 	/** 产品图片地址 **/
 	private String imgUrl="";
 	
 	/** 产品类别 **/
-	private Long catalogId=0L;
+	private long catalogId=0L;
 	
 	/** 产品所属于区域 **/
 	private int areaId=0;
 	
 	/** 产品排序 **/
-	private Long order=0L;
+	private long order=0L;
 	
 	/** 产品状态 1新增 2修改 3删除 **/
 	private int status=1;
 	
 	/** 产品版本 **/
 	@Indexed
-	private Long ver=0L;
+	private long ver=0L;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -55,11 +55,11 @@ public class Product implements Serializable{
 		this.name = name;
 	}
 
-	public Long getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
@@ -71,11 +71,11 @@ public class Product implements Serializable{
 		this.imgUrl = imgUrl;
 	}
 
-	public Long getCatalogId() {
+	public long getCatalogId() {
 		return catalogId;
 	}
 
-	public void setCatalogId(Long catalogId) {
+	public void setCatalogId(long catalogId) {
 		this.catalogId = catalogId;
 	}
 
@@ -87,11 +87,11 @@ public class Product implements Serializable{
 		this.areaId = areaId;
 	}
 
-	public Long getOrder() {
+	public long getOrder() {
 		return order;
 	}
 
-	public void setOrder(Long order) {
+	public void setOrder(long order) {
 		this.order = order;
 	}
 
@@ -103,11 +103,11 @@ public class Product implements Serializable{
 		this.status = status;
 	}
 
-	public Long getVer() {
+	public long getVer() {
 		return ver;
 	}
 
-	public void setVer(Long ver) {
+	public void setVer(long ver) {
 		this.ver = ver;
 	}
 	

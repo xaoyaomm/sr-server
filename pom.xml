@@ -32,10 +32,6 @@
 		<hibernate-validator.version>5.1.1.Final</hibernate-validator.version>
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
 		<fasterxml.version>2.0.6</fasterxml.version>
-		<!-- <wsdl4j.version>1.6.3</wsdl4j.version> -->
-		<!-- <XmlSchema.version>1.4.7</XmlSchema.version>
-		<org.apache.neethi.version>3.0.3</org.apache.neethi.version> -->
-		<!-- <mysql.version>5.1.30</mysql.version> -->
 		<mockito-all.version>1.9.5</mockito-all.version>
 		<aspectjrt.version>1.6.12</aspectjrt.version>
 		<aspectjweaver.version>1.6.12</aspectjweaver.version>
@@ -46,7 +42,7 @@
 		<jdk.version>1.7</jdk.version>
 	</properties>
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -196,7 +192,7 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>${commons-fileupload.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -228,7 +224,7 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${fasterxml.version}</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -259,7 +255,7 @@
 			<version>${servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.imgscalr</groupId>
 			<artifactId>imgscalr-lib</artifactId>
@@ -293,9 +289,8 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-					<!-- 请设置本地环境变量 JAVA_HOME,add by haipenge 2014.5.24 -->
 					<compilerArguments>
-						<bootclasspath>${JAVA_HOME}/jre/lib/rt.jar</bootclasspath>
+						<extdirs>lib</extdirs>
 					</compilerArguments>
 				</configuration>
 			</plugin>
@@ -339,6 +334,13 @@
 									</excludes>
 									<targetPath>WEB-INF/classes</targetPath>
 								</resource>
+								<resource>
+									<directory>lib</directory>
+									<targetPath>WEB-INF/lib</targetPath>
+									<includes>
+										<include>**/*.jar</include>
+									</includes>
+								</resource>
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
 							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -378,6 +380,13 @@
 										<exclude>*.xml</exclude>
 									</excludes>
 									<targetPath>WEB-INF/classes</targetPath>
+								</resource>
+								<resource>
+									<directory>lib</directory>
+									<targetPath>WEB-INF/lib</targetPath>
+									<includes>
+										<include>**/*.jar</include>
+									</includes>
 								</resource>
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
@@ -419,6 +428,13 @@
 									</excludes>
 									<targetPath>WEB-INF/classes</targetPath>
 								</resource>
+								<resource>
+									<directory>lib</directory>
+									<targetPath>WEB-INF/lib</targetPath>
+									<includes>
+										<include>**/*.jar</include>
+									</includes>
+								</resource>
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
 							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -445,78 +461,4 @@
 		</profile>
 	</profiles>
 
-	<!-- <repositories>
-		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>interval:1</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/thirdparty</url>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<id>spring-snapshot</id>
-			<name>Spring Snapshot Repository</name>
-			<url>http://repo.springsource.org/snapshot</url>
-		</repository>
-	</repositories> -->
-	<!-- <pluginRepositories>
-		<pluginRepository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/thirdparty</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>snapshots</id>
-			<name>Snapshots</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>interval:1</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-		
-	</pluginRepositories> -->
-	<distributionManagement>
-		<repository>
-			<id>sfc365-release</id>
-			<name>Nexus Release Repository</name>
-			<url>http://192.168.1.51:8081/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>sfc365-snapshots</id>
-			<name>Nexus Snapshot Repository</name>
-			<url>http://192.168.1.51:8088/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>

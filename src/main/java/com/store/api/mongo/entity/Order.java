@@ -1,9 +1,14 @@
 package com.store.api.mongo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.store.api.mongo.entity.subdocument.Offer;
+import com.store.api.mongo.entity.subdocument.OrderProduct;
 
 /**
  * 
@@ -17,13 +22,13 @@ public class Order implements Serializable{
     private static final long serialVersionUID = -4718253039843718803L;
     
     @Id
-    private Long id;
+    private long id;
     
     /** 买家ID **/
-    private Long customerId=0L;
+    private long customerId=0L;
     
     /** 卖家ID **/
-    private Long merchantsId=0L;
+    private long merchantsId=0L;
     
     /** 买家名称 **/
     private String customerName="";
@@ -41,22 +46,22 @@ public class Order implements Serializable{
     private int status=0;
     
     /** 订单创建时间 **/
-    private Long createDate=0L;
+    private long createDate=0L;
     
     /** 成单时间 **/
-    private Long offerDate=0L;
+    private long offerDate=0L;
     
     /** 送达时间 **/
-    private Long arrivedDate=0L;
+    private long arrivedDate=0L;
     
     /** 确认收货时间 **/
-    private Long confirmDate=0L;
+    private long confirmDate=0L;
     
     /** 取消时间 **/
-    private Long cancelDate=0L;
+    private long cancelDate=0L;
     
     /** 订单总价 **/
-    private Long totalPrice=0L;
+    private long totalPrice=0L;
     
     /** 商品总数量 **/
     private int totalAmount=0;
@@ -71,20 +76,26 @@ public class Order implements Serializable{
     private String toAddress="";
     
     /** 卖家位置 [0]纬度  [1]经度**/
-    private Double[] fromLocation={0D,0D};
+    private double[] fromLocation={0D,0D};
     
     /** 买家位置 [0]纬度  [1]经度**/
-    private Double[] toLocation={0D,0D};
+    private double[] toLocation={0D,0D};
+    
+    /** 报价信息**/
+    private List<Offer> offers=new ArrayList<Offer>();
+    
+    /** 购买产品列表**/
+    private List<OrderProduct> products=new ArrayList<OrderProduct>();
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public Long getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
-    public Long getMerchantsId() {
+    public long getMerchantsId() {
         return merchantsId;
     }
 
@@ -92,23 +103,23 @@ public class Order implements Serializable{
         return status;
     }
 
-    public Long getCreateDate() {
+    public long getCreateDate() {
         return createDate;
     }
 
-    public Long getOfferDate() {
+    public long getOfferDate() {
         return offerDate;
     }
 
-    public Long getArrivedDate() {
+    public long getArrivedDate() {
         return arrivedDate;
     }
 
-    public Long getConfirmDate() {
+    public long getConfirmDate() {
         return confirmDate;
     }
 
-    public Long getCancelDate() {
+    public long getCancelDate() {
         return cancelDate;
     }
 
@@ -120,23 +131,23 @@ public class Order implements Serializable{
         return toAddress;
     }
 
-    public Double[] getFromLocation() {
+    public double[] getFromLocation() {
         return fromLocation;
     }
 
-    public Double[] getToLocation() {
+    public double[] getToLocation() {
         return toLocation;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 
-    public void setMerchantsId(Long merchantsId) {
+    public void setMerchantsId(long merchantsId) {
         this.merchantsId = merchantsId;
     }
 
@@ -144,23 +155,23 @@ public class Order implements Serializable{
         this.status = status;
     }
 
-    public void setCreateDate(Long createDate) {
+    public void setCreateDate(long createDate) {
         this.createDate = createDate;
     }
 
-    public void setOfferDate(Long offerDate) {
+    public void setOfferDate(long offerDate) {
         this.offerDate = offerDate;
     }
 
-    public void setArrivedDate(Long arrivedDate) {
+    public void setArrivedDate(long arrivedDate) {
         this.arrivedDate = arrivedDate;
     }
 
-    public void setConfirmDate(Long confirmDate) {
+    public void setConfirmDate(long confirmDate) {
         this.confirmDate = confirmDate;
     }
 
-    public void setCancelDate(Long cancelDate) {
+    public void setCancelDate(long cancelDate) {
         this.cancelDate = cancelDate;
     }
 
@@ -172,19 +183,19 @@ public class Order implements Serializable{
         this.toAddress = toAddress;
     }
 
-    public Long getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(long totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public void setFromLocation(Double[] fromLocation) {
+    public void setFromLocation(double[] fromLocation) {
         this.fromLocation = fromLocation;
     }
 
-    public void setToLocation(Double[] toLocation) {
+    public void setToLocation(double[] toLocation) {
         this.toLocation = toLocation;
     }
 
@@ -235,5 +246,21 @@ public class Order implements Serializable{
 	public void setProsDesc(String prosDesc) {
 		this.prosDesc = prosDesc;
 	}
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public List<OrderProduct> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<OrderProduct> products) {
+        this.products = products;
+    }
 
 }

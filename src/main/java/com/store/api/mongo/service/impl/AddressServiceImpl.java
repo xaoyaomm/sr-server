@@ -1,6 +1,5 @@
 package com.store.api.mongo.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void save(Address entity) {
-        if (null == entity.getId()) {
+        if (0 == entity.getId()) {
             entity.setId(this.sequenceService.getNextSequence(entity));
         }
         repository.save(entity);
@@ -31,7 +30,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void save(List<Address> entitys) {
         for (Address entity : entitys) {
-            if (null == entity.getId()) {
+            if (0 == entity.getId()) {
                 entity.setId(sequenceService.getNextSequence(entity));
             }
         }
@@ -39,12 +38,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findByUserId(Long userId) {
+    public List<Address> findByUserId(long userId) {
         return repository.findByUserId(userId);
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(long id) {
         repository.delete(id);
     }
 
@@ -54,7 +53,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address findOne(Long id) {
+    public Address findOne(long id) {
         return repository.findOne(id);
     }
 

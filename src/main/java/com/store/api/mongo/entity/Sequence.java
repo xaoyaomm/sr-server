@@ -18,36 +18,36 @@ public class Sequence implements Serializable {
 	private static final long serialVersionUID = 5075732214984800587L;
 
 	@Id
-	private Long id=null;
+	private long id=0;
 	/**
 	 *  主键
 	 */
-	private Long seq=new Long(1);
+	private long seq=1;
 	/**
 	 * 步长
 	 */
-	private Long step=new Long(1);
+	private long step=1;
 	/**
 	 * 序列名字
 	 */
 	private  String name="";
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-	public Long getSeq() {
+	public long getSeq() {
 		return seq;
 	}
-	public void setSeq(Long seq) {
+	public void setSeq(long seq) {
 		this.seq = seq;
 	}
-	public Long getStep() {
+	public long getStep() {
 		return step;
 	}
-	public void setStep(Long step) {
+	public void setStep(long step) {
 		this.step = step;
 	}
 	public String getName() {

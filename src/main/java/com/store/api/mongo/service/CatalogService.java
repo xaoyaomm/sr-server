@@ -16,7 +16,7 @@ public interface CatalogService {
 	
 	public void save(List<Catalog> entitys);
 	
-	public void remove(Long id);
+	public void remove(long id);
 	
 	public void remove(Catalog entity);
 	

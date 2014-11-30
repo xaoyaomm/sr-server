@@ -18,7 +18,7 @@ public class SequenceServiceImpl  implements SequenceService {
 	 * 针对Mongo的序列服务实现
 	 */
 	@Override
-	synchronized public Long getNextSequence(String name) {
+	synchronized public long getNextSequence(String name) {
 		 Sequence sequence=this.sequenceRepository.getSequenceByName(name);
 		return sequence.getSeq();
 	}
@@ -27,13 +27,13 @@ public class SequenceServiceImpl  implements SequenceService {
      * 针对Mongo的序列服务实现
      */
     @Override
-    synchronized public <T extends Serializable> Long getNextSequence(T entity) {
+    synchronized public <T extends Serializable> long getNextSequence(T entity) {
         Sequence sequence=this.sequenceRepository.getSequenceByName(entity.getClass().getSimpleName());
         return sequence.getSeq();
     }
 
     @Override
-    public void SetNextSequence(String sequenceName, Long next) {
+    public void SetNextSequence(String sequenceName, long next) {
         Sequence sequence=this.sequenceRepository.getSequenceByName(sequenceName);
         if(null==sequence){
             sequence=new Sequence();

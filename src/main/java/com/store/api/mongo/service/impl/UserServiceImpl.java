@@ -1,21 +1,18 @@
 package com.store.api.mongo.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.geo.Circle;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import com.store.api.common.Common;
 import com.store.api.common.Constant;
 import com.store.api.mongo.dao.UserRepository;
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.mongo.entity.vo.UserSearch;
 import com.store.api.mongo.service.SequenceService;
 import com.store.api.mongo.service.UserService;
 
@@ -30,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void save(User entity) {
-		if (null == entity.getId()) {
+		if (0 == entity.getId()) {
 			entity.setId(this.sequenceService.getNextSequence(entity));
 		}
 		repository.save(entity);
@@ -40,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void save(List<User> entitys) {
 		for (User entity : entitys) {
-			if (null == entity.getId()) {
+			if (0 == entity.getId()) {
 				entity.setId(sequenceService.getNextSequence(entity));
 			}
 		}
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findOne(Long id) {
+	public User findOne(long id) {
 		return repository.findOne(id);
 	}
 
@@ -79,8 +76,16 @@ public class UserServiceImpl implements UserService {
 	 * @return
 	 */
 	@Override
-	public List<User> geoSearch(UserType type, Double[] location,Double distance) {
+	public List<UserSearch> geoSearch(UserType type, double[] location,long distance) {
 		List<User> list=repository.geoSearch(type, location, distance/Constant.EARTH_RADIUS);
-		return list;
+		List<UserSearch> voList=new ArrayList<UserSearch>();
+		for (User user : list) {
+            UserSearch us=new UserSearch();
+            us.setDistance(Common.getDistance(location[0], location[1], user.getLocation()[0], user.getLocation()[1]));
+            us.setUser(user);
+            voList.add(us);
+        }
+		Collections.sort(voList);
+		return voList;
 	}
 }

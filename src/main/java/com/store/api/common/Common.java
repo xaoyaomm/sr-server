@@ -1,5 +1,7 @@
 package com.store.api.common;
 
+import java.text.DecimalFormat;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class Common {
@@ -63,7 +65,7 @@ public class Common {
      * @param lat2 纬度
      * @return
      */
-    public static double getDistance(double lng1, double lat1, double lng2, double lat2){
+    public static long getDistance(double lng1, double lat1, double lng2, double lat2){
        double radLat1 = lat1* Math.PI / 180.0;
        double radLat2 = lat2* Math.PI / 180.0;
        double a = radLat1 - radLat2;
@@ -72,8 +74,9 @@ public class Common {
         Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
        s = s * Constant.EARTH_RADIUS;
        s = Math.round(s * 10000) / 10000;
-       return s;
+       return Long.parseLong(new DecimalFormat("0").format(s));
     }
     public static void main(String[] args){
+        System.out.println(getDistance(114.036956,22.616613,114.017121,22.60577));
     }
 }

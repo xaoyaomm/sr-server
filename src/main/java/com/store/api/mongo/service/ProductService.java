@@ -19,14 +19,14 @@ public interface ProductService {
 	
 	public void remove(Product entity);
 	
-	public Product findOne(Long id);
+	public Product findOne(long id);
 	
 	/**
 	 * 按区域ID查询
 	 * @param areaId
 	 * @return
 	 */
-	public List<Product> findByAreaId(Long areaId);
+	public List<Product> findByAreaId(long areaId);
 	
 	/**
 	 * 按区域ID和版本号查询
@@ -34,14 +34,14 @@ public interface ProductService {
 	 * @param ver
 	 * @return
 	 */
-	public List<Product> findByAreaIdAndVerGreaterThan(Long areaId,Long ver);
+	public List<Product> findByAreaIdAndVerGreaterThan(long areaId,long ver);
 	
 	/**
 	 * 查询最大版本号
 	 * @param areaId
 	 * @return
 	 */
-	public Long findMaxVer(Long areaId);
+	public long findMaxVer(long areaId);
 	
 	/**
 	 * 按ID列表查询

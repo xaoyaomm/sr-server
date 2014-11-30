@@ -21,7 +21,7 @@ public class CatalogServiceImpl implements CatalogService {
     
 	@Override
 	public void save(Catalog entity) {
-		if (null == entity.getId()) {
+		if (0 == entity.getId()) {
             entity.setId(this.sequenceService.getNextSequence(entity));
         }
         repository.save(entity);
@@ -30,7 +30,7 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public void save(List<Catalog> entitys) {
 		for (Catalog entity : entitys) {
-            if (null == entity.getId()) {
+            if (0 == entity.getId()) {
                 entity.setId(sequenceService.getNextSequence(entity));
             }
         }
@@ -38,7 +38,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public void remove(Long id) {
+	public void remove(long id) {
 		repository.delete(id);
 	}
 

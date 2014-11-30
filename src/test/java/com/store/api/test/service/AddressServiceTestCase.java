@@ -17,7 +17,9 @@ public class AddressServiceTestCase extends BaseServiceTestCase {
         Address addr=new Address();
         addr.setAddress("深圳市福田区彩田北路天威花园XXXX号");
         addr.setUserId(6L);
-        addr.setLocation(new Double[]{0D,0D});
+        addr.setLocation(new double[]{0D,0D});
+        addr.setPhone("13662241734");
+        addr.setName("张三");
         service.save(addr);
         Assert.assertNotNull(addr.getId());
     }

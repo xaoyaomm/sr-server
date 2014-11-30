@@ -11,10 +11,10 @@ public class Area implements Serializable{
 	private static final long serialVersionUID = 3280817503409191093L;
 	
 	@Id
-	private Long id;
+	private long id;
 	
 	/** 父ID **/
-	private Long parentId;
+	private long parentId;
 	
 	/** 区域名称 **/
 	private String title="";
@@ -22,19 +22,19 @@ public class Area implements Serializable{
 	/** 区域类型 0顶级 1 1级 2 2级 **/
 	private int type=0;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Long getParentId() {
+	public long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(Long parentId) {
+	public void setParentId(long parentId) {
 		this.parentId = parentId;
 	}
 

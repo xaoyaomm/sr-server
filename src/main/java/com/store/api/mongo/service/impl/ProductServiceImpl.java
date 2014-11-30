@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public void save(Product entity) {
-		if (null == entity.getId()) {
+		if (0 == entity.getId()) {
             entity.setId(this.sequenceService.getNextSequence(entity));
         }
 		entity.setVer(this.sequenceService.getNextSequence(entity.getClass().getSimpleName()+"_ver"));
@@ -43,9 +43,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void save(List<Product> entitys) {
-		Long ver=this.sequenceService.getNextSequence(entitys.get(0).getClass().getSimpleName()+"_ver");
+		long ver=this.sequenceService.getNextSequence(entitys.get(0).getClass().getSimpleName()+"_ver");
 		for (Product entity : entitys) {
-            if (null == entity.getId()) {
+            if (0 == entity.getId()) {
                 entity.setId(sequenceService.getNextSequence(entity));
             }
             entity.setVer(ver);
@@ -59,22 +59,22 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product findOne(Long id) {
+	public Product findOne(long id) {
 		return repository.findOne(id);
 	}
 
 	@Override
-	public List<Product> findByAreaId(Long areaId) {
+	public List<Product> findByAreaId(long areaId) {
 		return repository.findByAreaId(areaId);
 	}
 
 	@Override
-	public List<Product> findByAreaIdAndVerGreaterThan(Long areaId, Long ver) {
+	public List<Product> findByAreaIdAndVerGreaterThan(long areaId, long ver) {
 		return repository.findByAreaIdAndVerGreaterThan(areaId, ver);
 	}
 
     @Override
-    public Long findMaxVer(Long areaId) {
+    public long findMaxVer(long areaId) {
         PageRequest pr=new PageRequest(0, 1, Direction.DESC, "ver");
         Page<Product> page=repository.findByAreaId(areaId, pr);
         if(page.hasContent())

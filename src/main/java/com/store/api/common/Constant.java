@@ -44,17 +44,6 @@ public class Constant {
     public static final String SESSION_INVALID_VALUE="yes";
     
     /**
-     * 推送注册接口地址
-     */
-    public static final String XMPP_REG_URL;
-    
-    /**
-     * 推送接口地址
-     */
-    public static final String XMPP_PUSH_URL;
-
-    
-    /**
      * 搜索距离(米)
      */
     public static Long SEARCH_DISTANCE;
@@ -74,8 +63,6 @@ public class Constant {
             LOG.error("load config.properties file fail:" + ex.getMessage());
         }
         IMG_URL_PRE=props.getProperty("imgAddress","http://192.168.1.51:81");
-        XMPP_REG_URL=props.getProperty("xmppRegUrl","http://192.168.1.53:9090/plugins/userService");
-        XMPP_PUSH_URL=props.getProperty("xmppPushUrl","http://192.168.1.53:9090/plugins/pushmessage");
         SEARCH_DISTANCE=PropertiesUtil.getLongProperty(props, "searchDistance");
         COOKIE_DOMAIN=props.getProperty("cookieDomain","202.96.155.42");
     }

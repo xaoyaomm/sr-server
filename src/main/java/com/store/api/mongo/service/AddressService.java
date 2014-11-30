@@ -10,14 +10,14 @@ public interface AddressService {
     
     public void save(List<Address> entitys);
     
-    public List<Address> findByUserId(Long userId);
+    public List<Address> findByUserId(long userId);
     
-    public void remove(Long id);
+    public void remove(long id);
     
     public void remove(Address entity);
     
     public void remove(List<Address> entitys);
     
-    public Address findOne(Long id);
+    public Address findOne(long id);
 
 }

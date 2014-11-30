@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.mongo.entity.vo.UserSearch;
 
 public interface UserService {
 	
@@ -12,7 +13,7 @@ public interface UserService {
 	
 	public void save(List<User> entitys);
 	
-	public User findOne(Long id);
+	public User findOne(long id);
 	
 	public User findByUserName(String userName);
 	
@@ -27,6 +28,6 @@ public interface UserService {
 	 * @param distance  搜索半径(单位:米)
 	 * @return
 	 */
-	public List<User> geoSearch(UserType type,Double[] location,Double distance);
+	public List<UserSearch> geoSearch(UserType type,double[] location,long distance);
 	
 }

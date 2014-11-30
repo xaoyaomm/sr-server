@@ -52,7 +52,7 @@ public class CustomerTestCase extends BaseActionTestCase {
     @Test
     public void testQueryOffer() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/queryoffer").accept(MediaType.ALL)
-                .param("orderid", "6"));
+                .param("orderid", "36").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -74,7 +74,7 @@ public class CustomerTestCase extends BaseActionTestCase {
     @Test
     public void testOrderDetail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/orderdetail").accept(MediaType.ALL)
-                .param("orderid", "6").cookie(cookie));
+                .param("orderid", "35").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

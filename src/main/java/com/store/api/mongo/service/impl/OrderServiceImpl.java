@@ -7,10 +7,7 @@
  */
 package com.store.api.mongo.service.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.OrderRepository;
 import com.store.api.mongo.entity.Order;
-import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.SequenceService;
 
@@ -40,21 +36,21 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository repository;
 
     @Override
-    public Page<Order> findByCustomerId(Long id, int page, int size) {
+    public Page<Order> findByCustomerId(long id, int page, int size) {
         
         PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "status","id");
         return repository.findByCustomerId(id, pr);
     }
 
     @Override
-    public Page<Order> findByMerchantsId(Long id, int page, int size) {
+    public Page<Order> findByMerchantsId(long id, int page, int size) {
         PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "status","id");
         return repository.findByMerchantsId(id, pr);
     }
 
     @Override
     public void save(Order entity) {
-        if (null == entity.getId()) {
+        if (0 == entity.getId()) {
             entity.setId(this.sequenceService.getNextSequence(entity));
         }
         repository.save(entity);
@@ -63,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void save(List<Order> entitys) {
         for (Order entity : entitys) {
-            if (null == entity.getId()) {
+            if (0 == entity.getId()) {
                 entity.setId(sequenceService.getNextSequence(entity));
             }
         }
@@ -71,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(long id) {
         repository.delete(id);
     }
 
@@ -81,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 	@Override
-	public Order findOne(Long id) {
+	public Order findOne(long id) {
 		return repository.findOne(id);
 	}
 
@@ -90,15 +86,21 @@ public class OrderServiceImpl implements OrderService {
 		repository.delete(entity);
 	}
 
-	@Override
-	public List<Order> findAll(Set<Long> ids) {
-		Iterator<Order> it =repository.findAll(ids).iterator();
-		List<Order> list=new ArrayList<Order>();
-		while(it.hasNext()){
-			Order order=it.next();
-			list.add(order);
-		}
-		return list;
-	}
+    @Override
+    public int findTadayLostByUserId(long id, long date) {
+        return repository.findTadayLostByUserId(id, date);
+    }
+
+    @Override
+    public Page<Order> findTopOrder(long mercId, long orderId, int page, int size) {
+        PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+        return repository.findTopOrder(mercId,orderId,pr);
+    }
+
+    @Override
+    public Page<Order> findTailOrder(long mercId, long orderId, int page, int size) {
+        PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+        return repository.findTailOrder(mercId,orderId,pr);
+    }
 
 }

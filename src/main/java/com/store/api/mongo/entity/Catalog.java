@@ -10,19 +10,19 @@ public class Catalog implements Serializable{
 	private static final long serialVersionUID = -6091301219300179699L;
 	
 	@Id
-	private Long id;
+	private long id;
 	
 	/** 分类名称 **/
 	private String name="";
 	
 	/** 排序 **/
-	private Long order=0L;
+	private long order=0L;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -34,11 +34,11 @@ public class Catalog implements Serializable{
 		this.name = name;
 	}
 
-	public Long getOrder() {
+	public long getOrder() {
 		return order;
 	}
 
-	public void setOrder(Long order) {
+	public void setOrder(long order) {
 		this.order = order;
 	}
 

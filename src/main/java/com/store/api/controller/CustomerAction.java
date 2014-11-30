@@ -18,15 +18,14 @@ import com.store.api.common.Constant;
 import com.store.api.mongo.entity.Address;
 import com.store.api.mongo.entity.Catalog;
 import com.store.api.mongo.entity.Order;
-import com.store.api.mongo.entity.OrderOffer;
-import com.store.api.mongo.entity.OrderProduct;
 import com.store.api.mongo.entity.Product;
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.mongo.entity.subdocument.Offer;
+import com.store.api.mongo.entity.subdocument.OrderProduct;
+import com.store.api.mongo.entity.vo.UserSearch;
 import com.store.api.mongo.service.AddressService;
 import com.store.api.mongo.service.CatalogService;
-import com.store.api.mongo.service.OrderOfferService;
-import com.store.api.mongo.service.OrderProductService;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.ProductService;
 import com.store.api.mongo.service.UserService;
@@ -53,16 +52,10 @@ public class CustomerAction extends BaseAction {
 	private ProductService productService;
 
 	@Autowired
-	private OrderProductService orderProductService;
-
-	@Autowired
 	private OrderService orderService;
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private OrderOfferService orderOfferService;
 	
 	@Autowired
 	private AddressService addressService;
@@ -165,10 +158,10 @@ public class CustomerAction extends BaseAction {
 		}
 
 		List<Long> proIds = new ArrayList<Long>();
-		Map<String, String> reMap = new HashMap<String, String>();
+		Map<String, Object> reMap = new HashMap<String, Object>();
 		long totalPrice = 0;
 		Order order =null;
-		List<OrderOffer> offerList=null;
+		List<Offer> offerList=null;
 		StringBuffer prosDesc = new StringBuffer();
 
 		for (OrderProduct op : opList) {
@@ -192,43 +185,48 @@ public class CustomerAction extends BaseAction {
 			order = new Order();
 			order.setCreateDate(System.currentTimeMillis());
 			order.setCustomerId(user.getId());
-			order.setCustomerName(user.getNickName());
-			order.setCustomerPhone(user.getPhone());
+			order.setCustomerName(address.getName());
+			order.setCustomerPhone(address.getPhone());
 			order.setToAddress(address.getAddress());
 			order.setToLocation(address.getLocation());
 			order.setTotalPrice(totalPrice);
 			order.setTotalAmount(opList.size());
 			order.setProsDesc(prosDesc.toString());
 			order.setStatus(0);
-			orderService.save(order);
-
-			for (OrderProduct op : opList) {
-				op.setOrderId(order.getId());
-			}
-			orderProductService.save(opList);
-
 			
+			
+//            List<User> users = userService.findByType(UserType.merchants);
+            List<UserSearch> pushUsers=userService.geoSearch(UserType.merchants, order.getToLocation(), Constant.SEARCH_DISTANCE);
+            List<Map<String, String>> locationList=new ArrayList<Map<String,String>>();
+            Map<String, String> locationMap=null;
+            offerList = new ArrayList<Offer>();
+            for (UserSearch us : pushUsers) {
+                Offer offer = new Offer();
+                offer.setCreateDate(System.currentTimeMillis());
+                offer.setMerchantsId(us.getUser().getId());
+                offer.setStatus(0);
+                offerList.add(offer);
+                locationMap=new HashMap<String, String>();
+                locationMap.put("distance", us.getDistance()+"");
+                locationMap.put("lng", us.getUser().getLocation()[0]+"");
+                locationMap.put("lat", us.getUser().getLocation()[1]+"");
+                locationMap.put("merc_name", us.getUser().getNickName());
+                locationList.add(locationMap);
+            }
+            order.setOffers(offerList);
+            order.setProducts(opList);
+            orderService.save(order);
+			
+            // TODO 推送给商户 users
+
+			reMap.put("mercs", locationList);
 			reMap.put("order_id", order.getId() + "");
 			reMap.put("invalid_time", "300");
-
-			// TODO 推送给商户
-			List<User> users = userService.findByType(UserType.merchants);
-			offerList = new ArrayList<OrderOffer>();
-			for (User usr : users) {
-				OrderOffer offer = new OrderOffer();
-				offer.setCreateDate(System.currentTimeMillis());
-				offer.setMerchantsId(usr.getId());
-				offer.setOrderId(order.getId());
-				offer.setStatus(0);
-				offerList.add(offer);
-			}
-			orderOfferService.save(offerList);
-			reMap.put("rec_num", users.size()+"");
+            
+			
+			reMap.put("rec_num", pushUsers.size()+"");
 			
 		} catch (Exception e) {//异常后删除写入的数据
-			orderService.remove(order);
-			orderProductService.remove(opList);
-			orderOfferService.remove(offerList);
 			result.put("errorcode", "-4");
 			result.put("info", "下单失败");
 			return result;
@@ -253,7 +251,7 @@ public class CustomerAction extends BaseAction {
 		if (orderId > 0) {
 			Order order = orderService.findOne(orderId);
 			Map<String, String> reMap = new HashMap<String, String>();
-			List<OrderOffer> offerList = orderOfferService.findByOrderId(orderId);
+			List<Offer> offerList = order.getOffers();
 
 			if (null != order && order.getStatus() > 0) {
 				reMap.put("status", "1");
@@ -326,8 +324,9 @@ public class CustomerAction extends BaseAction {
 		if (orderId > 0) {
 			Map<String, Object> reMap = new HashMap<String, Object>();
 			List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
-
-			List<OrderProduct> ops = orderProductService.findByOrderId(orderId);
+            
+			Order order=orderService.findOne(orderId);
+			List<OrderProduct> ops = order.getProducts();
 			if (ops.size() > 0) {
 				for (OrderProduct op : ops) {
 					Map<String, String> opMap = new HashMap<String, String>();
@@ -339,7 +338,7 @@ public class CustomerAction extends BaseAction {
 					reList.add(opMap);
 				}
 			}
-			Order order = orderService.findOne(orderId);
+			
 			reMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
 			reMap.put("deal_merc", order.getMerchantsName());
 			reMap.put("status", order.getStatus() + "");

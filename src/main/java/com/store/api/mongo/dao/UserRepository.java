@@ -24,6 +24,6 @@ public interface UserRepository extends MongoRepository<User, Long>{
 	 * @return
 	 */
 	@Query(value="{'type':?0,'status':1,'location':{'$geoWithin':{'$centerSphere':[?1,?2]}}}")
-	public List<User> geoSearch(UserType type,Double[] location,Double distance);
+	public List<User> geoSearch(UserType type,double[] location,double distance);
 
 }

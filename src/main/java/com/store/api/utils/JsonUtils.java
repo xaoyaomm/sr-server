@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.store.api.mongo.entity.OrderProduct;
 import com.store.api.mongo.entity.Product;
+import com.store.api.mongo.entity.subdocument.OrderProduct;
 
 public class JsonUtils {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtils.class);

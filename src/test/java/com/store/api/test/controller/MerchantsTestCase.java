@@ -21,7 +21,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderListTop() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttop").accept(MediaType.ALL)
-        		 .param("orderid", "6")
+        		 .param("orderid", "35")
         		 .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -32,7 +32,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderListTail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttail").accept(MediaType.ALL)
-                 .param("orderid", "7")
+                 .param("orderid", "36")
                  .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -43,7 +43,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderDetail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderdetail").accept(MediaType.ALL)
-        		 .param("orderid", "4")
+        		 .param("orderid", "35")
         		 .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -54,7 +54,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testOffer() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/offer").accept(MediaType.ALL)
-        		 .param("orderid", "4")
+        		 .param("orderid", "35")
         		 .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -76,7 +76,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testOrderDetail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/orderdetail").accept(MediaType.ALL)
-                .param("orderid", "4").cookie(cookie));
+                .param("orderid", "35").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -86,7 +86,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testCancleOrder() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/cancleorder").accept(MediaType.ALL)
-                .param("orderid", "4").cookie(cookie));
+                .param("orderid", "35").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -96,7 +96,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testArrive() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/arrive").accept(MediaType.ALL)
-                .param("orderid", "4").cookie(cookie));
+                .param("orderid", "35").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

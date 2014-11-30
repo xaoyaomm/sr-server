@@ -19,7 +19,7 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private Long id;
+	private long id;
 	
 	/** 用户名 **/
 	private String userName="";
@@ -38,7 +38,7 @@ public class User implements Serializable{
 	private UserType type;
 	
 	/** 推荐人ID **/
-	private Long recUserId=0L;
+	private long recUserId=0L;
 	
 	/** 推广码 **/
 	private String promoCode="";
@@ -48,7 +48,7 @@ public class User implements Serializable{
 	
 	/** 坐标点[0]经度  [1]纬度 **/
 	@GeoSpatialIndexed(type=GeoSpatialIndexType.GEO_2DSPHERE ,name="location_2ds")
-	private Double[] location={0D,0D};
+	private double[] location={0D,0D};
 	
 	/** 注册版本 **/
 	private String registerVer="";
@@ -60,7 +60,7 @@ public class User implements Serializable{
 	private String imei="";
 	
 	/** 地址ID **/
-	private Long addressId=0L;
+	private long addressId=0L;
 	
 	/** UUID **/
 	private String uuid="";
@@ -69,32 +69,32 @@ public class User implements Serializable{
 	private int status=1;
 	
 	/** 帐号创建时间 **/
-    private Long createTime=System.currentTimeMillis();
+    private long createTime=System.currentTimeMillis();
 	
 	/** 最后使用时间 **/
-	private Long lastUserTime=System.currentTimeMillis();
+	private long lastUserTime=System.currentTimeMillis();
 	
-	public Long getLastUserTime() {
+	public long getLastUserTime() {
         return lastUserTime;
     }
 
-    public void setLastUserTime(Long lastUserTime) {
+    public void setLastUserTime(long lastUserTime) {
         this.lastUserTime = lastUserTime;
     }
 
-    public Long getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Long createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
-    public Long getId() {
+    public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -138,11 +138,11 @@ public class User implements Serializable{
 		this.type = type;
 	}
 
-	public Long getRecUserId() {
+	public long getRecUserId() {
 		return recUserId;
 	}
 
-	public void setRecUserId(Long recUserId) {
+	public void setRecUserId(long recUserId) {
 		this.recUserId = recUserId;
 	}
 
@@ -162,11 +162,11 @@ public class User implements Serializable{
 		this.address = address;
 	}
 
-    public Double[] getLocation() {
+    public double[] getLocation() {
         return location;
     }
 
-    public void setLocation(Double[] location) {
+    public void setLocation(double[] location) {
         this.location = location;
     }
 
@@ -182,7 +182,7 @@ public class User implements Serializable{
         return imei;
     }
 
-    public Long getAddressId() {
+    public long getAddressId() {
         return addressId;
     }
 
@@ -198,7 +198,7 @@ public class User implements Serializable{
         this.imei = imei;
     }
 
-    public void setAddressId(Long addressId) {
+    public void setAddressId(long addressId) {
         this.addressId = addressId;
     }
 

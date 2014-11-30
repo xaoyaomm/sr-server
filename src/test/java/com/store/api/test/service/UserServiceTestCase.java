@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
+import com.store.api.mongo.entity.vo.UserSearch;
 import com.store.api.mongo.service.UserService;
 
 public class UserServiceTestCase extends BaseServiceTestCase {
@@ -43,7 +44,7 @@ public class UserServiceTestCase extends BaseServiceTestCase {
 	
 	@Test
 	public void testGeoSearch(){
-		List<User> users=service.geoSearch(UserType.merchants, new Double[]{114.036956,22.616613}, 2369D);
+		List<UserSearch> users=service.geoSearch(UserType.merchants, new double[]{114.036956,22.616613}, 2369);
 		System.out.println(users.size());
 	}
 }
