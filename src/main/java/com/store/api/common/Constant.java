@@ -53,6 +53,11 @@ public class Constant {
      */
     public static final String COOKIE_DOMAIN;
     
+    /**
+     * IOS推送环境，是否是开发环境
+     */
+    public static final boolean PUSH_IOS_ENV_DEV;
+    
     static{
         InputStream infile = Constant.class
                 .getResourceAsStream("/conf/config.properties");
@@ -65,5 +70,6 @@ public class Constant {
         IMG_URL_PRE=props.getProperty("imgAddress","http://192.168.1.51:81");
         SEARCH_DISTANCE=PropertiesUtil.getLongProperty(props, "searchDistance");
         COOKIE_DOMAIN=props.getProperty("cookieDomain","202.96.155.42");
+        PUSH_IOS_ENV_DEV=PropertiesUtil.getBooleanProperty(props, "ios_env_dev", true);
     }
 }

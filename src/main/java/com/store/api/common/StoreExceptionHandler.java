@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
 @Controller
-public class SfcExceptionHandler {
+public class StoreExceptionHandler {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
   
     @ExceptionHandler(Exception.class)  

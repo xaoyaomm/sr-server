@@ -21,7 +21,9 @@ import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.subdocument.Offer;
 import com.store.api.mongo.entity.subdocument.OrderProduct;
 import com.store.api.mongo.service.OrderService;
+import com.store.api.mongo.service.PushService;
 import com.store.api.session.annotation.Authorization;
+import com.store.api.utils.JsonUtils;
 import com.store.api.utils.Utils;
 
 /**
@@ -38,6 +40,9 @@ public class MerchantsAction extends BaseAction {
 
     @Autowired
     private OrderService orderService;
+    
+    @Autowired
+    private PushService pushService;
 
     /**
      * 接单列表头部,取>订单ID的记录
@@ -237,6 +242,15 @@ public class MerchantsAction extends BaseAction {
                     }
                     order.setOffers(ofs);
                     orderService.save(order);
+                    
+                    //推送给用户
+                    String title="测试TITLE";
+                    Map<String, String> pushMap=new HashMap<String, String>();
+                    pushMap.put("type", "2");
+                    pushMap.put("order_id", order.getId()+"");
+                    pushMap.put("msg", "您的订单已经被"+user.getNickName()+"接受，接等待配送");
+                    String content=JsonUtils.object2Json(pushMap);
+                    pushService.pushToUser(order.getCustomerId()+"", content, title);
 
                     result.put("errorcode", "1");
                     result.put("info", "");

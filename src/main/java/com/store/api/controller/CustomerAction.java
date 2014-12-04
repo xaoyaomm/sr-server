@@ -28,6 +28,7 @@ import com.store.api.mongo.service.AddressService;
 import com.store.api.mongo.service.CatalogService;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.ProductService;
+import com.store.api.mongo.service.PushService;
 import com.store.api.mongo.service.UserService;
 import com.store.api.session.annotation.Authorization;
 import com.store.api.utils.JsonUtils;
@@ -59,6 +60,9 @@ public class CustomerAction extends BaseAction {
 	
 	@Autowired
 	private AddressService addressService;
+	
+	@Autowired
+	private PushService pushService;
 
 	/**
 	 * 查询所有商品列表
@@ -200,6 +204,9 @@ public class CustomerAction extends BaseAction {
             List<Map<String, String>> locationList=new ArrayList<Map<String,String>>();
             Map<String, String> locationMap=null;
             offerList = new ArrayList<Offer>();
+            List<String> accountList1=new ArrayList<String>();
+            List<String> accountList2=new ArrayList<String>();
+            List<String> accountList3=new ArrayList<String>();
             for (UserSearch us : pushUsers) {
                 Offer offer = new Offer();
                 offer.setCreateDate(System.currentTimeMillis());
@@ -212,12 +219,31 @@ public class CustomerAction extends BaseAction {
                 locationMap.put("lat", us.getUser().getLocation()[1]+"");
                 locationMap.put("merc_name", us.getUser().getNickName());
                 locationList.add(locationMap);
+                
+                if(us.getDistance()<=100) // <=100米的商家优先推送
+                    accountList1.add(us.getUser().getId()+"");
+                else if(us.getDistance()<=500)
+                    accountList2.add(us.getUser().getId()+"");
+                else
+                    accountList3.add(us.getUser().getId()+"");
             }
             order.setOffers(offerList);
             order.setProducts(opList);
             orderService.save(order);
 			
             // TODO 推送给商户 users
+            String title="测试TITLE";
+            Map<String, String> pushMap=new HashMap<String, String>();
+            pushMap.put("type", "1");
+            pushMap.put("order_id", order.getId()+"");
+            pushMap.put("msg", "测试MSG");
+            String content=JsonUtils.object2Json(pushMap);
+            if(accountList1.size()>0)
+                pushService.orderPushToMerc(accountList1, content, title, 0);
+            if(accountList2.size()>0)
+                pushService.orderPushToMerc(accountList2, content, title, 15);
+            if(accountList3.size()>0)
+                pushService.orderPushToMerc(accountList3, content, title, 30);
 
 			reMap.put("mercs", locationList);
 			reMap.put("order_id", order.getId() + "");
