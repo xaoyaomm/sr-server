@@ -40,9 +40,9 @@ public class PushServiceImpl implements PushService {
 
     private static LinkedList<PushVo> pushList = new LinkedList<PushVo>();
 
-    private static final long accessId = 2100065261;
+    private static final long accessId = 2100067699;
 
-    private static final String secretKey = "30946cb7a81dfbf22808435404fbee28";
+    private static final String secretKey = "7ea1112ab5dd5dca4ded2486a5567dd1";
 
     private static int iosEnv = XingeApp.IOSENV_DEV; // IOS 开发环境
     
@@ -71,6 +71,7 @@ public class PushServiceImpl implements PushService {
         message.setExpireTime(expire);
         message.setCustom(content);
         message.setType(Message.TYPE_MESSAGE);
+        message.setMultiPkg(1);
         JSONObject ret = null;
         if (accountList.size() > 1)
             ret = xinge.pushAccountList(0, accountList, message);

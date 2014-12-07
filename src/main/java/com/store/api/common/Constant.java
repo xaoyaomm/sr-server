@@ -16,6 +16,7 @@ public class Constant {
     public static final String SESSION_NAME="STORERUNSSID";
     public static final String HEADER_STORERUN_IMEI="SR-IM";
     public static final String HEADER_STORERUN_VERSION="SR-VER";
+    public static final String HEADER_STORERUN_VERSION_CODE="SR-CODE";
     public static final String HEADER_STORERUN_CLIENT="SR-CLI";
     
     /**

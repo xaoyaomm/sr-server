@@ -42,7 +42,7 @@ public class Order implements Serializable{
     /** 卖家电话 **/
     private String merchantsPhone="";
     
-    /** 订单状态:0创建 1已抢单 2送货中 4已送达 6已确认 10取消 **/
+    /** 订单状态:0创建 1已抢单 2送货中 4已送达 6已确认 9未送达 10取消 **/
     private int status=0;
     
     /** 订单创建时间 **/
@@ -59,6 +59,9 @@ public class Order implements Serializable{
     
     /** 取消时间 **/
     private long cancelDate=0L;
+    
+    /** 未送达标记时间 **/
+    private long unfinishDate=0L;
     
     /** 订单总价 **/
     private long totalPrice=0L;
@@ -261,6 +264,14 @@ public class Order implements Serializable{
 
     public void setProducts(List<OrderProduct> products) {
         this.products = products;
+    }
+
+    public long getUnfinishDate() {
+        return unfinishDate;
+    }
+
+    public void setUnfinishDate(long unfinishDate) {
+        this.unfinishDate = unfinishDate;
     }
 
 }

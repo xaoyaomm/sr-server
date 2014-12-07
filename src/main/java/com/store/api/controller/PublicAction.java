@@ -82,6 +82,7 @@ public class PublicAction extends BaseAction {
         user.setRegisterVer(getVersionName());
         user.setCurrVer(getVersionName());
         userService.save(user);
+        session.setAttribute(Constant.SESSION_USER, user);
 
         if (type == 1) {
             initSession(UserType.merchants, user, false);
@@ -196,8 +197,8 @@ public class PublicAction extends BaseAction {
             return JsonUtils.resultJson(-2, "修改字段不能为空", null);
 
         Object obj = session.getAttribute(Constant.SESSION_USER);
-
-        User user = (User) obj;
+        User user = userService.findOne(((User)obj).getId());
+        
         if (!Utils.isEmpty(nickName))
             user.setNickName(nickName.trim());
         if (!Utils.isEmpty(phone))
@@ -218,9 +219,7 @@ public class PublicAction extends BaseAction {
     @Authorization(type = Constant.SESSION_USER)
     public String userInfo() throws Exception {
         Object obj = session.getAttribute(Constant.SESSION_USER);
-
-        User user = (User) obj;
-        userService.save(user);
+        User user = userService.findOne(((User)obj).getId());
 
         List<Address> addrs = addressService.findByUserId(user.getId());
         List<Map<String, String>> resAddr = new LinkedList<Map<String, String>>();
@@ -257,9 +256,7 @@ public class PublicAction extends BaseAction {
     @Authorization(type = Constant.SESSION_USER)
     public String queryAddress() throws Exception {
         Object obj = session.getAttribute(Constant.SESSION_USER);
-
-        User user = (User) obj;
-        userService.save(user);
+        User user = userService.findOne(((User)obj).getId());
 
         List<Address> addrs = addressService.findByUserId(user.getId());
         List<Map<String, String>> resAddr = new LinkedList<Map<String, String>>();
@@ -311,7 +308,7 @@ public class PublicAction extends BaseAction {
             isdef = true;
 
         Object obj = session.getAttribute(Constant.SESSION_USER);
-        User user = (User) obj;
+        User user = userService.findOne(((User)obj).getId());
 
         Address addObj = null;
 
@@ -346,11 +343,36 @@ public class PublicAction extends BaseAction {
             session.setAttribute(Constant.SESSION_USER, user);
         }
         userService.save(user);
+        session.setAttribute(Constant.SESSION_USER, user);
 
         Map<String, String> reMap = new HashMap<String, String>();
         reMap.put("addr_id", addObj.getId() + "");
 
         return JsonUtils.resultJson(1, "", reMap);
+    }
+    
+    /**
+     * 删除地址
+     * @param addrId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/removeaddress", produces = "text/plain;charset=UTF-8")
+    @Authorization(type = Constant.SESSION_USER)
+    public String removeAddress(@RequestParam(value = "addressid", required = false, defaultValue = "0")
+    long addrId){
+        Object obj = session.getAttribute(Constant.SESSION_USER);
+        User user = userService.findOne(((User)obj).getId());
+        if(addrId>0){
+            addressService.remove(addrId);
+            if(addrId==user.getAddressId()){
+                  user.setAddress("");
+                  user.setAddressId(0);
+                  user.setLocation(new double[]{0,0});
+                  userService.save(user);
+            }
+        }
+        return JsonUtils.resultJson(1, "", null);
     }
 
 }

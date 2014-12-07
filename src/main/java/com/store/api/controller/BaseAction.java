@@ -1,18 +1,14 @@
 package com.store.api.controller;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
 import com.store.api.common.Constant;
 import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
@@ -119,10 +115,8 @@ public class BaseAction {
     }
 
     private Long parseVersionCode() {
-        String version = request.getHeader(Constant.HEADER_STORERUN_VERSION);
+        String version = request.getHeader(Constant.HEADER_STORERUN_VERSION_CODE);
         if (!Utils.isEmpty(version)) {
-            if (version.contains("."))
-                version = version.replace(".", "");
             if (Utils.isNumber(version))
                 return Long.valueOf(version);
         }
