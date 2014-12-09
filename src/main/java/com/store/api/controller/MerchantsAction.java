@@ -245,12 +245,11 @@ public class MerchantsAction extends BaseAction {
                     
                     //推送给用户
                     String title="测试TITLE";
-                    Map<String, String> pushMap=new HashMap<String, String>();
+                    Map<String, Object> pushMap=new HashMap<String, Object>();
                     pushMap.put("type", "2");
                     pushMap.put("order_id", order.getId()+"");
                     pushMap.put("msg", "您的订单已经被"+user.getNickName()+"接受，接等待配送");
-                    String content=JsonUtils.object2Json(pushMap);
-                    pushService.pushToUser(order.getCustomerId()+"", content, title);
+                    pushService.pushToUser(order.getCustomerId()+"", pushMap, title);
 
                     result.put("errorcode", "1");
                     result.put("info", "");

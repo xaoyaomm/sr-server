@@ -244,17 +244,16 @@ public class CustomerAction extends BaseAction {
 
             // TODO 推送给商户 users
             String title = "测试TITLE";
-            Map<String, String> pushMap = new HashMap<String, String>();
+            Map<String, Object> pushMap = new HashMap<String, Object>();
             pushMap.put("type", "1");
             pushMap.put("order_id", order.getId() + "");
             pushMap.put("msg", "测试MSG");
-            String content = JsonUtils.object2Json(pushMap);
             if (accountList1.size() > 0)
-                pushService.orderPushToMerc(accountList1, content, title, 0);
+                pushService.orderPushToMerc(accountList1, pushMap, title, 0);
             if (accountList2.size() > 0)
-                pushService.orderPushToMerc(accountList2, content, title, 15);
+                pushService.orderPushToMerc(accountList2, pushMap, title, 15);
             if (accountList3.size() > 0)
-                pushService.orderPushToMerc(accountList3, content, title, 30);
+                pushService.orderPushToMerc(accountList3, pushMap, title, 30);
 
             reMap.put("mercs", locationList);
             reMap.put("order_id", order.getId() + "");

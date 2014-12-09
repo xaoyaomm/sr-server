@@ -8,6 +8,7 @@
 package com.store.api.mongo.service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -24,7 +25,7 @@ public interface PushService {
      * @param title
      * @param delay 延时PUSH时长，单位：秒
      */
-    public void orderPushToMerc(List<String> accountList,String content,String title,long delay);
+    public void orderPushToMerc(List<String> accountList,Map<String , Object> content,String title,long delay);
     
     /**
      * PUSH用户（推送android和ios）
@@ -32,6 +33,6 @@ public interface PushService {
      * @param content 内容JSON
      * @param title
      */
-    public void pushToUser(String account,String content,String title);
+    public void pushToUser(String account,Map<String , Object> content,String title);
 
 }

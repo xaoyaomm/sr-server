@@ -164,6 +164,8 @@ public class PublicAction extends BaseAction {
                 map.put("address", addr.getAddress());
                 map.put("phone", addr.getPhone());
                 map.put("name", addr.getName());
+                map.put("lng", addr.getLocation()[0]+"");
+                map.put("lat", addr.getLocation()[1]+"");
                 map.put("def", addr.getId()==user.getAddressId() ? "1" : "0");
                 resAddr.add(map);
             }
@@ -230,6 +232,8 @@ public class PublicAction extends BaseAction {
                 map.put("address", addr.getAddress());
                 map.put("phone", addr.getPhone());
                 map.put("name", addr.getName());
+                map.put("lng", addr.getLocation()[0]+"");
+                map.put("lat", addr.getLocation()[1]+"");
                 map.put("def", addr.getId()==user.getAddressId() ? "1" : "0");
                 resAddr.add(map);
             }
@@ -267,6 +271,8 @@ public class PublicAction extends BaseAction {
                 map.put("address", addr.getAddress());
                 map.put("phone", addr.getPhone());
                 map.put("name", addr.getName());
+                map.put("lng", addr.getLocation()[0]+"");
+                map.put("lat", addr.getLocation()[1]+"");
                 map.put("def", addr.getId()==user.getAddressId() ? "1" : "0");
                 resAddr.add(map);
             }

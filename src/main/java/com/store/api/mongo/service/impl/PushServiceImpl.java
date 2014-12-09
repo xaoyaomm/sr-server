@@ -112,12 +112,10 @@ public class PushServiceImpl implements PushService {
             return false;
     }
 
-    public void orderPushToMerc(List<String> accountList, String content, String title, long delay) {
+    public void orderPushToMerc(List<String> accountList, Map<String , Object> content, String title, long delay) {
         PushVo vo = new PushVo();
-        Map<String , Object> map=new HashMap<String, Object>();
-        map.put("data", content);
         vo.setAccountList(accountList);
-        vo.setContent(map);
+        vo.setContent(content);
         vo.setTitle(title);
         vo.setExpire(defExpire);
         PushDelay push = new PushDelay(vo);
@@ -125,14 +123,12 @@ public class PushServiceImpl implements PushService {
 
     }
 
-    public void pushToUser(String account, String content, String title) {
+    public void pushToUser(String account, Map<String , Object> content, String title) {
         PushVo vo = new PushVo();
         List<String> accountList=new ArrayList<String>();
-        Map<String , Object> map=new HashMap<String, Object>();
-        map.put("data", content);
         accountList.add(account);
         vo.setAccountList(accountList);
-        vo.setContent(map);
+        vo.setContent(content);
         vo.setTitle(title);
         vo.setExpire(defExpire);
         pushList.offer(vo);
