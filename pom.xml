@@ -28,8 +28,8 @@
 		<spring-data-mongo.version>1.5.2.RELEASE</spring-data-mongo.version>
 		<!-- 4.3.5.Final -->
 		<hibernate.version>4.2.12.Final</hibernate.version>
-		<hibernate.tools.version>3.2.4.GA</hibernate.tools.version>
-		<hibernate-validator.version>5.1.1.Final</hibernate-validator.version>
+		<!-- <hibernate.tools.version>3.2.4.GA</hibernate.tools.version>
+		<hibernate-validator.version>5.1.1.Final</hibernate-validator.version> -->
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
 		<fasterxml.version>2.0.6</fasterxml.version>
 		<mockito-all.version>1.9.5</mockito-all.version>
@@ -144,7 +144,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
@@ -158,7 +158,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate-validator.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>

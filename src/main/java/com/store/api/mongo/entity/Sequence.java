@@ -2,8 +2,7 @@ package com.store.api.mongo.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
-
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**

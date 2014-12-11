@@ -232,24 +232,34 @@ public class MerchantsAction extends BaseAction {
                     order.setStatus(2);
 
                     List<Offer> ofs = order.getOffers();
+                    List<String> mersList=new ArrayList<String>();
                     if (ofs.size() > 0) {
                         for (Offer of : ofs) {
                             if (of.getMerchantsId().equals(user.getId())) {
                                 of.setStatus(1);
-                            } else
+                            } else{
                                 of.setStatus(2);
+                                mersList.add(of.getMerchantsId()+"");
+                            }
                         }
                     }
                     order.setOffers(ofs);
                     orderService.save(order);
                     
-                    //推送给用户
+                    //推送给买家
                     String title="测试TITLE";
                     Map<String, Object> pushMap=new HashMap<String, Object>();
                     pushMap.put("type", "2");
                     pushMap.put("order_id", order.getId()+"");
                     pushMap.put("msg", "您的订单已经被"+user.getNickName()+"接受，接等待配送");
                     pushService.pushToUser(order.getCustomerId()+"", pushMap, title);
+                    
+                    //推送给没抢到单的卖家
+                    Map<String, Object> otherPushMap=new HashMap<String, Object>();
+                    otherPushMap.put("type", "3");
+                    otherPushMap.put("order_id", order.getId()+"");
+                    otherPushMap.put("msg", "该订单已经被其它人抢了");
+                    pushService.pushToUsers(mersList, otherPushMap, title);
 
                     result.put("errorcode", "1");
                     result.put("info", "");

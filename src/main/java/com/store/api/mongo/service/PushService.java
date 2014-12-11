@@ -34,5 +34,13 @@ public interface PushService {
      * @param title
      */
     public void pushToUser(String account,Map<String , Object> content,String title);
+    
+    /**
+     * PUSH用户（推送android和ios）
+     * @param account
+     * @param content 内容JSON
+     * @param title
+     */
+    public void pushToUsers(List<String> accountList,Map<String , Object> content,String title);
 
 }

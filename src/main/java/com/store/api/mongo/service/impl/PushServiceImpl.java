@@ -134,6 +134,16 @@ public class PushServiceImpl implements PushService {
         pushList.offer(vo);
         startPushTask();
     }
+    
+    public void pushToUsers(List<String> accountList, Map<String , Object> content, String title) {
+        PushVo vo = new PushVo();
+        vo.setAccountList(accountList);
+        vo.setContent(content);
+        vo.setTitle(title);
+        vo.setExpire(defExpire);
+        pushList.offer(vo);
+        startPushTask();
+    }
 
     /**
      * 处理延迟推送的内部类
