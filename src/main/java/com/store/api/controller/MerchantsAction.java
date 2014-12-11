@@ -178,10 +178,12 @@ public class MerchantsAction extends BaseAction {
                         reList.add(opMap);
                     }
                 }
+                reMap.put("order_id", order.getId()+"");
                 reMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
                 reMap.put("to_address", order.getToAddress());
                 reMap.put("phone", order.getCustomerPhone());
                 reMap.put("nick_name", order.getCustomerName());
+                reMap.put("product_num", order.getTotalAmount() + "");
                 reMap.put("total_price", order.getTotalPrice() + "");
                 reMap.put("products", reList);
             }
