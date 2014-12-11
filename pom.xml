@@ -3,7 +3,7 @@
 	<groupId>storeRun</groupId>
 	<artifactId>api</artifactId>
 	<packaging>war</packaging>
-	<version>trunk</version>
+	<version>1.0</version>
 	<name>storeRun-api</name>
 	<url>http://maven.apache.org</url>
 
