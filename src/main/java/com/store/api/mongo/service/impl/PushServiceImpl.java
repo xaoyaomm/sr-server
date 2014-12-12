@@ -187,7 +187,7 @@ public class PushServiceImpl implements PushService {
         @Override
         public void run() {
             try{
-            PushVo vo = pushList.peek();
+            PushVo vo = pushList.poll();
             if (null != vo) {
                 pushAccountAndroid(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire());
                 pushAccountIOS(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire());
