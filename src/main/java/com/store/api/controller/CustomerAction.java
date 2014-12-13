@@ -122,9 +122,23 @@ public class CustomerAction extends BaseAction {
             reMap.put("p_img", product.getImgUrl());
             reMap.put("p_catalog", product.getCatalogId() + "");
             reMap.put("p_status", product.getStatus() + "");
-            reMap.put("p_order", product.getOrder()+"");
+            reMap.put("p_order", product.getOrder() + "");
             reList.add(reMap);
         }
+
+        Object obj = session.getAttribute(Constant.SESSION_USER);
+        if (null != obj) {
+            User user = (User) obj;
+            if (user.getType().equals(UserType.customer)) {
+                User realUser=userService.findOne(user.getId());
+                if(null!=realUser){
+                    realUser.setCurrVer(getVersionName());
+                    realUser.setLastUserTime(System.currentTimeMillis());
+                    userService.save(realUser);
+                }
+            }
+        }
+
         result.put("errorcode", "1");
         result.put("info", "");
         result.put("ver", maxVer + "");
@@ -412,6 +426,14 @@ public class CustomerAction extends BaseAction {
             order.setStatus(6);
             orderService.save(order);
 
+            String title = "测试TITLE";
+            Map<String, Object> pushMap = new HashMap<String, Object>();
+            pushMap.put("type", "5");
+            pushMap.put("order_id", order.getId() + "");
+            pushMap.put("msg", "买家已确认收货");
+            ;
+            pushService.pushToUser(order.getMerchantsId() + "", pushMap, title, UserType.merchants);
+
             result.put("errorcode", "1");
             result.put("info", "");
             return result;
@@ -439,6 +461,13 @@ public class CustomerAction extends BaseAction {
             order.setStatus(9);
             orderService.save(order);
 
+            String title = "测试TITLE";
+            Map<String, Object> pushMap = new HashMap<String, Object>();
+            pushMap.put("type", "6");
+            pushMap.put("order_id", order.getId() + "");
+            pushMap.put("msg", "您的订单状态已变更");
+            pushService.pushToUser(order.getMerchantsId() + "", pushMap, title, UserType.merchants);
+
             result.put("errorcode", "1");
             result.put("info", "");
             return result;
@@ -451,6 +480,7 @@ public class CustomerAction extends BaseAction {
 
     /**
      * 查询常购商品
+     * 
      * @param orderId
      * @return
      */
@@ -469,7 +499,7 @@ public class CustomerAction extends BaseAction {
             reMap.put("p_num", op.getNum() + "");
             reList.add(reMap);
         }
-        if(reList.size()>0)
+        if (reList.size() > 0)
             result.put("errorcode", "1");
         else
             result.put("errorcode", "2");

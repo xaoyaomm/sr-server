@@ -10,6 +10,8 @@ package com.store.api.mongo.entity.vo;
 import java.util.List;
 import java.util.Map;
 
+import com.store.api.mongo.entity.enumeration.UserType;
+
 /**
  * 
  * Revision History
@@ -29,6 +31,17 @@ public class PushVo {
     
     /** 消息标题 **/
     private String title;
+    
+    /** 推送用户类型 **/
+    private UserType type;
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
 
     public List<String> getAccountList() {
         return accountList;

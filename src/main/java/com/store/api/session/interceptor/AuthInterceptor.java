@@ -54,10 +54,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                         response.getWriter().print(JsonUtils.resultJson(-1, "帐号已在其它设备上登录，请重新登录", null));
                         return false;
                     } else{
-                        User user=(User) obj;
-                        user.setCurrVer(parseVersionName(request));
-                        user.setLastUserTime(System.currentTimeMillis());
-                        request.getSession().setAttribute(auth.type(),user);
                         return true;
                     }
                 } else {// 验证失败

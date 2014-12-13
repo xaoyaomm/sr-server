@@ -10,6 +10,8 @@ package com.store.api.mongo.service;
 import java.util.List;
 import java.util.Map;
 
+import com.store.api.mongo.entity.enumeration.UserType;
+
 /**
  * 
  * Revision History
@@ -32,15 +34,17 @@ public interface PushService {
      * @param account
      * @param content 内容JSON
      * @param title
+     * @param type  推送的用户类型
      */
-    public void pushToUser(String account,Map<String , Object> content,String title);
+    public void pushToUser(String account,Map<String , Object> content,String title,UserType type);
     
     /**
      * PUSH用户（推送android和ios）
      * @param account
      * @param content 内容JSON
      * @param title
+     * @param type  推送的用户类型
      */
-    public void pushToUsers(List<String> accountList,Map<String , Object> content,String title);
+    public void pushToUsers(List<String> accountList,Map<String , Object> content,String title,UserType type);
 
 }

@@ -8,7 +8,6 @@
 package com.store.api.mongo.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.store.api.common.Constant;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.entity.vo.PushVo;
 import com.store.api.mongo.service.PushService;
 import com.tencent.xinge.Message;
@@ -40,13 +40,25 @@ public class PushServiceImpl implements PushService {
 
     private static LinkedList<PushVo> pushList = new LinkedList<PushVo>();
 
-    private static final long accessId = 2100067699;
+    /** 客户端 **/
+    private static final long accessId_client = 2100067699;
 
-    private static final String secretKey = "7ea1112ab5dd5dca4ded2486a5567dd1";
+    /** 客户端 **/
+    private static final String secretKey_client = "7ea1112ab5dd5dca4ded2486a5567dd1";
+    
+    /** 商户端 **/
+    private static final long accessId_merc = 2100067702;
+
+    /** 商户端 **/
+    private static final String secretKey_merc = "413f981e94c7f542268f07cf34b9b2d6";
 
     private static int iosEnv = XingeApp.IOSENV_DEV; // IOS 开发环境
     
     private PushQueueTask task=null;
+    
+    private XingeApp client=null;
+    
+    private XingeApp merc=null;
 
     /** 默认离线时间 **/
     private int defExpire = 300;
@@ -55,6 +67,11 @@ public class PushServiceImpl implements PushService {
             iosEnv = XingeApp.IOSENV_DEV;
         else
             iosEnv = XingeApp.IOSENV_PROD;
+    }
+    
+    public PushServiceImpl(){
+        this.client=new XingeApp(accessId_client, secretKey_client);
+        this.merc=new XingeApp(accessId_merc, secretKey_merc);
     }
 
     /**
@@ -65,13 +82,16 @@ public class PushServiceImpl implements PushService {
      * @param expire
      * @return
      */
-    private boolean pushAccountAndroid(List<String> accountList, Map<String, Object> content, String title, int expire) {
-        XingeApp xinge = new XingeApp(accessId, secretKey);
+    private boolean pushAccountAndroid(List<String> accountList, Map<String, Object> content, String title, int expire,UserType type) {
+        XingeApp xinge = null;
+        if(type.equals(UserType.customer))
+            xinge=client;
+        else
+            xinge=merc;
         Message message = new Message();
         message.setExpireTime(expire);
         message.setCustom(content);
         message.setType(Message.TYPE_MESSAGE);
-        message.setMultiPkg(1);
         JSONObject ret = null;
         if (accountList.size() > 1)
             ret = xinge.pushAccountList(0, accountList, message);
@@ -92,8 +112,12 @@ public class PushServiceImpl implements PushService {
      * @param expire
      * @return
      */
-    private boolean pushAccountIOS(List<String> accountList, Map<String, Object> content, String title, int expire) {
-        XingeApp xinge = new XingeApp(accessId, secretKey);
+    private boolean pushAccountIOS(List<String> accountList, Map<String, Object> content, String title, int expire,UserType type) {
+        XingeApp xinge = null;
+        if(type.equals(UserType.customer))
+            xinge=client;
+        else
+            xinge=merc;
         MessageIOS message = new MessageIOS();
         message.setExpireTime(expire);
         message.setCustom(content);
@@ -123,7 +147,7 @@ public class PushServiceImpl implements PushService {
 
     }
 
-    public void pushToUser(String account, Map<String , Object> content, String title) {
+    public void pushToUser(String account, Map<String , Object> content, String title,UserType type) {
         PushVo vo = new PushVo();
         List<String> accountList=new ArrayList<String>();
         accountList.add(account);
@@ -131,16 +155,18 @@ public class PushServiceImpl implements PushService {
         vo.setContent(content);
         vo.setTitle(title);
         vo.setExpire(defExpire);
+        vo.setType(type);
         pushList.offer(vo);
         startPushTask();
     }
     
-    public void pushToUsers(List<String> accountList, Map<String , Object> content, String title) {
+    public void pushToUsers(List<String> accountList, Map<String , Object> content, String title,UserType type) {
         PushVo vo = new PushVo();
         vo.setAccountList(accountList);
         vo.setContent(content);
         vo.setTitle(title);
         vo.setExpire(defExpire);
+        vo.setType(type);
         pushList.offer(vo);
         startPushTask();
     }
@@ -169,7 +195,7 @@ public class PushServiceImpl implements PushService {
         class PushDelayTask extends TimerTask {
             @Override
             public void run() {
-                pushAccountAndroid(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire());
+                pushAccountAndroid(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire(),UserType.merchants);
                 timer.cancel();
             }
 
@@ -189,8 +215,8 @@ public class PushServiceImpl implements PushService {
             try{
             PushVo vo = pushList.poll();
             if (null != vo) {
-                pushAccountAndroid(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire());
-                pushAccountIOS(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire());
+                pushAccountAndroid(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire(),vo.getType());
+                pushAccountIOS(vo.getAccountList(), vo.getContent(), vo.getTitle(), vo.getExpire(),vo.getType());
             }
             }catch(Exception e){
                 LOG.error("PushQueueTask run fail.",e);

@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.store.api.common.Constant;
 import com.store.api.mongo.entity.Order;
 import com.store.api.mongo.entity.User;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.entity.subdocument.Offer;
 import com.store.api.mongo.entity.subdocument.OrderProduct;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.PushService;
 import com.store.api.session.annotation.Authorization;
-import com.store.api.utils.JsonUtils;
 import com.store.api.utils.Utils;
 
 /**
@@ -217,11 +217,11 @@ public class MerchantsAction extends BaseAction {
                 if (order.getStatus() > 0) {
                     if (user.getId()==order.getMerchantsId()) {
                         result.put("errorcode", "2");
-                        result.put("info", "该订单已经被其它人抢了");
+                        result.put("info", "该订单已经被您抢到了");
                         return result;
                     } else {
                         result.put("errorcode", "3");
-                        result.put("info", "该订单已经被您抢到了");
+                        result.put("info", "该订单已经被其它人抢了");
                         return result;
                     }
                 } else {
@@ -254,14 +254,14 @@ public class MerchantsAction extends BaseAction {
                     pushMap.put("type", "2");
                     pushMap.put("order_id", order.getId()+"");
                     pushMap.put("msg", "您的订单已经被"+user.getNickName()+"接受，接等待配送");
-                    pushService.pushToUser(order.getCustomerId()+"", pushMap, title);
+                    pushService.pushToUser(order.getCustomerId()+"", pushMap, title,UserType.customer);
                     
                     //推送给没抢到单的卖家
                     Map<String, Object> otherPushMap=new HashMap<String, Object>();
                     otherPushMap.put("type", "3");
                     otherPushMap.put("order_id", order.getId()+"");
                     otherPushMap.put("msg", "该订单已经被其它人抢了");
-                    pushService.pushToUsers(mersList, otherPushMap, title);
+                    pushService.pushToUsers(mersList, otherPushMap, title,UserType.merchants);
 
                     result.put("errorcode", "1");
                     result.put("info", "");
@@ -422,6 +422,13 @@ public class MerchantsAction extends BaseAction {
                 order.setStatus(4);
 
                 orderService.save(order);
+                
+                String title="测试TITLE";
+                Map<String, Object> pushMap=new HashMap<String, Object>();
+                pushMap.put("type", "4");
+                pushMap.put("order_id", order.getId()+"");
+                pushMap.put("msg", "您的订单状态已变更");
+                pushService.pushToUser(order.getCustomerId()+"", pushMap, title,UserType.customer);
 
                 result.put("errorcode", "1");
                 result.put("info", "");
