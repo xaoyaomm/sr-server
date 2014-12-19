@@ -21,7 +21,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderListTop() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttop").accept(MediaType.ALL)
-        		 .param("orderid", "35")
+        		 .param("orderid", "150")
         		 .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -32,7 +32,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderListTail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttail").accept(MediaType.ALL)
-                 .param("orderid", "36")
+                 .param("orderid", "45")
                  .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();

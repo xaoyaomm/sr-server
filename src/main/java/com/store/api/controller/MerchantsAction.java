@@ -62,20 +62,22 @@ public class MerchantsAction extends BaseAction {
         cal.set(Calendar.SECOND, 0);
         Long startTime = cal.getTime().getTime();
         int page = 1;
-        int size = 20;
+        int size = 50;
 
         Object obj = session.getAttribute(Constant.SESSION_USER);
         User user = (User) obj;
 
         int lost = orderService.findTadayLostByUserId(user.getId(), startTime);
         Map<String, Object> reMap = new HashMap<String, Object>();
-        List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
-        Map<String, String> orderMap = null;
+        List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+        List<Map<String, String>> opList = null;
+        Map<String, Object> orderMap = null;
+        Map<String, String> opMap = null;
 
         Page<Order> orderPage = orderService.findTopOrder(user.getId(), orderId, page, size);
         if (orderPage.hasContent()) {
             for (Order order : orderPage.getContent()) {
-                orderMap = new HashMap<String, String>();
+                orderMap = new HashMap<String, Object>();
                 orderMap.put("order_id", order.getId() + "");
                 orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
                 orderMap.put("to_address", order.getToAddress());
@@ -83,6 +85,21 @@ public class MerchantsAction extends BaseAction {
                 orderMap.put("total_price", order.getTotalPrice() + "");
                 orderMap.put("desc", order.getProsDesc());
                 orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
+                orderMap.put("phone", order.getCustomerPhone());
+                orderMap.put("nick_name", order.getCustomerName());
+                
+                List<OrderProduct> ops = order.getProducts();
+                opList=new ArrayList<Map<String, String>>();
+                for (OrderProduct op : ops) {
+                    opMap = new HashMap<String, String>();
+                    opMap.put("p_id", op.getProductId() + "");
+                    opMap.put("p_name", op.getProductName());
+                    opMap.put("p_price", op.getProductPrice() + "");
+                    opMap.put("p_img", op.getProductImg());
+                    opMap.put("p_num", op.getAmount() + "");
+                    opList.add(opMap);
+                }
+                orderMap.put("products", opList);
                 reList.add(orderMap);
             }
         }
@@ -122,14 +139,15 @@ public class MerchantsAction extends BaseAction {
         User user = (User) obj;
 
         Map<String, Object> reMap = new HashMap<String, Object>();
-        List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
-        Map<String, String> orderMap = null;
-
+        List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+        List<Map<String, String>> opList = null;
+        Map<String, Object> orderMap = null;
+        Map<String, String> opMap = null;
         Page<Order> orderPage = orderService.findTailOrder(user.getId(), orderId, page, size);
 
         if (orderPage.hasContent()) {
             for (Order order : orderPage.getContent()) {
-                orderMap = new HashMap<String, String>();
+                orderMap = new HashMap<String, Object>();
                 orderMap.put("order_id", order.getId() + "");
                 orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
                 orderMap.put("to_address", order.getToAddress());
@@ -137,6 +155,21 @@ public class MerchantsAction extends BaseAction {
                 orderMap.put("total_price", order.getTotalPrice() + "");
                 orderMap.put("desc", order.getProsDesc());
                 orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
+                orderMap.put("phone", order.getCustomerPhone());
+                orderMap.put("nick_name", order.getCustomerName());
+                
+                List<OrderProduct> ops = order.getProducts();
+                opList=new ArrayList<Map<String, String>>();
+                for (OrderProduct op : ops) {
+                    opMap = new HashMap<String, String>();
+                    opMap.put("p_id", op.getProductId() + "");
+                    opMap.put("p_name", op.getProductName());
+                    opMap.put("p_price", op.getProductPrice() + "");
+                    opMap.put("p_img", op.getProductImg());
+                    opMap.put("p_num", op.getAmount() + "");
+                    opList.add(opMap);
+                }
+                orderMap.put("products", opList);
                 reList.add(orderMap);
             }
         }
@@ -391,6 +424,13 @@ public class MerchantsAction extends BaseAction {
                 order.setStatus(10);
 
                 orderService.save(order);
+                
+                String title="测试TITLE";
+                Map<String, Object> pushMap=new HashMap<String, Object>();
+                pushMap.put("type", "7");
+                pushMap.put("order_id", order.getId()+"");
+                pushMap.put("msg", "您的订单已被"+order.getMerchantsName()+"取消");
+                pushService.pushToUser(order.getCustomerId()+"", pushMap, title,UserType.customer);
 
                 result.put("errorcode", "1");
                 result.put("info", "");

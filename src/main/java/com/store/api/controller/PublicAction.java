@@ -353,6 +353,12 @@ public class PublicAction extends BaseAction {
 
         Map<String, String> reMap = new HashMap<String, String>();
         reMap.put("addr_id", addObj.getId() + "");
+        reMap.put("address", addObj.getAddress());
+        reMap.put("phone", addObj.getPhone());
+        reMap.put("name", addObj.getName());
+        reMap.put("lng", addObj.getLocation()[0]+"");
+        reMap.put("lat", addObj.getLocation()[1]+"");
+        reMap.put("def", isdef ? "1" : "0");
 
         return JsonUtils.resultJson(1, "", reMap);
     }

@@ -155,7 +155,7 @@ public class CustomerAction extends BaseAction {
     @ResponseBody
     @RequestMapping("/order")
     @Authorization(type = Constant.SESSION_USER)
-    public Map<String, Object> productList(@RequestParam(value = "goods", required = false, defaultValue = "")
+    public Map<String, Object> order(@RequestParam(value = "goods", required = false, defaultValue = "")
     String json, @RequestParam(value = "addrid", required = false, defaultValue = "")
     Long addrId) {
         if (Utils.isEmpty(json)) {
@@ -222,7 +222,6 @@ public class CustomerAction extends BaseAction {
             order.setProsDesc(prosDesc.toString());
             order.setStatus(0);
 
-            // List<User> users = userService.findByType(UserType.merchants);
             List<UserSearch> pushUsers = userService.geoSearch(UserType.merchants, order.getToLocation(), Constant.SEARCH_DISTANCE);
             List<Map<String, String>> locationList = new ArrayList<Map<String, String>>();
             Map<String, String> locationMap = null;
@@ -336,6 +335,8 @@ public class CustomerAction extends BaseAction {
     public Map<String, Object> orderList(@RequestParam(value = "page", required = false, defaultValue = "1")
     int page, @RequestParam(value = "size", required = false, defaultValue = "10")
     int size) {
+    	if(page<=0)
+    		page=1;
         Object obj = session.getAttribute(Constant.SESSION_USER);
         User user = (User) obj;
         Map<String, String> reMap = null;
