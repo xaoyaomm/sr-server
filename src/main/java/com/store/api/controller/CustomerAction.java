@@ -348,6 +348,7 @@ public class CustomerAction extends BaseAction {
                 reMap.put("order_id", order.getId() + "");
                 reMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
                 reMap.put("deal_merc", order.getMerchantsName());
+                reMap.put("merc_phone", order.getMerchantsPhone());
                 reMap.put("status", order.getStatus() + "");
                 reMap.put("product_num", order.getTotalAmount() + "");
                 reMap.put("total_price", order.getTotalPrice() + "");
@@ -394,6 +395,7 @@ public class CustomerAction extends BaseAction {
 
             reMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
             reMap.put("deal_merc", order.getMerchantsName());
+            reMap.put("merc_phone", order.getMerchantsPhone());
             reMap.put("status", order.getStatus() + "");
             reMap.put("product_num", order.getTotalAmount() + "");
             reMap.put("total_price", order.getTotalPrice() + "");

@@ -41,24 +41,40 @@ public class PushServiceImpl implements PushService {
     private static LinkedList<PushVo> pushList = new LinkedList<PushVo>();
 
     /** 客户端 **/
-    private static final long accessId_client = 2100067699;
+    private static final long accessId_client_android = 2100072214L;
+    
+    /** 客户端 **/
+    private static final long accessId_client_ios = 2200072215L;
 
     /** 客户端 **/
-    private static final String secretKey_client = "7ea1112ab5dd5dca4ded2486a5567dd1";
+    private static final String secretKey_client_android = "d902fe7af1292aeea1cd94f964ecefab";
+    
+    /** 客户端 **/
+    private static final String secretKey_client_ios = "c2604b8a738740bff2ba4939358f7038";
     
     /** 商户端 **/
-    private static final long accessId_merc = 2100067702;
+    private static final long accessId_merc_android = 2100067702L;
+    
+    /** 商户端 **/
+    private static final long accessId_merc_ios = 2200072426L;
 
     /** 商户端 **/
-    private static final String secretKey_merc = "413f981e94c7f542268f07cf34b9b2d6";
+    private static final String secretKey_merc_android = "413f981e94c7f542268f07cf34b9b2d6";
+    
+    /** 商户端 **/
+    private static final String secretKey_merc_ios = "8fdd6fd158afd81b21ed34ab5dc26e1e";
 
     private static int iosEnv = XingeApp.IOSENV_DEV; // IOS 开发环境
     
     private PushQueueTask task=null;
     
-    private XingeApp client=null;
+    private XingeApp clientAndroid=null;
     
-    private XingeApp merc=null;
+    private XingeApp clientIos=null;
+    
+    private XingeApp mercAndroid=null;
+    
+    private XingeApp mercIos=null;
 
     /** 默认离线时间 **/
     private int defExpire = 300;
@@ -70,8 +86,10 @@ public class PushServiceImpl implements PushService {
     }
     
     public PushServiceImpl(){
-        this.client=new XingeApp(accessId_client, secretKey_client);
-        this.merc=new XingeApp(accessId_merc, secretKey_merc);
+        this.clientAndroid=new XingeApp(accessId_client_android, secretKey_client_android);
+        this.mercAndroid=new XingeApp(accessId_merc_android, secretKey_merc_android);
+        this.clientIos=new XingeApp(accessId_client_ios, secretKey_client_ios);
+        this.mercIos=new XingeApp(accessId_merc_ios, secretKey_merc_ios);
     }
 
     /**
@@ -85,9 +103,9 @@ public class PushServiceImpl implements PushService {
     private boolean pushAccountAndroid(List<String> accountList, Map<String, Object> content, String title, int expire,UserType type) {
         XingeApp xinge = null;
         if(type.equals(UserType.customer))
-            xinge=client;
+            xinge=clientAndroid;
         else
-            xinge=merc;
+            xinge=mercAndroid;
         Message message = new Message();
         message.setExpireTime(expire);
         message.setCustom(content);
@@ -115,9 +133,9 @@ public class PushServiceImpl implements PushService {
     private boolean pushAccountIOS(List<String> accountList, Map<String, Object> content, String title, int expire,UserType type) {
         XingeApp xinge = null;
         if(type.equals(UserType.customer))
-            xinge=client;
+            xinge=clientIos;
         else
-            xinge=merc;
+            xinge=mercIos;
         MessageIOS message = new MessageIOS();
         message.setExpireTime(expire);
         message.setCustom(content);
