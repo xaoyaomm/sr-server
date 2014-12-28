@@ -67,6 +67,6 @@ public class SecurityUtil {
     public static void main(String[] args){
         System.out.println(decrypt("aaaDNWQJHxm3R_OxCVaNu"));
         //cargo_199_5410075   A2IaH29iKYt4QhV3KYMzOhV
-        System.out.println(encrypt("merchants_21_"));
+        System.out.println(encrypt("merchants_107_"));
     }
 }

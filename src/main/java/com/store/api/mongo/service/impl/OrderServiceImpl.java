@@ -92,15 +92,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findTopOrder(long mercId, long orderId, int page, int size) {
+    public Page<Order> findTopOrderWithMercPush(long mercId, long orderId, int page, int size) {
         PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
-        return repository.findTopOrder(mercId,orderId,pr);
+        return repository.findTopOrderWithMercPush(mercId,orderId,pr);
     }
 
     @Override
-    public Page<Order> findTailOrder(long mercId, long orderId, int page, int size) {
+    public Page<Order> findTailOrderWithMercPush(long mercId, long orderId, int page, int size) {
         PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
-        return repository.findTailOrder(mercId,orderId,pr);
+        return repository.findTailOrderWithMercPush(mercId,orderId,pr);
     }
+
+	@Override
+	public Page<Order> findTopOrderWithCustomer(long customerId, long orderId, int page, int size) {
+		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+		return repository.findTopOrderWithCustomer(customerId, orderId, pr);
+	}
+
+	@Override
+	public Page<Order> findTailOrderWithCustomer(long customerId, long orderId, int page, int size) {
+		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+		return repository.findTailOrderWithCustomer(customerId, orderId, pr);
+	}
+
+	@Override
+	public Page<Order> findTopOrderWithMerc(long mercId, long orderId, int page, int size) {
+		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+        return repository.findTopOrderWithMerc(mercId,orderId,pr);
+	}
+
+	@Override
+	public Page<Order> findTailOrderWithMerc(long mercId, long orderId, int page, int size) {
+		PageRequest pr=new PageRequest(page<0?0:page-1, size, Direction.DESC, "createDate");
+        return repository.findTailOrderWithMerc(mercId,orderId,pr);
+	}
 
 }

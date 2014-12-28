@@ -15,7 +15,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 
 	@Before
     public void init() throws Exception{
-        cookie=new Cookie("STORERUNSSID", "dZLaA2eedoShQhJqQz");
+        cookie=new Cookie("STORERUNSSID", "dZLaA2eedoShQhPzO51");
     }
 	
 	@Test
@@ -32,7 +32,7 @@ public class MerchantsTestCase extends BaseActionTestCase {
 	@Test
     public void testReceiveOrderListTail() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/receiveorderlisttail").accept(MediaType.ALL)
-                 .param("orderid", "45")
+                 .param("orderid", "40")
                  .cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
@@ -97,6 +97,26 @@ public class MerchantsTestCase extends BaseActionTestCase {
     public void testArrive() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/arrive").accept(MediaType.ALL)
                 .param("orderid", "35").cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+	
+	@Test
+    public void testOrderTop() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/orderlisttop").accept(MediaType.ALL)
+                .param("orderid", "200").cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+	
+	@Test
+    public void testOrderTail() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/merchants/orderlisttail").accept(MediaType.ALL)
+                .param("orderid", "130").cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

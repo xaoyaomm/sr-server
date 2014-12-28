@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.Assert;
 
 import com.store.api.common.Constant;
+import com.store.api.common.MD5;
 import com.store.api.utils.JsonUtils;
 
 
@@ -55,7 +56,7 @@ public class PublicTest extends BaseActionTestCase{
     public void testCustomerLogin() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/login").accept(MediaType.ALL)
                 .param("name", "vincent")
-                .param("pwd", "12345"));
+                .param("pwd", MD5.encrypt("123456")));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -66,8 +67,9 @@ public class PublicTest extends BaseActionTestCase{
     @Test
     public void testMerchantsLogin() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/login").accept(MediaType.ALL)
-                .param("name", "vc_merc")
-                .param("pwd", "12345"));
+                .param("name", "mer1")
+                .param("pwd", MD5.encrypt("123456"))
+                .param("type", "1"));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);
@@ -113,6 +115,18 @@ public class PublicTest extends BaseActionTestCase{
                 .param("lng", "22.1234")
                 .param("def", "1")
                 .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
+    @Test
+    public void testCheckVersion() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/checkversion").accept(MediaType.ALL)
+        		.param("type", "1")
+                .param("code", "101")
+        		.cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

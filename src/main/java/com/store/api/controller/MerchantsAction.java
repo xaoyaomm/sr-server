@@ -74,7 +74,7 @@ public class MerchantsAction extends BaseAction {
         Map<String, Object> orderMap = null;
         Map<String, String> opMap = null;
 
-        Page<Order> orderPage = orderService.findTopOrder(user.getId(), orderId, page, size);
+        Page<Order> orderPage = orderService.findTopOrderWithMercPush(user.getId(), orderId, page, size);
         if (orderPage.hasContent()) {
             for (Order order : orderPage.getContent()) {
                 orderMap = new HashMap<String, Object>();
@@ -84,7 +84,13 @@ public class MerchantsAction extends BaseAction {
                 orderMap.put("product_num", order.getTotalAmount() + "");
                 orderMap.put("total_price", order.getTotalPrice() + "");
                 orderMap.put("desc", order.getProsDesc());
-                orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
+                if(order.getStatus() > 0){
+                	if(order.getMerchantsId()==user.getId())
+                		orderMap.put("status", "1");
+                	else
+                		orderMap.put("status", "2");
+                }else
+                	orderMap.put("status", "0");
                 orderMap.put("phone", order.getCustomerPhone());
                 orderMap.put("nick_name", order.getCustomerName());
                 
@@ -143,7 +149,7 @@ public class MerchantsAction extends BaseAction {
         List<Map<String, String>> opList = null;
         Map<String, Object> orderMap = null;
         Map<String, String> opMap = null;
-        Page<Order> orderPage = orderService.findTailOrder(user.getId(), orderId, page, size);
+        Page<Order> orderPage = orderService.findTailOrderWithMercPush(user.getId(), orderId, page, size);
 
         if (orderPage.hasContent()) {
             for (Order order : orderPage.getContent()) {
@@ -154,7 +160,13 @@ public class MerchantsAction extends BaseAction {
                 orderMap.put("product_num", order.getTotalAmount() + "");
                 orderMap.put("total_price", order.getTotalPrice() + "");
                 orderMap.put("desc", order.getProsDesc());
-                orderMap.put("status", order.getStatus() > 0 ? "1" : "0");
+                if(order.getStatus() > 0){
+                	if(order.getMerchantsId()==user.getId())
+                		orderMap.put("status", "1");
+                	else
+                		orderMap.put("status", "2");
+                }else
+                	orderMap.put("status", "0");
                 orderMap.put("phone", order.getCustomerPhone());
                 orderMap.put("nick_name", order.getCustomerName());
                 
@@ -194,6 +206,8 @@ public class MerchantsAction extends BaseAction {
     public Map<String, Object> receiveOrderDetail(@RequestParam(value = "orderid", required = false, defaultValue = "0")
     Long orderId) {
         if (orderId > 0) {
+        	Object obj = session.getAttribute(Constant.SESSION_USER);
+            User user = (User) obj;
             Map<String, Object> reMap = new HashMap<String, Object>();
             List<Map<String, String>> reList = new ArrayList<Map<String, String>>();
             Map<String, String> opMap = null;
@@ -216,7 +230,13 @@ public class MerchantsAction extends BaseAction {
                 reMap.put("to_address", order.getToAddress());
                 reMap.put("phone", order.getCustomerPhone());
                 reMap.put("nick_name", order.getCustomerName());
-                reMap.put("status", order.getStatus() + "");
+                if(order.getStatus() > 0){
+                	if(order.getMerchantsId()==user.getId())
+                		reMap.put("status", "1");
+                	else
+                		reMap.put("status", "2");
+                }else
+                	reMap.put("status", "0");
                 reMap.put("product_num", order.getTotalAmount() + "");
                 reMap.put("total_price", order.getTotalPrice() + "");
                 reMap.put("products", reList);
@@ -252,10 +272,12 @@ public class MerchantsAction extends BaseAction {
                     if (user.getId()==order.getMerchantsId()) {
                         result.put("errorcode", "2");
                         result.put("info", "该订单已经被您抢到了");
+                        result.put("merc_id", order.getMerchantsId()+"");
                         return result;
                     } else {
                         result.put("errorcode", "3");
                         result.put("info", "该订单已经被其它人抢了");
+                        result.put("merc_id", order.getMerchantsId()+"");
                         return result;
                     }
                 } else {
@@ -299,6 +321,7 @@ public class MerchantsAction extends BaseAction {
 
                     result.put("errorcode", "1");
                     result.put("info", "");
+                    result.put("merc_id", order.getMerchantsId()+"");
                     return result;
                 }
             }
@@ -309,6 +332,118 @@ public class MerchantsAction extends BaseAction {
             return result;
         }
     }
+    
+    
+    /**
+	 * 订单列表头部,取>订单ID的记录
+	 * @param orderId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/orderlisttop")
+	@Authorization(type = Constant.SESSION_USER)
+	public Map<String, Object> orderListTop(@RequestParam(value = "orderid", required = false, defaultValue = "0") Long orderId) {
+		int page = 1;
+		int size = 50;
+		Object obj = session.getAttribute(Constant.SESSION_USER);
+		User user = (User) obj;
+		List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+		List<Map<String, String>> opList = null;
+		Map<String, Object> orderMap = null;
+		Map<String, String> opMap = null;
+		Page<Order> orderPage = orderService.findTopOrderWithMerc(user.getId(), orderId, page, size);
+		if (orderPage.hasContent()) {
+			for (Order order : orderPage.getContent()) {
+				orderMap = new HashMap<String, Object>();
+				orderMap.put("order_id", order.getId() + "");
+				orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
+				orderMap.put("to_address", order.getToAddress());
+				orderMap.put("nick_name", order.getCustomerName());
+				orderMap.put("phone", order.getCustomerPhone());
+				orderMap.put("status", order.getStatus() + "");
+				orderMap.put("product_num", order.getTotalAmount() + "");
+				orderMap.put("total_price", order.getTotalPrice() + "");
+				orderMap.put("desc", order.getProsDesc());
+
+				List<OrderProduct> ops = order.getProducts();
+				opList = new ArrayList<Map<String, String>>();
+				for (OrderProduct op : ops) {
+					opMap = new HashMap<String, String>();
+					opMap.put("p_id", op.getProductId() + "");
+                    opMap.put("p_name", op.getProductName());
+                    opMap.put("p_price", op.getProductPrice() + "");
+                    opMap.put("p_img", op.getProductImg());
+                    opMap.put("p_num", op.getAmount() + "");
+					opList.add(opMap);
+				}
+				orderMap.put("products", opList);
+				reList.add(orderMap);
+			}
+		}
+		result.put("errorcode", "1");
+		result.put("info", "");
+		result.put("data", reList);
+		return result;
+	}
+	
+	/**
+	 * 订单列表尾部,取<订单ID的记录
+	 * @param orderId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/orderlisttail")
+	@Authorization(type = Constant.SESSION_USER)
+	public Map<String, Object> orderListTail(@RequestParam(value = "orderid", required = false, defaultValue = "0") Long orderId) {
+		int page = 1;
+        int size = 10;
+
+        if (orderId <= 0) {
+            result.put("errorcode", "-2");
+            result.put("info", "查询失败");
+            return result;
+        }
+		Object obj = session.getAttribute(Constant.SESSION_USER);
+		User user = (User) obj;
+		List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+		List<Map<String, String>> opList = null;
+		Map<String, Object> orderMap = null;
+		Map<String, String> opMap = null;
+		Page<Order> orderPage = orderService.findTailOrderWithMerc(user.getId(), orderId, page, size);
+		if (orderPage.hasContent()) {
+			for (Order order : orderPage.getContent()) {
+				orderMap = new HashMap<String, Object>();
+				orderMap.put("order_id", order.getId() + "");
+				orderMap.put("date", Utils.formatDate(new Date(order.getCreateDate()), null));
+				orderMap.put("to_address", order.getToAddress());
+				orderMap.put("nick_name", order.getCustomerName());
+				orderMap.put("phone", order.getCustomerPhone());
+				orderMap.put("status", order.getStatus() + "");
+				orderMap.put("product_num", order.getTotalAmount() + "");
+				orderMap.put("total_price", order.getTotalPrice() + "");
+				orderMap.put("desc", order.getProsDesc());
+
+				List<OrderProduct> ops = order.getProducts();
+				opList = new ArrayList<Map<String, String>>();
+				for (OrderProduct op : ops) {
+					opMap = new HashMap<String, String>();
+					opMap.put("p_id", op.getProductId() + "");
+                    opMap.put("p_name", op.getProductName());
+                    opMap.put("p_price", op.getProductPrice() + "");
+                    opMap.put("p_img", op.getProductImg());
+                    opMap.put("p_num", op.getAmount() + "");
+					opList.add(opMap);
+				}
+				orderMap.put("products", opList);
+				reList.add(orderMap);
+			}
+		}
+		result.put("errorcode", "1");
+		result.put("info", "");
+		result.put("data", reList);
+		return result;
+	}
+    
 
     /**
      * 订单列表

@@ -53,18 +53,50 @@ public interface OrderService {
     public int findTadayLostByUserId(long id,long date);
     
     /**
-     * 分页查询推送给商户的订单数(top)
+     * 分页查询推送给商户的订单(top)
      * @param mercId
      * @param orderId
      * @return
      */
-    public Page<Order> findTopOrder(long mercId,long orderId,int page,int size);
+    public Page<Order> findTopOrderWithMercPush(long mercId,long orderId,int page,int size);
     
     /**
-     * 分页查询推送给商户的订单数(tail)
+     * 分页查询推送给商户的订单(tail)
      * @param mercId
      * @param orderId
      * @return
      */
-    public Page<Order> findTailOrder(long mercId,long orderId,int page,int size);
+    public Page<Order> findTailOrderWithMercPush(long mercId,long orderId,int page,int size);
+    
+    /**
+     * 分页查询商户的订单(top)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<Order> findTopOrderWithMerc(long mercId,long orderId,int page,int size);
+    
+    /**
+     * 分页查询商户的订单(tail)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<Order> findTailOrderWithMerc(long mercId,long orderId,int page,int size);
+    
+    /**
+     * 分页查询买家的订单(top)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<Order> findTopOrderWithCustomer(long customerId,long orderId,int page,int size);
+    
+    /**
+     * 分页查询买家的订单(tail)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    public Page<Order> findTailOrderWithCustomer(long customerId,long orderId,int page,int size);
 }

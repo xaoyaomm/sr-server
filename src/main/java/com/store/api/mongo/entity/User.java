@@ -4,13 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.store.api.mongo.entity.enumeration.UserType;
 
 @Document
@@ -36,6 +33,9 @@ public class User implements Serializable{
 	/** 用户类型 **/
 	@Enumerated(EnumType.STRING)
 	private UserType type;
+	
+	/** 店铺编号,推广使用 **/
+	private long mercNum=0;
 	
 	/** 推荐人ID **/
 	private long recUserId=0L;
@@ -73,6 +73,15 @@ public class User implements Serializable{
 	
 	/** 最后使用时间 **/
 	private long lastUserTime=System.currentTimeMillis();
+	
+	/** 注册地城市代码 **/
+	private int cityCode=0;
+	
+	/** 注册地省份 **/
+	private String province="";
+	
+	/** 注册地城市 **/
+	private String city="";
 	
 	public long getLastUserTime() {
         return lastUserTime;
@@ -216,6 +225,38 @@ public class User implements Serializable{
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public int getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(int cityCode) {
+		this.cityCode = cityCode;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public long getMercNum() {
+		return mercNum;
+	}
+
+	public void setMercNum(long mercNum) {
+		this.mercNum = mercNum;
 	}
 
 }

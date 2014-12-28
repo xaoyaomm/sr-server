@@ -39,7 +39,7 @@ public class CustomerTestCase extends BaseActionTestCase {
     
     @Test
     public void testOrder() throws Exception{
-    	String json="[{\"p_id\":\"16\",\"p_num\":\"2\"},{\"p_id\":\"34\",\"p_num\":\"1\"},{\"p_id\":\"44\",\"p_num\":\"1\"}]";
+    	String json="[{\"p_id\":\"16\",\"p_num\":\"2\"},{\"p_id\":\"34\",\"p_num\":\"1\"},{\"p_id\":\"44\",\"p_num\":\"1\"},{\"p_id\":\"27\",\"p_num\":\"1\"}]";
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/order").accept(MediaType.ALL)
                 .param("goods",json)
                 .param("addrid", "4").cookie(cookie));
@@ -85,6 +85,28 @@ public class CustomerTestCase extends BaseActionTestCase {
     public void testOften() throws Exception{
         ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/often").accept(MediaType.ALL)
                .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
+    @Test
+    public void testTopOrder() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/orderlisttop").accept(MediaType.ALL)
+        		.param("orderid", "36")
+        		.cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
+    @Test
+    public void testTailOrder() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/orderlisttail").accept(MediaType.ALL)
+        		.param("orderid", "39")
+        		.cookie(cookie));
         MvcResult mr = ra.andReturn();
         String result = mr.getResponse().getContentAsString();
         log.info(result);

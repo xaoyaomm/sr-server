@@ -23,21 +23,48 @@ public interface OrderRepository extends MongoRepository<Order, Long> {
     public int findTadayLostByUserId(Long id,Long date);
     
     /**
-     * 分页查询推送给商户的订单数(top)
+     * 分页查询推送给商户的订单(top)
      * @param mercId
      * @param orderId
      * @return
      */
-    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0,'status':{'$ne':1}}},'id':{'$gt':?1}}")
-    public Page<Order> findTopOrder(Long mercId, Long orderId,Pageable pr);
+//    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0,'status':{'$ne':1}}},'id':{'$gt':?1}}")
+    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0}},'id':{'$gt':?1}}")
+    public Page<Order> findTopOrderWithMercPush(Long mercId, Long orderId,Pageable pr);
     
     /**
-     * 分页查询推送给商户的订单数(tail)
+     * 分页查询推送给商户的订单(tail)
      * @param mercId
      * @param orderId
      * @return
      */
-    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0,'status':{'$ne':1}}},'id':{'$lt':?1}}")
-    public Page<Order> findTailOrder(Long mercId, Long orderId,Pageable pr);
+//    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0,'status':{'$ne':1}}},'id':{'$lt':?1}}")
+    @Query(value="{'offers':{'$elemMatch':{'merchantsId':?0}},'id':{'$lt':?1}}")
+    public Page<Order> findTailOrderWithMercPush(Long mercId, Long orderId,Pageable pr);
+    
+    /**
+     * 分页查询商户的订单(top)
+     * @param mercId
+     * @param orderId
+     * @param pr
+     * @return
+     */
+    @Query(value="{'merchantsId':?0,'id':{'$gt':?1}}")
+    public Page<Order> findTopOrderWithMerc(Long mercId, Long orderId,Pageable pr);
+    
+    /**
+     * 分页查询商户的订单(tail)
+     * @param mercId
+     * @param orderId
+     * @return
+     */
+    @Query(value="{'merchantsId':?0,'id':{'$lt':?1}}")
+    public Page<Order> findTailOrderWithMerc(Long mercId, Long orderId,Pageable pr);
+    
+    @Query(value="{'customerId':?0,'id':{'$gt':?1}}")
+    public Page<Order> findTopOrderWithCustomer(Long customerId, Long orderId,Pageable pr);
+    
+    @Query(value="{'customerId':?0,'id':{'$lt':?1}}")
+    public Page<Order> findTailOrderWithCustomer(Long customerId, Long orderId,Pageable pr);
 
 }

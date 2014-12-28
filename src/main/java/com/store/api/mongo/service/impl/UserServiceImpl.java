@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
 	public void save(User entity) {
 		if (0 == entity.getId()) {
 			entity.setId(this.sequenceService.getNextSequence(entity));
+			if (entity.getType().equals(UserType.merchants)) {
+				if (this.sequenceService.getNextSequence("merc_num") < 1000) {
+					this.sequenceService.SetNextSequence("merc_num", 1000);
+					entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
+				}
+			}
 		}
 		repository.save(entity);
 
@@ -39,6 +45,11 @@ public class UserServiceImpl implements UserService {
 		for (User entity : entitys) {
 			if (0 == entity.getId()) {
 				entity.setId(sequenceService.getNextSequence(entity));
+				if (entity.getType().equals(UserType.merchants))
+					if (this.sequenceService.getNextSequence("merc_num") < 1000) {
+						this.sequenceService.SetNextSequence("merc_num", 1000);
+						entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
+					}
 			}
 		}
 		repository.save(entitys);
@@ -70,21 +81,22 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 按地址位置搜索商户
-	 * @param type   用户类型
-	 * @param location  坐标点([经度,纬度])
-	 * @param distance  搜索半径(单位:米)
+	 * 
+	 * @param type 用户类型
+	 * @param location 坐标点([经度,纬度])
+	 * @param distance 搜索半径(单位:米)
 	 * @return
 	 */
 	@Override
-	public List<UserSearch> geoSearch(UserType type, double[] location,long distance) {
-		List<User> list=repository.geoSearch(type, location, distance/Constant.EARTH_RADIUS);
-		List<UserSearch> voList=new ArrayList<UserSearch>();
+	public List<UserSearch> geoSearch(UserType type, double[] location, long distance) {
+		List<User> list = repository.geoSearch(type, location, distance / Constant.EARTH_RADIUS);
+		List<UserSearch> voList = new ArrayList<UserSearch>();
 		for (User user : list) {
-            UserSearch us=new UserSearch();
-            us.setDistance(Common.getDistance(location[0], location[1], user.getLocation()[0], user.getLocation()[1]));
-            us.setUser(user);
-            voList.add(us);
-        }
+			UserSearch us = new UserSearch();
+			us.setDistance(Common.getDistance(location[0], location[1], user.getLocation()[0], user.getLocation()[1]));
+			us.setUser(user);
+			voList.add(us);
+		}
 		Collections.sort(voList);
 		return voList;
 	}
