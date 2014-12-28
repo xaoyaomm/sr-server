@@ -20,19 +20,19 @@ public class Offer implements Serializable{
     private static final long serialVersionUID = -8256242503548068133L;
     
     /** 卖家ID **/
-    private Long merchantsId=0L;
+    private long merchantsId=0L;
     
     /** 创建时间 **/
-    private Long createDate=0L;
+    private long createDate=0L;
     
     /** 抢单状态:0未抢单 1已抢单 2被其它人抢 **/
     private int status=0;
 
-    public Long getMerchantsId() {
+    public long getMerchantsId() {
         return merchantsId;
     }
 
-    public Long getCreateDate() {
+    public long getCreateDate() {
         return createDate;
     }
 
@@ -40,11 +40,11 @@ public class Offer implements Serializable{
         return status;
     }
 
-    public void setMerchantsId(Long merchantsId) {
+    public void setMerchantsId(long merchantsId) {
         this.merchantsId = merchantsId;
     }
 
-    public void setCreateDate(Long createDate) {
+    public void setCreateDate(long createDate) {
         this.createDate = createDate;
     }
 

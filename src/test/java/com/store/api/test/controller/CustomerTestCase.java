@@ -113,4 +113,15 @@ public class CustomerTestCase extends BaseActionTestCase {
         Assert.isTrue(StringUtils.isNotEmpty(result));
     }
     
+    @Test
+    public void testConfirm() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/confirm").accept(MediaType.ALL)
+                .param("orderid", "35")
+                .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
 }

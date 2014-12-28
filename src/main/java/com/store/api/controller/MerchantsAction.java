@@ -293,7 +293,7 @@ public class MerchantsAction extends BaseAction {
                     List<String> mersList=new ArrayList<String>();
                     if (ofs.size() > 0) {
                         for (Offer of : ofs) {
-                            if (of.getMerchantsId().equals(user.getId())) {
+                            if (of.getMerchantsId()==user.getId()) {
                                 of.setStatus(1);
                             } else{
                                 of.setStatus(2);

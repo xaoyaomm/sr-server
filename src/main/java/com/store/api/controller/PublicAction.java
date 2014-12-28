@@ -288,7 +288,10 @@ public class PublicAction extends BaseAction {
 		veResult.put("user_name", user.getUserName());
 		veResult.put("nick_name", user.getNickName());
 		veResult.put("phone", user.getPhone());
-		veResult.put("user_type", "1");
+		if(user.getType().equals(UserType.visitor))
+		    veResult.put("user_type", "0");
+		else
+		    veResult.put("user_type", "1");
 		if(user.getType().equals(UserType.merchants))
 			veResult.put("merc_num", user.getMercNum()+"");
 		veResult.put("addrs", resAddr);
