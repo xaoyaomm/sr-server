@@ -110,6 +110,23 @@ public class PublicAction extends BaseAction {
 		} else {
 			initSession(UserType.customer, user, false);
 		}
+		
+
+		List<Address> addrs = addressService.findByUserId(user.getId());
+		List<Map<String, String>> resAddr = new LinkedList<Map<String, String>>();
+		if (null != addrs && !addrs.isEmpty()) {
+			for (Address addr : addrs) {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("addr_id", addr.getId() + "");
+				map.put("address", addr.getAddress());
+				map.put("phone", addr.getPhone());
+				map.put("name", addr.getName());
+				map.put("lng", addr.getLocation()[0] + "");
+				map.put("lat", addr.getLocation()[1] + "");
+				map.put("def", addr.getId() == user.getAddressId() ? "1" : "0");
+				resAddr.add(map);
+			}
+		}
 
 		Map<String, Object> veResult = new HashMap<String, Object>();
 		veResult.put("user_id", user.getId() + "");
@@ -119,6 +136,7 @@ public class PublicAction extends BaseAction {
 		veResult.put("user_type", "1");
 		if(type==1)
 			veResult.put("merc_num", user.getMercNum()+"");
+		veResult.put("addrs", resAddr);
 		return JsonUtils.resultJson(1, "", veResult);
 	}
 
@@ -282,6 +300,19 @@ public class PublicAction extends BaseAction {
 				resAddr.add(map);
 			}
 		}
+		
+		// 通过IP获取位置信息
+				if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
+					String ip = request.getRemoteAddr();
+					if (!Utils.isEmpty(ip)) {
+						AddressBean addr = Common.ipWithBaidu(ip);
+						if (null != addr) {
+							user.setCity(addr.getCity());
+							user.setProvince(addr.getProvince());
+							user.setCityCode(addr.getCityCode());
+						}
+					}
+				}
 
 		Map<String, Object> veResult = new HashMap<String, Object>();
 		veResult.put("user_id", user.getId() + "");
@@ -375,19 +406,15 @@ public class PublicAction extends BaseAction {
 			addObj = new Address();
 			addObj.setUserId(user.getId());
 			
-			// 通过IP获取位置信息
+			// 获取位置信息
 			if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
-				String ip = request.getRemoteAddr();
-				if (!Utils.isEmpty(ip)) {
 					AddressBean addr = Common.geocoderWithBaidu(lng, lat);
 					if (null != addr) {
 						user.setCity(addr.getCity());
 						user.setProvince(addr.getProvince());
 						user.setCityCode(addr.getCityCode());
 					}
-				}
 			}
-			
 			
 		} else {
 			addObj = addressService.findOne(addrId);

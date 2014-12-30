@@ -89,6 +89,15 @@ public class Order implements Serializable{
     
     /** 购买产品列表**/
     private List<OrderProduct> products=new ArrayList<OrderProduct>();
+    
+    /** 订单所属城市代码 **/
+	private int cityCode=0;
+	
+	/** 订单所属省份 **/
+	private String province="";
+	
+	/** 订单所属城市 **/
+	private String city="";
 
     public long getId() {
         return id;
@@ -273,5 +282,30 @@ public class Order implements Serializable{
     public void setUnfinishDate(long unfinishDate) {
         this.unfinishDate = unfinishDate;
     }
+
+	public int getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(int cityCode) {
+		this.cityCode = cityCode;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+    
 
 }

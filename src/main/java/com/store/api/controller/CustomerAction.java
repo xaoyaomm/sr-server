@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.store.api.common.Common;
 import com.store.api.common.Constant;
 import com.store.api.mongo.entity.Address;
 import com.store.api.mongo.entity.Catalog;
@@ -24,6 +25,7 @@ import com.store.api.mongo.entity.User;
 import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.entity.subdocument.Offer;
 import com.store.api.mongo.entity.subdocument.OrderProduct;
+import com.store.api.mongo.entity.vo.AddressBean;
 import com.store.api.mongo.entity.vo.UserSearch;
 import com.store.api.mongo.service.AddressService;
 import com.store.api.mongo.service.CatalogService;
@@ -227,6 +229,27 @@ public class CustomerAction extends BaseAction {
 			order.setTotalAmount(opList.size());
 			order.setProsDesc(prosDesc.toString());
 			order.setStatus(0);
+			
+			// 获取位置信息
+			if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
+				String ip = request.getRemoteAddr();
+				AddressBean addr=null;
+				if (!Utils.isEmpty(ip)) {
+					addr = Common.ipWithBaidu(ip);
+					if (null == addr) {
+						addr=Common.geocoderWithBaidu(address.getLocation()[0], address.getLocation()[1]);
+					}
+					if(null!=addr){
+						order.setCity(addr.getCity());
+						order.setProvince(addr.getProvince());
+						order.setCityCode(addr.getCityCode());
+					}
+				}
+			}else{
+				order.setCity(user.getCity());
+				order.setProvince(user.getProvince());
+				order.setCityCode(user.getCityCode());
+			}
 
 			List<UserSearch> pushUsers = userService.geoSearch(UserType.merchants, order.getToLocation(), Constant.SEARCH_DISTANCE);
 			List<Map<String, String>> locationList = new ArrayList<Map<String, String>>();
