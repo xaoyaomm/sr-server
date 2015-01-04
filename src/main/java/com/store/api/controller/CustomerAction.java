@@ -283,6 +283,26 @@ public class CustomerAction extends BaseAction {
 			orderService.save(order);
 			// 将所购商品加入常购列表中
 			oftenProductService.addToOftenProduct(order.getCustomerId(), opList);
+			
+			
+			if(accountList1.size() <= 0){
+			    if (accountList2.size() > 0){
+			        accountList1=accountList2;
+			    }else{
+			        accountList2=null;
+			        if (accountList3.size() > 0)
+			            accountList1=accountList3;
+			        else
+			            accountList3=null;
+			    }
+			}else{
+			    if (accountList2.size() <=0){
+			        if (accountList3.size() > 0)
+                        accountList2=accountList3;
+			        else
+			            accountList3=null;
+                }
+			}
 
 			// TODO 推送给商户 users
 			String title = "测试TITLE";
@@ -290,11 +310,11 @@ public class CustomerAction extends BaseAction {
 			pushMap.put("type", "1");
 			pushMap.put("order_id", order.getId() + "");
 			pushMap.put("msg", "测试MSG");
-			if (accountList1.size() > 0)
+			if (null!=accountList1 && accountList1.size() > 0)
 				pushService.orderPushToMerc(accountList1, pushMap, title, 0);
-			if (accountList2.size() > 0)
+			if (null!=accountList2 && accountList2.size() > 0)
 				pushService.orderPushToMerc(accountList2, pushMap, title, 15);
-			if (accountList3.size() > 0)
+			if (null!=accountList3 && accountList3.size() > 0)
 				pushService.orderPushToMerc(accountList3, pushMap, title, 30);
 
 			reMap.put("mercs", locationList);

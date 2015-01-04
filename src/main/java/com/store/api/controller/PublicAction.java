@@ -376,7 +376,7 @@ public class PublicAction extends BaseAction {
 	@Authorization(type = Constant.SESSION_USER)
 	public String editAddress(@RequestParam(value = "addressid", required = false, defaultValue = "0") Long addrId,
 			@RequestParam(value = "address", required = false, defaultValue = "") String address, @RequestParam(value = "lat", required = false, defaultValue = "") Double lat,
-			@RequestParam(value = "lng", required = false, defaultValue = "") Double lng, @RequestParam(value = "def", required = false, defaultValue = "") String def,
+			@RequestParam(value = "lng", required = false, defaultValue = "") Double lng, @RequestParam(value = "default", required = false, defaultValue = "") String def,
 			@RequestParam(value = "phone", required = false, defaultValue = "") String phone, @RequestParam(value = "name", required = false, defaultValue = "") String name)
 			throws Exception {
 		if (lat <= 0 || lng <= 0)
@@ -418,10 +418,9 @@ public class PublicAction extends BaseAction {
 			
 		} else {
 			addObj = addressService.findOne(addrId);
-			if (null != addObj)
-				isdef = addObj.getId() == user.getAddressId();
-			else
-				return JsonUtils.resultJson(5, "地址修改失败", null);
+			if (null == addObj)
+			    return JsonUtils.resultJson(5, "地址修改失败", null);
+				
 		}
 		addObj.setAddress(address);
 		addObj.setLocation(new double[] { lng, lat });
