@@ -124,4 +124,24 @@ public class CustomerTestCase extends BaseActionTestCase {
         Assert.isTrue(StringUtils.isNotEmpty(result));
     }
     
+    @Test
+    public void testHot() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/hot").accept(MediaType.ALL)
+                .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
+    @Test
+    public void testCampaign() throws Exception{
+        ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/customer/campaign").accept(MediaType.ALL)
+                .cookie(cookie));
+        MvcResult mr = ra.andReturn();
+        String result = mr.getResponse().getContentAsString();
+        log.info(result);
+        Assert.isTrue(StringUtils.isNotEmpty(result));
+    }
+    
 }

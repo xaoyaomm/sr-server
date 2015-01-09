@@ -25,7 +25,10 @@ public class Offer implements Serializable{
     /** 创建时间 **/
     private long createDate=0L;
     
-    /** 抢单状态:0未抢单 1已抢单 2被其它人抢 **/
+    /** 是否有抢单动作 **/
+    private boolean isAct=false;
+    
+    /** 抢单状态:0未抢单 1已抢到单 2被其它人抢 **/
     private int status=0;
 
     public long getMerchantsId() {
@@ -51,5 +54,13 @@ public class Offer implements Serializable{
     public void setStatus(int status) {
         this.status = status;
     }
+
+	public boolean isAct() {
+		return isAct;
+	}
+
+	public void setAct(boolean isAct) {
+		this.isAct = isAct;
+	}
 
 }

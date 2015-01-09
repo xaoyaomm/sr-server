@@ -375,13 +375,13 @@ public class PublicAction extends BaseAction {
 	@RequestMapping(value = "/editaddress", produces = "text/plain;charset=UTF-8")
 	@Authorization(type = Constant.SESSION_USER)
 	public String editAddress(@RequestParam(value = "addressid", required = false, defaultValue = "0") Long addrId,
-			@RequestParam(value = "address", required = false, defaultValue = "") String address, @RequestParam(value = "lat", required = false, defaultValue = "") Double lat,
-			@RequestParam(value = "lng", required = false, defaultValue = "") Double lng, @RequestParam(value = "default", required = false, defaultValue = "") String def,
+			@RequestParam(value = "address", required = false, defaultValue = "") String address, @RequestParam(value = "lat", required = false, defaultValue = "0") Double lat,
+			@RequestParam(value = "lng", required = false, defaultValue = "0") Double lng, @RequestParam(value = "default", required = false, defaultValue = "") String def,
 			@RequestParam(value = "phone", required = false, defaultValue = "") String phone, @RequestParam(value = "name", required = false, defaultValue = "") String name)
 			throws Exception {
-		if (lat <= 0 || lng <= 0)
+		if (addrId == 0 && (lat <= 0 || lng <= 0))
 			return JsonUtils.resultJson(-2, "位置信息错误", null);
-		if (Utils.isEmpty(address))
+		if (addrId == 0 && Utils.isEmpty(address))
 			return JsonUtils.resultJson(-3, "请填写地址信息", null);
 		boolean isadd = true;
 		boolean isdef = false;
@@ -422,17 +422,21 @@ public class PublicAction extends BaseAction {
 			    return JsonUtils.resultJson(5, "地址修改失败", null);
 				
 		}
-		addObj.setAddress(address);
-		addObj.setLocation(new double[] { lng, lat });
-		addObj.setPhone(phone);
-		addObj.setName(name);
+		if(!Utils.isEmpty(address))
+			addObj.setAddress(address);
+		if(lat>0 && lng>0)
+			addObj.setLocation(new double[] { lng, lat });
+		if(!Utils.isEmpty(phone))
+			addObj.setPhone(phone);
+		if(!Utils.isEmpty(name))
+			addObj.setName(name);
 
 		addressService.save(addObj);
 
 		if (isdef) {
-			user.setAddress(address);
+			user.setAddress(addObj.getAddress());
 			user.setAddressId(addObj.getId());
-			user.setLocation(new double[] { lng, lat });
+			user.setLocation(addObj.getLocation());
 			session.setAttribute(Constant.SESSION_USER, user);
 		}
 		userService.save(user);

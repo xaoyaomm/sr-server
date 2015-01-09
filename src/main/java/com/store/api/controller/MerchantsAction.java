@@ -275,6 +275,16 @@ public class MerchantsAction extends BaseAction {
                         result.put("merc_id", order.getMerchantsId()+"");
                         return result;
                     } else {
+                    	List<Offer> ofs = order.getOffers();
+                        if (ofs.size() > 0) {
+                            for (Offer of : ofs) {
+                                if (of.getMerchantsId()==user.getId()) {
+                                    of.setAct(true);;
+                                }
+                            }
+                        }
+                        order.setOffers(ofs);
+                        orderService.save(order);
                         result.put("errorcode", "3");
                         result.put("info", "该订单已经被其它人抢了");
                         result.put("merc_id", order.getMerchantsId()+"");
@@ -295,6 +305,7 @@ public class MerchantsAction extends BaseAction {
                         for (Offer of : ofs) {
                             if (of.getMerchantsId()==user.getId()) {
                                 of.setStatus(1);
+                                of.setAct(true);
                             } else{
                                 of.setStatus(2);
                                 mersList.add(of.getMerchantsId()+"");

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.store.api.common.Common;
 import com.store.api.common.Constant;
 import com.store.api.mongo.entity.Address;
+import com.store.api.mongo.entity.Campaigns;
 import com.store.api.mongo.entity.Catalog;
+import com.store.api.mongo.entity.HotProduct;
 import com.store.api.mongo.entity.OftenProduct;
 import com.store.api.mongo.entity.Order;
 import com.store.api.mongo.entity.Product;
@@ -28,7 +30,9 @@ import com.store.api.mongo.entity.subdocument.OrderProduct;
 import com.store.api.mongo.entity.vo.AddressBean;
 import com.store.api.mongo.entity.vo.UserSearch;
 import com.store.api.mongo.service.AddressService;
+import com.store.api.mongo.service.CampaignsService;
 import com.store.api.mongo.service.CatalogService;
+import com.store.api.mongo.service.HotProductService;
 import com.store.api.mongo.service.OftenProductService;
 import com.store.api.mongo.service.OrderService;
 import com.store.api.mongo.service.ProductService;
@@ -71,6 +75,12 @@ public class CustomerAction extends BaseAction {
 	@Autowired
 	private OftenProductService oftenProductService;
 
+	@Autowired
+	private CampaignsService campaignsService;
+
+	@Autowired
+	private HotProductService hotProductService;
+
 	/**
 	 * 查询所有商品列表
 	 * 
@@ -103,7 +113,7 @@ public class CustomerAction extends BaseAction {
 	@ResponseBody
 	@RequestMapping("/productlist")
 	public Map<String, Object> productList(@RequestParam(value = "ver", required = false, defaultValue = "0") Long ver,
-			@RequestParam(value = "area_id", required = false, defaultValue = "340") long  areaId) {
+			@RequestParam(value = "area_id", required = false, defaultValue = "340") long areaId) {
 		List<Product> list = null;
 		Long maxVer = productService.findMaxVer(areaId);
 		if (ver.equals(0L)) {
@@ -229,23 +239,23 @@ public class CustomerAction extends BaseAction {
 			order.setTotalAmount(opList.size());
 			order.setProsDesc(prosDesc.toString());
 			order.setStatus(0);
-			
+
 			// 获取位置信息
 			if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
 				String ip = request.getRemoteAddr();
-				AddressBean addr=null;
+				AddressBean addr = null;
 				if (!Utils.isEmpty(ip)) {
 					addr = Common.ipWithBaidu(ip);
 					if (null == addr) {
-						addr=Common.geocoderWithBaidu(address.getLocation()[0], address.getLocation()[1]);
+						addr = Common.geocoderWithBaidu(address.getLocation()[0], address.getLocation()[1]);
 					}
-					if(null!=addr){
+					if (null != addr) {
 						order.setCity(addr.getCity());
 						order.setProvince(addr.getProvince());
 						order.setCityCode(addr.getCityCode());
 					}
 				}
-			}else{
+			} else {
 				order.setCity(user.getCity());
 				order.setProvince(user.getProvince());
 				order.setCityCode(user.getCityCode());
@@ -283,25 +293,28 @@ public class CustomerAction extends BaseAction {
 			orderService.save(order);
 			// 将所购商品加入常购列表中
 			oftenProductService.addToOftenProduct(order.getCustomerId(), opList);
-			
-			
-			if(accountList1.size() <= 0){
-			    if (accountList2.size() > 0){
-			        accountList1=accountList2;
-			    }else{
-			        accountList2=null;
-			        if (accountList3.size() > 0)
-			            accountList1=accountList3;
-			        else
-			            accountList3=null;
-			    }
-			}else{
-			    if (accountList2.size() <=0){
-			        if (accountList3.size() > 0)
-                        accountList2=accountList3;
-			        else
-			            accountList3=null;
-                }
+
+			LOG.info("accountList1:" + accountList1);
+			LOG.info("accountList2:" + accountList2);
+			LOG.info("accountList3:" + accountList3);
+
+			if (accountList1.size() <= 0) {
+				if (accountList2.size() > 0) {
+					accountList1 = accountList2;
+				} else {
+					accountList2 = null;
+					if (accountList3.size() > 0)
+						accountList1 = accountList3;
+					else
+						accountList3 = null;
+				}
+			} else {
+				if (accountList2.size() <= 0) {
+					if (accountList3.size() > 0)
+						accountList2 = accountList3;
+					else
+						accountList3 = null;
+				}
 			}
 
 			// TODO 推送给商户 users
@@ -310,11 +323,11 @@ public class CustomerAction extends BaseAction {
 			pushMap.put("type", "1");
 			pushMap.put("order_id", order.getId() + "");
 			pushMap.put("msg", "测试MSG");
-			if (null!=accountList1 && accountList1.size() > 0)
+			if (null != accountList1 && accountList1.size() > 0)
 				pushService.orderPushToMerc(accountList1, pushMap, title, 0);
-			if (null!=accountList2 && accountList2.size() > 0)
+			if (null != accountList2 && accountList2.size() > 0)
 				pushService.orderPushToMerc(accountList2, pushMap, title, 15);
-			if (null!=accountList3 && accountList3.size() > 0)
+			if (null != accountList3 && accountList3.size() > 0)
 				pushService.orderPushToMerc(accountList3, pushMap, title, 30);
 
 			reMap.put("mercs", locationList);
@@ -372,6 +385,7 @@ public class CustomerAction extends BaseAction {
 
 	/**
 	 * 订单列表头部,取>订单ID的记录
+	 * 
 	 * @param orderId
 	 * @return
 	 */
@@ -420,6 +434,7 @@ public class CustomerAction extends BaseAction {
 
 	/**
 	 * 订单列表尾部,取>订单ID的记录
+	 * 
 	 * @param orderId
 	 * @return
 	 */
@@ -645,6 +660,69 @@ public class CustomerAction extends BaseAction {
 			reMap.put("p_id", op.getProductId() + "");
 			reMap.put("p_num", op.getNum() + "");
 			reList.add(reMap);
+		}
+		if (reList.size() > 0)
+			result.put("errorcode", "1");
+		else
+			result.put("errorcode", "2");
+		result.put("info", "");
+		result.put("data", reList);
+		return result;
+	}
+
+	/**
+	 * 查询热销商品
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/hot")
+	@Authorization(type = Constant.SESSION_USER)
+	public Map<String, Object> hotProduct() {
+		List<HotProduct> hotList = hotProductService.findAll();
+		List<Long> ids = new ArrayList<Long>();
+		for (HotProduct hot : hotList) {
+			ids.add(hot.getId());
+		}
+		Map<Long, Product> pros = productService.findByIds(ids);
+		Map<String, Object> reMap = null;
+		List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+		for (HotProduct hp : hotList) {
+			Product pro = pros.get(hp.getId());
+			if (null != pro) {
+				reMap = new HashMap<String, Object>();
+				reMap.put("p_id", pro.getId() + "");
+				reMap.put("p_num", hp.getTotal() + "");
+				reList.add(reMap);
+			}
+		}
+		if (reList.size() > 0)
+			result.put("errorcode", "1");
+		else
+			result.put("errorcode", "2");
+		result.put("info", "");
+		result.put("data", reList);
+		return result;
+	}
+	
+	/**
+	 * 活动查询
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/campaign")
+	@Authorization(type = Constant.SESSION_USER)
+	public Map<String, Object> campaigns() {
+		List<Campaigns> cams = campaignsService.findValidData(System.currentTimeMillis());
+		
+		Map<String, Object> reMap = null;
+		List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+		for (Campaigns cam : cams) {
+				reMap = new HashMap<String, Object>();
+				reMap.put("image_url", cam.getBannerUrl());
+				reMap.put("detail_url", cam.getPageUrl());
+				reList.add(reMap);
 		}
 		if (reList.size() > 0)
 			result.put("errorcode", "1");
