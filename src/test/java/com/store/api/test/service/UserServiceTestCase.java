@@ -22,7 +22,7 @@ public class UserServiceTestCase extends BaseServiceTestCase {
 		user.setAddress("测试地址");
 		user.setNickName("测试_A");
 		user.setPhone("13662241734");
-		user.setType(UserType.customer);
+		user.setType(UserType.merchants);
 		user.setUserName("testa");
 		service.save(user);
 		System.out.println(user.getId());

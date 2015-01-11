@@ -213,6 +213,8 @@ public class PublicAction extends BaseAction {
 			if(!user.getType().equals(UserType.merchants)){
 				return JsonUtils.resultJson(-5, "帐号密码错误", null);
 			}
+			if(user.getStatus()!=1)
+			    return JsonUtils.resultJson(-6, "帐号已被锁定", null);
 		}
 		initSession(user.getType(), user, false);
 

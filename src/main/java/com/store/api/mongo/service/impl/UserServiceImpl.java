@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
 			if (entity.getType().equals(UserType.merchants)) {
 				if (this.sequenceService.getNextSequence("merc_num") < 1000) {
 					this.sequenceService.SetNextSequence("merc_num", 1000);
-					entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 				}
+				entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 			}
 		}
 		repository.save(entity);
@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
 				if (entity.getType().equals(UserType.merchants))
 					if (this.sequenceService.getNextSequence("merc_num") < 1000) {
 						this.sequenceService.SetNextSequence("merc_num", 1000);
-						entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 					}
+				entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 			}
 		}
 		repository.save(entitys);
