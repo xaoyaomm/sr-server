@@ -130,6 +130,16 @@ public class BaseAction {
         return null;
     }
     
+    protected String getRemoteAddr(){
+    	String xff= request.getHeader("X-Forwarded-For");
+    	if(!Utils.isEmpty(xff)){
+    		String[] arrs=xff.split(",");
+    		if(arrs.length>0)
+    			return arrs[0];
+    	}
+    	return null;
+    }
+    
     protected void initSession (UserType type,User user,boolean delOld)throws Exception{
         String oldSessionId = null;
         String sessid = null;

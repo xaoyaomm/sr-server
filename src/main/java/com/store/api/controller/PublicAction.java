@@ -91,7 +91,7 @@ public class PublicAction extends BaseAction {
 
 		// 通过IP获取位置信息
 		if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
-			String ip = request.getRemoteAddr();
+			String ip = getRemoteAddr();
 			if (!Utils.isEmpty(ip)) {
 				AddressBean addr = Common.ipWithBaidu(ip);
 				if (null != addr) {
@@ -160,7 +160,7 @@ public class PublicAction extends BaseAction {
 			user.setCurrVer(getVersionName());
 			user.setUuid(uuid);
 			// 通过IP获取位置信息
-			String ip = request.getRemoteAddr();
+			String ip = getRemoteAddr();
 			if (!Utils.isEmpty(ip)) {
 				AddressBean addr = Common.ipWithBaidu(ip);
 				if (null != addr) {
@@ -305,7 +305,7 @@ public class PublicAction extends BaseAction {
 		
 		// 通过IP获取位置信息
 				if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
-					String ip = request.getRemoteAddr();
+					String ip = getRemoteAddr();
 					if (!Utils.isEmpty(ip)) {
 						AddressBean addr = Common.ipWithBaidu(ip);
 						if (null != addr) {

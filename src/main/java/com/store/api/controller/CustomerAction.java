@@ -242,7 +242,7 @@ public class CustomerAction extends BaseAction {
 
 			// 获取位置信息
 			if (Utils.isEmpty(user.getCity()) || user.getCityCode() == 0) {
-				String ip = request.getRemoteAddr();
+				String ip = getRemoteAddr();
 				AddressBean addr = null;
 				if (!Utils.isEmpty(ip)) {
 					addr = Common.ipWithBaidu(ip);
