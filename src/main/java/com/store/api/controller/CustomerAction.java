@@ -560,6 +560,7 @@ public class CustomerAction extends BaseAction {
 			reMap.put("status", order.getStatus() + "");
 			reMap.put("product_num", order.getTotalAmount() + "");
 			reMap.put("total_price", order.getTotalPrice() + "");
+			reMap.put("desc", order.getProsDesc());
 			reMap.put("products", reList);
 
 			result.put("errorcode", "1");
@@ -677,7 +678,7 @@ public class CustomerAction extends BaseAction {
 	 */
 	@ResponseBody
 	@RequestMapping("/hot")
-	@Authorization(type = Constant.SESSION_USER)
+//	@Authorization(type = Constant.SESSION_USER)
 	public Map<String, Object> hotProduct() {
 		List<HotProduct> hotList = hotProductService.findAll();
 		List<Long> ids = new ArrayList<Long>();
@@ -712,7 +713,7 @@ public class CustomerAction extends BaseAction {
 	 */
 	@ResponseBody
 	@RequestMapping("/campaign")
-	@Authorization(type = Constant.SESSION_USER)
+//	@Authorization(type = Constant.SESSION_USER)
 	public Map<String, Object> campaigns() {
 		List<Campaigns> cams = campaignsService.findValidData(System.currentTimeMillis());
 		

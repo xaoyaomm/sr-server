@@ -489,12 +489,12 @@ public class PublicAction extends BaseAction {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/checkversion", produces = "text/plain;charset=UTF-8")
-	@Authorization(type = Constant.SESSION_USER)
+//	@Authorization(type = Constant.SESSION_USER)
 	public String checkVersion(@RequestParam(value = "type", required = false, defaultValue = "1") int type,
 			@RequestParam(value = "code", required = false, defaultValue = "0") int code) {
 		Map<String, String> reMap = new HashMap<String, String>();
 		if (code > 0) {
-			ReleaseVersion version = releaseVersionService.findMax(type, code);
+			ReleaseVersion version = releaseVersionService.findMax(type==2?UserType.merchants:UserType.customer, code);
 			if (null != version) {
 				reMap.put("version_name", version.getVersionCodeName());
 				reMap.put("version_code", version.getVersionCode() + "");

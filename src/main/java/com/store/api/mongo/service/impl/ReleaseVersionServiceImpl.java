@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.store.api.mongo.dao.ReleaseVersionRepository;
 import com.store.api.mongo.entity.ReleaseVersion;
+import com.store.api.mongo.entity.enumeration.UserType;
 import com.store.api.mongo.service.ReleaseVersionService;
 import com.store.api.mongo.service.SequenceService;
 
@@ -34,7 +35,7 @@ public class ReleaseVersionServiceImpl implements ReleaseVersionService {
 	}
 
 	@Override
-	public ReleaseVersion findMax(int type,int versionCode) {
+	public ReleaseVersion findMax(UserType type,int versionCode) {
 		PageRequest pr=new PageRequest(0,1, Direction.DESC, "versionCode");
         Page<ReleaseVersion> page=repository.findByClientTypeAndVersionCodeGreaterThan(type, versionCode, pr);
         if(page.hasContent())

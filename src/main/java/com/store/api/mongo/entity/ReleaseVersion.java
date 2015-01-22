@@ -2,8 +2,13 @@ package com.store.api.mongo.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.store.api.mongo.entity.enumeration.UserType;
 
 @Document
 public class ReleaseVersion implements Serializable{
@@ -13,8 +18,8 @@ public class ReleaseVersion implements Serializable{
 	@Id
 	private long id;
 	
-	/** 客户端类型  1:用户端  2:商户端 **/
-	private int clientType=1;
+	@Enumerated(EnumType.STRING)
+	private UserType clientType;
 	
 	/** 版本号CODE **/
 	private int versionCode=0;
@@ -40,14 +45,6 @@ public class ReleaseVersion implements Serializable{
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public int getClientType() {
-		return clientType;
-	}
-
-	public void setClientType(int clientType) {
-		this.clientType = clientType;
 	}
 
 	public int getVersionCode() {
@@ -96,5 +93,13 @@ public class ReleaseVersion implements Serializable{
 
 	public void setCreateDate(long createDate) {
 		this.createDate = createDate;
+	}
+
+	public UserType getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(UserType clientType) {
+		this.clientType = clientType;
 	}
 }
