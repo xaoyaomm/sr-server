@@ -136,7 +136,8 @@ public class BaseAction {
     		String[] arrs=xff.split(",");
     		if(arrs.length>0)
     			return arrs[0];
-    	}
+    	}else
+    		return request.getRemoteAddr();
     	return null;
     }
     

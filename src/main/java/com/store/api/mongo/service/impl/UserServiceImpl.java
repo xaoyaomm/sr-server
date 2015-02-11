@@ -30,9 +30,6 @@ public class UserServiceImpl implements UserService {
 		if (0 == entity.getId()) {
 			entity.setId(this.sequenceService.getNextSequence(entity));
 			if (entity.getType().equals(UserType.merchants)) {
-				if (this.sequenceService.getNextSequence("merc_num") < 1000) {
-					this.sequenceService.SetNextSequence("merc_num", 1000);
-				}
 				entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 			}
 		}
@@ -46,9 +43,6 @@ public class UserServiceImpl implements UserService {
 			if (0 == entity.getId()) {
 				entity.setId(sequenceService.getNextSequence(entity));
 				if (entity.getType().equals(UserType.merchants))
-					if (this.sequenceService.getNextSequence("merc_num") < 1000) {
-						this.sequenceService.SetNextSequence("merc_num", 1000);
-					}
 				entity.setMercNum(this.sequenceService.getNextSequence("merc_num"));
 			}
 		}

@@ -324,11 +324,13 @@ public class MerchantsAction extends BaseAction {
                     pushService.pushToUser(order.getCustomerId()+"", pushMap, title,UserType.customer);
                     
                     //推送给没抢到单的卖家
-                    Map<String, Object> otherPushMap=new HashMap<String, Object>();
-                    otherPushMap.put("type", "3");
-                    otherPushMap.put("order_id", order.getId()+"");
-                    otherPushMap.put("msg", "该订单已经被其它人抢了");
-                    pushService.pushToUsers(mersList, otherPushMap, title,UserType.merchants);
+                    if(mersList.size()>0){
+	                    Map<String, Object> otherPushMap=new HashMap<String, Object>();
+	                    otherPushMap.put("type", "3");
+	                    otherPushMap.put("order_id", order.getId()+"");
+	                    otherPushMap.put("msg", "该订单已经被其它人抢了");
+	                    pushService.pushToUsers(mersList, otherPushMap, title,UserType.merchants);
+                    }
 
                     result.put("errorcode", "1");
                     result.put("info", "");

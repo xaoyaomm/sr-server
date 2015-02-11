@@ -53,13 +53,13 @@ public class PushServiceImpl implements PushService {
     private static final String secretKey_client_ios = "c2604b8a738740bff2ba4939358f7038";
     
     /** 商户端 **/
-    private static final long accessId_merc_android = 2100067702L;
+    private static final long accessId_merc_android = 2100072567L;
     
     /** 商户端 **/
     private static final long accessId_merc_ios = 2200072426L;
 
     /** 商户端 **/
-    private static final String secretKey_merc_android = "413f981e94c7f542268f07cf34b9b2d6";
+    private static final String secretKey_merc_android = "86223ac71661135b68e8334c3cdbf05f";
     
     /** 商户端 **/
     private static final String secretKey_merc_ios = "8fdd6fd158afd81b21ed34ab5dc26e1e";

@@ -29,7 +29,7 @@ public class PublicTest extends BaseActionTestCase{
     @Test
     public void testRegister() throws Exception{
     	ResultActions ra = mockMvc.perform(MockMvcRequestBuilders.post("/public/register").accept(MediaType.ALL)
-    			.param("name", "vc_merc")
+    			.param("name", "vincent3_merc")
     			.param("pwd", "12345")
     			.param("type", "1")
     			.param("nickname", "龙华天福便利店")
